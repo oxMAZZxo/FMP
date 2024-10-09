@@ -25,6 +25,9 @@ A global leaderboard that players can use to compete for the No.1 spot.
 
 ## Technologies Used
 Unity due to its versatility with 2D animations and sprites and support for mobile platforms with options for app customization and building.
+
 Cinemachine for smooth configurable camera movement.
+
 Touch Control Manager which sends invokes signals that objects can respond to.
+
 Google Play & Play Games Services.
