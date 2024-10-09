@@ -692,6 +692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7c7036ead7edc645b01ce225d097b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 519420031}
   deadzone: 100
   minTravelMagnitude: 0.4
   showGrid: 1
