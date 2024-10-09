@@ -10,6 +10,7 @@
 ## Project Description
 This repository holds my final major project
 An arcade-style 2D skateboarding game for casual players. It features endless randomly generated maps and preset practice maps. The focus is on performing tricks and completing challenges to climb the global leaderboard.
+
 Core Focus:
 1.	Mobile optimisation and scalable mechanics.
 2.	Complete and smooth gameplay loop (gameplay, scoring, game over, restart).
