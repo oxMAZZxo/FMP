@@ -694,6 +694,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deadzone: 100
   minTravelMagnitude: 0.4
+  showGrid: 1
+  largeStep: 0.01
+  color: {r: 0, g: 1, b: 0, a: 1}
+  subColor: {r: 0, g: 0.5, b: 0, a: 1}
 --- !u!4 &1362810836
 Transform:
   m_ObjectHideFlags: 0
