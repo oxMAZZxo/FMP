@@ -461,7 +461,7 @@ Transform:
   m_GameObject: {fileID: 825628980}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.354, y: 0.7067776, z: -10}
+  m_LocalPosition: {x: -8.9, y: 0.7067776, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1888,7 +1888,7 @@ GameObject:
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1960,7 +1960,7 @@ Transform:
   m_GameObject: {fileID: 1727760423}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.354, y: 0.7067776, z: -10}
+  m_LocalPosition: {x: -8.9, y: 0.7067776, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2074,7 +2074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1727760425}
-  deadzone: 100
+  deadzone: 200
   minDiagonalThreshold: 0.4
 --- !u!4 &1896241748
 Transform:
@@ -2183,7 +2183,7 @@ Transform:
   m_GameObject: {fileID: 5216016245056962427}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.354, y: 0.5, z: 0}
+  m_LocalPosition: {x: -8.9, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2202,8 +2202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303750e76938a584299b0646e51f5c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 77.6
-  maxX_Velocity: 1
+  movementSpeed: 115.6
+  maxX_Velocity: 4.2
   minimumJumpForce: 1.17
   groundCheck: {fileID: 2035116442}
   whatIsGround:
@@ -2318,9 +2318,9 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1727760426}
+  - {fileID: 825628982}
   - {fileID: 1896241748}
   - {fileID: 1066806300}
   - {fileID: 3088592964041584742}
-  - {fileID: 825628982}
   - {fileID: 497153724}
   - {fileID: 526993286}

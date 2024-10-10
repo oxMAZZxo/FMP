@@ -12,13 +12,15 @@ public class TouchControls : MonoBehaviour
     public static TouchControls Instance;
     [SerializeField,Range(1f,1000f)]private float deadzone = 10f;
     [SerializeField,Range(0.01f,1f)]private float minDiagonalThreshold = 0.4f;
-    public static event EventHandler tapEvent;
-    public static event EventHandler swipeRightEvent;
-    public static event EventHandler swipeDownEvent;
-    public static event EventHandler swipeLeftEvent;
+    public static event EventHandler<TouchEventArgs> tapEvent;
+    public static event EventHandler<TouchEventArgs> swipeUpEvent;
+    public static event EventHandler<TouchEventArgs> swipeDownEvent;
+    public static event EventHandler<TouchEventArgs> swipeRightEvent;
+    public static event EventHandler<TouchEventArgs> swipeLeftEvent;
     private Vector2 touchStart;
     private Vector2 touchEnd;
     private float worldRadius;
+    private float touchTime;
 
     void Awake()
     {
@@ -31,24 +33,35 @@ public class TouchControls : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        touchTime = 0;
+    }
+
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             touchStart = Input.mousePosition;
         }
 
-        if(Input.GetMouseButtonUp(0))
+        if(touchStart != Vector2.zero)
+        {
+            touchTime += Time.deltaTime;
+        }
+
+        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
         {
             touchEnd = Input.mousePosition;
             DetectSwipe();
             touchStart = Vector2.zero;
+            touchTime = 0;
         }
+
     }
 
     private void DetectSwipe()
     {
-
         Vector2 swipeDelta = touchEnd - touchStart;
         if(swipeDelta.magnitude > deadzone)
         {
@@ -56,21 +69,24 @@ public class TouchControls : MonoBehaviour
             switch (swipeDirection)
             {
                 case SwipeDirection.RIGHT: 
-                swipeRightEvent.Invoke(this, new EventArgs());
+                swipeRightEvent.Invoke(this, new TouchEventArgs(touchTime));
                 break;
 
                 case SwipeDirection.LEFT:
-                swipeLeftEvent.Invoke(this, new EventArgs());
+                swipeLeftEvent.Invoke(this, new TouchEventArgs(touchTime));
                 break;
 
                 case SwipeDirection.DOWN:
-                swipeDownEvent.Invoke(this, new EventArgs());
+                swipeDownEvent.Invoke(this, new TouchEventArgs(touchTime));
+                break;
+
+                case SwipeDirection.UP:
+                swipeUpEvent.Invoke(this, new TouchEventArgs(touchTime));
                 break;
             }
-            Debug.Log(swipeDirection.ToString());
         }else
         {
-            tapEvent.Invoke(this, new EventArgs());
+            tapEvent.Invoke(this, new TouchEventArgs(touchTime));
         }
     }
 
