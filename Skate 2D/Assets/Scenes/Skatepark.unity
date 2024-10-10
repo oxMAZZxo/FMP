@@ -2076,6 +2076,7 @@ MonoBehaviour:
   cam: {fileID: 1727760425}
   deadzone: 200
   minDiagonalThreshold: 0.4
+  touchInput: {fileID: -5038306681770092399, guid: f9b7ec6373c1a004095af3439de6cfd6, type: 3}
 --- !u!4 &1896241748
 Transform:
   m_ObjectHideFlags: 0

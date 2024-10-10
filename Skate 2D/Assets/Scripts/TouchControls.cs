@@ -1,17 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build.Content;
 using UnityEngine;
-using System;
-using Unity.VisualScripting;
-using UnityEngine.XR;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class TouchControls : MonoBehaviour
 {
-
     public Camera cam;
     public static TouchControls Instance;
     [SerializeField,Range(1f,1000f)]private float deadzone = 10f;
     [SerializeField,Range(0.01f,1f)]private float minDiagonalThreshold = 0.4f;
+    [SerializeField]private InputActionReference touchInput;
     public static event EventHandler<TouchEventArgs> tapEvent;
     public static event EventHandler<TouchEventArgs> swipeUpEvent;
     public static event EventHandler<TouchEventArgs> swipeDownEvent;
@@ -21,6 +22,7 @@ public class TouchControls : MonoBehaviour
     private Vector2 touchEnd;
     private float worldRadius;
     private float touchTime;
+
 
     void Awake()
     {
@@ -40,24 +42,10 @@ public class TouchControls : MonoBehaviour
 
     void Update()
     {
-        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            touchStart = Input.mousePosition;
-        }
-
         if(touchStart != Vector2.zero)
         {
             touchTime += Time.deltaTime;
         }
-
-        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
-        {
-            touchEnd = Input.mousePosition;
-            DetectSwipe();
-            touchStart = Vector2.zero;
-            touchTime = 0;
-        }
-
     }
 
     private void DetectSwipe()
@@ -122,6 +110,33 @@ public class TouchControls : MonoBehaviour
         {
             return delta.y > 0 ? SwipeDirection.UP : SwipeDirection.DOWN;
         }
+    }
+
+    private void OnTouchInputBegan(InputAction.CallbackContext context)
+    {
+        touchStart = Touchscreen.current.primaryTouch.position.ReadValue();
+    }
+
+    private void OnTouchInputEnded(InputAction.CallbackContext context)
+    {
+        touchEnd = Touchscreen.current.primaryTouch.position.ReadValue();
+        DetectSwipe();
+        touchStart = Vector2.zero;
+        touchTime = 0;
+    }
+
+    void OnEnable()
+    {
+        touchInput.action.Enable();
+        touchInput.action.started += OnTouchInputBegan;
+        touchInput.action.canceled += OnTouchInputEnded;
+    }
+
+    void OnDisable()
+    {
+        touchInput.action.Disable();
+        touchInput.action.started -= OnTouchInputBegan;
+        touchInput.action.canceled -= OnTouchInputEnded;
     }
 
     void OnDrawGizmos()

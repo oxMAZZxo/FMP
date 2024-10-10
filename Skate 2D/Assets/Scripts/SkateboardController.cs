@@ -30,10 +30,6 @@ public class SkateboardController : MonoBehaviour
     void FixedUpdate()
     {
         CheckGrounded();
-        if(Mathf.Abs(rb.velocity.x) != 0)
-        {
-            Debug.Log($"X Velocity: {rb.velocity.x}");
-        }
     }
 
     private void CheckGrounded()
@@ -64,7 +60,7 @@ public class SkateboardController : MonoBehaviour
 		{
 			// Add a vertical force to the player.
 			isGrounded = false;
-			rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (10 * currentTouchTime))));
+			rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (25 * currentTouchTime))));
 		}
     }
 
