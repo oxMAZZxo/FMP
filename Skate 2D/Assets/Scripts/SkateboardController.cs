@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
+using UnityEngine.Pool;
 
 [RequireComponent(typeof(Animator))]
 public class SkateboardController : MonoBehaviour
@@ -17,9 +15,13 @@ public class SkateboardController : MonoBehaviour
     [SerializeField,Range(0.5f,5f)]private float minimumJumpForce = 1f;
     [SerializeField]private Transform groundCheck;
     [SerializeField]private LayerMask whatIsGround;
-    const float groundedCheckRadius = 0.2f; 
+    [SerializeField,Range(0.01f,1f)]private float groundedCheckRadius = 0.2f; 
+    [SerializeField]private LayerMask whatIsGrindable;
+    [SerializeField,Range(0.01f,1f)]private float grindableCheckRadius = 0.3f;
     private bool isGrounded;
     private float currentTouchTime;
+    private Vector2 velocity;
+    private bool isGrinding;
 
     void Start()
     {
@@ -29,7 +31,28 @@ public class SkateboardController : MonoBehaviour
 
     void FixedUpdate()
     {
-        CheckGrounded();
+        if(Mathf.Abs(rb.velocity.x) < maxX_Velocity)
+        {
+            rb.AddForce(transform.right * movementSpeed);
+        }
+
+        
+        //While the player is performing a grind, we want to make sure to enable physics
+        //as the skateboard is reaching the end of the grindable obstacle
+        if(isGrinding) 
+        {
+            if(CheckIsGrinding() == false)
+            {
+                rb.constraints = RigidbodyConstraints2D.None;
+                rb.gravityScale = 1;
+                isGrinding = false;
+                animator.SetBool("isGrinding",false);
+            }
+
+        }else
+        {
+            CheckGrounded();
+        }
     }
 
     private void CheckGrounded()
@@ -56,15 +79,25 @@ public class SkateboardController : MonoBehaviour
 
     public void Jump()
     {
-        if (isGrounded)
+        if (isGrounded || isGrinding)
 		{
-			// Add a vertical force to the player.
-			isGrounded = false;
-			rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (25 * currentTouchTime))));
-		}
+            //if the code reaches this point of execution
+            //it is assumed that the player is perfoming a trick
+            //therefore we reset gravity if they were performing a grind
+            if(isGrinding)
+            {
+                rb.constraints = RigidbodyConstraints2D.None;
+                rb.gravityScale = 1;
+                isGrinding = false; //which means that they would no longer be doing a grind
+            }
+            
+			isGrounded = false; //which means they would no longer be grounded either
+
+			rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (100 * currentTouchTime))));
+        }
     }
 
-    private void Move(object sender, TouchEventArgs e)
+    private void Move()
     {
         if(Mathf.Abs(rb.velocity.x) < maxX_Velocity)
         {
@@ -72,55 +105,124 @@ public class SkateboardController : MonoBehaviour
         }
     }
 
-    private void Kickflip(object sender, TouchEventArgs e)
+    private void Action(object sender, TouchEventArgs e)
     {
-        if(!isGrounded) {return;}
-        animator.SetTrigger("kickflip");
         currentTouchTime = e.touchTime;
+        if(e.swipeDirection == SwipeDirection.NONE)
+        {
+            //Move();
+            return;
+        }
+
+        //if the player is not on the ground and isn't grinding
+        //meaning they are in the air, and they perform an action
+        if(!isGrounded && !isGrinding)
+        {
+            CheckCanGrind(e.swipeDirection); //Check If the player can grind
+        }else //else if one of those conditions is true
+        {
+            ShowTrickAnimation(e.swipeDirection);//perfrom a trick
+            if(isGrinding) // if they are grinding before the trick
+            {
+                animator.SetBool("isGrinding",false); //disable the grind animations
+                //so that the trick animation can play
+            }
+        }
+        
     }
 
-    private void Shuvit(object sender, TouchEventArgs e)
+    private void ShowTrickAnimation(SwipeDirection swipeDirection)
     {
-        if(!isGrounded) {return;}
-        animator.SetTrigger("shuvit");
-        currentTouchTime = e.touchTime;
+        switch(swipeDirection)
+        {
+            case SwipeDirection.UP:
+            animator.SetTrigger("ollie");
+            break;
+
+            case SwipeDirection.DOWN:
+            animator.SetTrigger("shuvit");
+            break;
+
+            case SwipeDirection.RIGHT:
+            animator.SetTrigger("kickflip");
+            break;
+
+            case SwipeDirection.LEFT:
+            animator.SetTrigger("heelflip");
+            break;
+
+        }
     }
 
-    private void Ollie(object sender, TouchEventArgs e)
+    private void CheckCanGrind(SwipeDirection swipeDirection)
     {
-        if(!isGrounded) {return;}
-        animator.SetTrigger("ollie");
-        currentTouchTime = e.touchTime;
+        Collider2D other;
+        bool grindable = CheckGrindable(out other); //check if player is above a grindable obstacle
+        if(!grindable) {return;}
+
+        //positions the player above the grindable obstacle
+        float distanceToMove = other.bounds.max.y - GetComponent<Collider2D>().bounds.min.y;
+        rb.gravityScale = 0;
+        rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+        transform.position = new Vector2(transform.position.x,transform.position.y + distanceToMove);
+        isGrinding = true;    
+
+        //show grind animation
+        ShowGrindAnimation(swipeDirection);         
     }
 
-    private void Heelflip(object sender, TouchEventArgs e)
+    private void ShowGrindAnimation(SwipeDirection swipeDirection)
     {
-        if(!isGrounded) {return;}
-        animator.SetTrigger("heelflip");
-        currentTouchTime = e.touchTime;
+        animator.SetTrigger("50-50");
+        animator.SetBool("isGrinding",true);   
+    }
+
+    private bool CheckGrindable(out Collider2D outCollider)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, grindableCheckRadius, whatIsGrindable);
+        
+		foreach(Collider2D collider in colliders)
+        {
+            outCollider = collider;
+            if(collider.CompareTag("Grindable"))
+            {
+                return true;
+            }
+        }
+        outCollider = null;
+        return false;
+    }
+
+    private bool CheckIsGrinding()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, grindableCheckRadius, whatIsGrindable);
+        
+		foreach(Collider2D collider in colliders)
+        {
+            if(collider.CompareTag("Grindable"))
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     void OnEnable()
     {
-        TouchControls.tapEvent += Move;
-        TouchControls.swipeRightEvent += Kickflip;
-        TouchControls.swipeDownEvent += Shuvit;
-        TouchControls.swipeUpEvent += Ollie;
-        TouchControls.swipeLeftEvent += Heelflip;
+        TouchControls.touchEvent += Action;
     }
 
     void OnDisable()
     {
-        TouchControls.tapEvent -= Move;
-        TouchControls.swipeRightEvent -= Kickflip;
-        TouchControls.swipeDownEvent -= Shuvit;
-        TouchControls.swipeUpEvent -= Ollie;
-        TouchControls.swipeLeftEvent -= Heelflip;
+        TouchControls.touchEvent -= Action;
     }
 
     void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(groundCheck.position,groundedCheckRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position,grindableCheckRadius);
     }
 }

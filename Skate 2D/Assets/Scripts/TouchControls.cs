@@ -13,11 +13,7 @@ public class TouchControls : MonoBehaviour
     [SerializeField,Range(1f,1000f)]private float deadzone = 10f;
     [SerializeField,Range(0.01f,1f)]private float minDiagonalThreshold = 0.4f;
     [SerializeField]private InputActionReference touchInput;
-    public static event EventHandler<TouchEventArgs> tapEvent;
-    public static event EventHandler<TouchEventArgs> swipeUpEvent;
-    public static event EventHandler<TouchEventArgs> swipeDownEvent;
-    public static event EventHandler<TouchEventArgs> swipeRightEvent;
-    public static event EventHandler<TouchEventArgs> swipeLeftEvent;
+    public static event EventHandler<TouchEventArgs> touchEvent;
     private Vector2 touchStart;
     private Vector2 touchEnd;
     private float worldRadius;
@@ -54,27 +50,10 @@ public class TouchControls : MonoBehaviour
         if(swipeDelta.magnitude > deadzone)
         {
             SwipeDirection swipeDirection = CalculateSwipe(swipeDelta);
-            switch (swipeDirection)
+            if(touchEvent != null)
             {
-                case SwipeDirection.RIGHT: 
-                swipeRightEvent.Invoke(this, new TouchEventArgs(touchTime));
-                break;
-
-                case SwipeDirection.LEFT:
-                swipeLeftEvent.Invoke(this, new TouchEventArgs(touchTime));
-                break;
-
-                case SwipeDirection.DOWN:
-                swipeDownEvent.Invoke(this, new TouchEventArgs(touchTime));
-                break;
-
-                case SwipeDirection.UP:
-                swipeUpEvent.Invoke(this, new TouchEventArgs(touchTime));
-                break;
+                touchEvent.Invoke(this, new TouchEventArgs(touchTime, swipeDirection));
             }
-        }else
-        {
-            tapEvent.Invoke(this, new TouchEventArgs(touchTime));
         }
     }
 
@@ -114,12 +93,20 @@ public class TouchControls : MonoBehaviour
 
     private void OnTouchInputBegan(InputAction.CallbackContext context)
     {
-        touchStart = Touchscreen.current.primaryTouch.position.ReadValue();
+        touchStart = Mouse.current.position.ReadValue();
+        if(Touchscreen.current != null)
+        {
+            touchStart = Touchscreen.current.primaryTouch.position.ReadValue();
+        }
     }
 
     private void OnTouchInputEnded(InputAction.CallbackContext context)
     {
-        touchEnd = Touchscreen.current.primaryTouch.position.ReadValue();
+        touchEnd = Mouse.current.position.ReadValue();
+        if(Touchscreen.current != null)
+        {
+            touchEnd = Touchscreen.current.primaryTouch.position.ReadValue();
+        }
         DetectSwipe();
         touchStart = Vector2.zero;
         touchTime = 0;
@@ -148,17 +135,4 @@ public class TouchControls : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(start,worldRadius);
     }
-}
-
-public enum SwipeDirection
-{
-    TAP,
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    UP_LEFT,
-    UP_RIGHT,
-    DOWN_LEFT,
-    DOWN_RIGHT
 }
