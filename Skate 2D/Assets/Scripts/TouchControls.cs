@@ -54,6 +54,12 @@ public class TouchControls : MonoBehaviour
             {
                 touchEvent.Invoke(this, new TouchEventArgs(touchTime, swipeDirection));
             }
+        }else
+        {
+            if(touchEvent != null)
+            {
+                touchEvent.Invoke(this,new TouchEventArgs(touchTime, SwipeDirection.NONE));
+            }
         }
     }
 

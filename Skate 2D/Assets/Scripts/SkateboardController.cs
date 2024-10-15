@@ -10,8 +10,10 @@ public class SkateboardController : MonoBehaviour
     private Animator animator;
     private Rigidbody2D rb;
 
-    [SerializeField,Range(1f,200f)]private float movementSpeed = 1f;
-    [SerializeField,Range(0.1f,10f)]private float maxX_Velocity = 1f;
+    [SerializeField,Range(1f,100f)]private float minMovementSpeed = 50f;
+    [SerializeField,Range(0.1f,5f)]private float minVelocity = 3f;
+    [SerializeField,Range(1f,200f)]private float maxMovementSpeed = 150f;
+    [SerializeField,Range(0.1f,10f)]private float maxVelocity = 5f;
     [SerializeField,Range(0.5f,5f)]private float minimumJumpForce = 1f;
     [SerializeField]private Transform groundCheck;
     [SerializeField]private LayerMask whatIsGround;
@@ -20,7 +22,6 @@ public class SkateboardController : MonoBehaviour
     [SerializeField,Range(0.01f,1f)]private float grindableCheckRadius = 0.3f;
     private bool isGrounded;
     private float currentTouchTime;
-    private Vector2 velocity;
     private bool isGrinding;
 
     void Start()
@@ -31,12 +32,10 @@ public class SkateboardController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(Mathf.Abs(rb.velocity.x) < maxX_Velocity)
+        if(Mathf.Abs(rb.velocity.x) < minVelocity)
         {
-            rb.AddForce(transform.right * movementSpeed);
+            rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
         }
-
-        
         //While the player is performing a grind, we want to make sure to enable physics
         //as the skateboard is reaching the end of the grindable obstacle
         if(isGrinding) 
@@ -99,9 +98,9 @@ public class SkateboardController : MonoBehaviour
 
     private void Move()
     {
-        if(Mathf.Abs(rb.velocity.x) < maxX_Velocity)
+        if(isGrounded && Mathf.Abs(rb.velocity.x) < maxVelocity)
         {
-            rb.AddForce(transform.right * movementSpeed);
+            rb.AddForce(transform.right * maxMovementSpeed);
         }
     }
 
@@ -110,7 +109,7 @@ public class SkateboardController : MonoBehaviour
         currentTouchTime = e.touchTime;
         if(e.swipeDirection == SwipeDirection.NONE)
         {
-            //Move();
+            Move();
             return;
         }
 
