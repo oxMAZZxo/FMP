@@ -20,6 +20,7 @@ public class SkateboardController : MonoBehaviour
     [SerializeField,Range(0.01f,1f)]private float groundedCheckRadius = 0.2f; 
     [SerializeField]private LayerMask whatIsGrindable;
     [SerializeField,Range(0.01f,1f)]private float grindableCheckRadius = 0.3f;
+    [SerializeField]private GameObject sparksParticle;
     private bool isGrounded;
     private float currentTouchTime;
     private bool isGrinding;
@@ -46,6 +47,7 @@ public class SkateboardController : MonoBehaviour
                 rb.gravityScale = 1;
                 isGrinding = false;
                 animator.SetBool("isGrinding",false);
+                sparksParticle.SetActive(false);
             }
 
         }else
@@ -151,6 +153,7 @@ public class SkateboardController : MonoBehaviour
             break;
 
         }
+        
     }
 
     private void CheckCanGrind(SwipeDirection swipeDirection)
@@ -174,6 +177,7 @@ public class SkateboardController : MonoBehaviour
     {
         animator.SetTrigger("50-50");
         animator.SetBool("isGrinding",true);   
+        sparksParticle.SetActive(true);
     }
 
     private bool CheckGrindable(out Collider2D outCollider)

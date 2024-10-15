@@ -14,7 +14,7 @@ public class TouchEventArgs : EventArgs
         swipeDirection = SwipeDirection.NONE;
     }
 
-    public TouchEventArgs(float time,SwipeDirection direction) : base()
+    public TouchEventArgs(float time,SwipeDirection direction = SwipeDirection.NONE) : base()
     {
         touchTime = time;
         swipeDirection = direction;
