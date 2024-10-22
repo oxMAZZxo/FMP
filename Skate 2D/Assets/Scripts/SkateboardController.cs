@@ -122,6 +122,7 @@ public class SkateboardController : MonoBehaviour
             CheckCanGrind(e.swipeDirection); //Check If the player can grind
         }else //else if one of those conditions is true
         {
+            sparksParticle.SetActive(false);
             ShowTrickAnimation(e.swipeDirection);//perfrom a trick
             if(isGrinding) // if they are grinding before the trick
             {
@@ -160,7 +161,7 @@ public class SkateboardController : MonoBehaviour
     {
         Collider2D other;
         bool grindable = CheckGrindable(out other); //check if player is above a grindable obstacle
-        if(!grindable) {return;}
+        if(!grindable || swipeDirection != SwipeDirection.DOWN && swipeDirection != SwipeDirection.LEFT && swipeDirection != SwipeDirection.RIGHT) {return;}
 
         //positions the player above the grindable obstacle
         float distanceToMove = other.bounds.max.y - GetComponent<Collider2D>().bounds.min.y;
@@ -175,9 +176,23 @@ public class SkateboardController : MonoBehaviour
 
     private void ShowGrindAnimation(SwipeDirection swipeDirection)
     {
-        animator.SetTrigger("50-50");
-        animator.SetBool("isGrinding",true);   
+        switch (swipeDirection)
+        {
+            case SwipeDirection.DOWN:
+            animator.SetTrigger("50-50");
+            break;
+
+            case SwipeDirection.LEFT:
+            animator.SetTrigger("5-0 Grind");
+            break;
+
+            case SwipeDirection.RIGHT:
+            animator.SetTrigger("Nose Grind");
+            break;
+        }
+
         sparksParticle.SetActive(true);
+        animator.SetBool("isGrinding",true);   
     }
 
     private bool CheckGrindable(out Collider2D outCollider)
