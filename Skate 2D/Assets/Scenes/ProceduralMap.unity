@@ -225,10 +225,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3088592964041584742}
   groundPrefab: {fileID: 4426653930425013092, guid: 2f89fe4fa4312fe48916369f3ba595b7, type: 3}
-  obstacles:
-  - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
-  - {fileID: 9009299061145675200, guid: 4f142de76c1eb024d9287d331dd5e833, type: 3}
+  obstaclePrefabs:
   - {fileID: 3921992949018577769, guid: fe989d88da9eb054ca304060018d2e15, type: 3}
+  - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
+  - {fileID: 3466813424133893137, guid: ca980184523ce5344bf53196c0bdafbf, type: 3}
+  - {fileID: 9009299061145675200, guid: 4f142de76c1eb024d9287d331dd5e833, type: 3}
   - {fileID: 6464161430064065539, guid: bf0792f1e926fda48995dbea83ad6ede, type: 3}
 --- !u!4 &1022530504
 Transform:
@@ -1884,7 +1885,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2490113007175574201, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_GravityScale
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3220706696710446752, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1938,13 +1939,17 @@ PrefabInstance:
       propertyPath: minVelocity
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: minimumJumpForce
+      value: 1.45
+      objectReference: {fileID: 0}
     - target: {fileID: 7722678107793403919, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7722678107793403919, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
