@@ -30,6 +30,10 @@ public class ProceduralMap : MonoBehaviour
         InitGround();
     }
 
+
+    /// <summary>
+    /// Initialises a pool of ground GameObjects with a fixed amount
+    /// </summary>
     private void InitPool()
     {
         GameObject[] grounds = new GameObject[5];
@@ -42,6 +46,10 @@ public class ProceduralMap : MonoBehaviour
         groundObjects = new Pool<GameObject>(5,grounds);
     }
 
+
+    /// <summary>
+    /// Spawns the Initial ground GameObjects the player is on
+    /// </summary>
     private void InitGround()
     {
         GameObject middleGround = groundObjects.GetObject();
@@ -99,8 +107,9 @@ public class ProceduralMap : MonoBehaviour
         
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
         Collider2D obstacleCollider = currentObstacle.GetComponent<Collider2D>();
-        float centreToBottomDistance = obstacleCollider.transform.position.y - obstacleCollider.bounds.min.y;
-        Debug.Log("The distance from the bottom Y bounds to top Y bounds of the obstacle is:" + centreToBottomDistance);
+        // the value 'centreToBottomDistance is needed in order to place the bottom Y bounds of an obstacle,
+        // onto the top Y bounds of the current ground GameObject that was activated
+        float centreToBottomDistance = obstacleCollider.transform.position.y - obstacleCollider.bounds.min.y; 
         Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.max.y + centreToBottomDistance);
         currentObstacle.transform.position = obstacleSpawnPos;
     }
