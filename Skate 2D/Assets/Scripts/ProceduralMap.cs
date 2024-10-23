@@ -48,7 +48,8 @@ public class ProceduralMap : MonoBehaviour
         {
             GameObject one = Instantiate(obstaclePrefabs[i],new Vector2(0,1000),Quaternion.identity);
             GameObject two = Instantiate(obstaclePrefabs[i],new Vector2(0,1000),Quaternion.identity);
-            obstaclePools[i] = new Pool<GameObject>(2,one,two);
+            GameObject three = Instantiate(obstaclePrefabs[i],new Vector2(0,1000),Quaternion.identity);
+            obstaclePools[i] = new Pool<GameObject>(2,one,two,three);
         }
         
 
