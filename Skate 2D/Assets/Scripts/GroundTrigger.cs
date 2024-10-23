@@ -10,7 +10,7 @@ public class GroundTrigger : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             //GameManager will create a new ground
-            ProceduralMap.Instance.CreateGround();
+            ProceduralMap.Instance.Generate();
         }
     }
 }

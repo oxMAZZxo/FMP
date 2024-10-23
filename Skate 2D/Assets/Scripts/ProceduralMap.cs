@@ -9,6 +9,7 @@ public class ProceduralMap : MonoBehaviour
     const float ySpawnPosition = -0.5f;
     [SerializeField]private Transform player;
     [SerializeField]private GameObject groundPrefab;
+    [SerializeField]private GameObject[] obstacles;
     private Pool<GameObject> groundObjects;
     private Vector2 previousSpawnPosition;
 
@@ -66,16 +67,41 @@ public class ProceduralMap : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Generates Terrain and Obstacles
+    /// </summary>
+    public void Generate()
+    {
+        GameObject ground = CreateGround();
+        CreateObstacle(ground);
+    }
 
     /// <summary>
     /// Creates a new ground based on the position of where the previous ground was created
     /// </summary>
-    public void CreateGround()
+    private GameObject CreateGround()
     {
         GameObject currentGround = groundObjects.GetObject();
         Vector2 spawnPos = new Vector2(previousSpawnPosition.x + groundSize, ySpawnPosition);
         currentGround.transform.position = spawnPos;
         previousSpawnPosition = spawnPos;
         currentGround.SetActive(true);
+        return currentGround;
+    }
+
+    /// <summary>
+    /// Creates a random obstacle from an array
+    /// </summary>
+    /// <param name="ground"></param>
+    private void CreateObstacle(GameObject ground)
+    {
+        GameObject currentObstacle = Instantiate(obstacles[Random.Range(0,4)],transform.position,Quaternion.identity);
+        
+        Collider2D groundCollider = ground.GetComponent<Collider2D>();
+        Collider2D obstacleCollider = currentObstacle.GetComponent<Collider2D>();
+        float centreToBottomDistance = obstacleCollider.transform.position.y - obstacleCollider.bounds.min.y;
+        Debug.Log("The distance from the bottom Y bounds to top Y bounds of the obstacle is:" + centreToBottomDistance);
+        Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.max.y + centreToBottomDistance);
+        currentObstacle.transform.position = obstacleSpawnPos;
     }
 }

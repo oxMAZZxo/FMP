@@ -1,5 +1,9 @@
 using System.Collections.Generic;
 
+/// <summary>
+/// The pool class allows developers to create a list of objects which they can re-use/recycle
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class Pool<T>
 {
     private T[] objects;
