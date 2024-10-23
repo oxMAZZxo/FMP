@@ -67,6 +67,10 @@ public class GameManager : MonoBehaviour
         
     }
 
+
+    /// <summary>
+    /// Creates a new ground based on the position of where the previous ground was created
+    /// </summary>
     public void CreateGround()
     {
         GameObject currentGround = groundObjects.GetObject();
