@@ -46,6 +46,7 @@ public class TouchControls : MonoBehaviour
 
     private void DetectSwipe()
     {
+        
         Vector2 swipeDelta = touchEnd - touchStart;
         SwipeDirection swipeDirection = SwipeDirection.NONE;
         if(swipeDelta.magnitude > deadzone)

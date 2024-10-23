@@ -169,7 +169,7 @@ public class SkateboardController : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezePositionY;
         transform.position = new Vector2(transform.position.x,transform.position.y + distanceToMove);
         isGrinding = true;    
-
+        rb.rotation = 0;
         //show grind animation
         ShowGrindAnimation(swipeDirection);         
     }
