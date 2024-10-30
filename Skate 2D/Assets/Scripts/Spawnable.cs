@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Obstacle", menuName = "ScriptableObjects/Obstacle", order = 1)]
-public class Obstacle : ScriptableObject
+public class Spawnable : ScriptableObject
 {
     public GameObject[] objects;
-    public ObstacleType type;
+    public ObjectType type;
     public SpawnAction spawnAction;
 }
 
-public enum ObstacleType
+public enum ObjectType
 {
     Curb,
     Bench,
     Rail,
     Kicker,
-    Unavoidable
+    Unavoidable,
+    Bins,
 }
 
 public enum SpawnAction

@@ -9,7 +9,7 @@ public class ProceduralMap : MonoBehaviour
     const float ySpawnPosition = -0.5f;
     [SerializeField]private Transform player;
     [SerializeField]private GameObject groundPrefab;
-    [SerializeField]private Obstacle[] obstaclePrefabs;
+    [SerializeField]private Spawnable[] obstaclePrefabs;
     private Pool<GameObject> groundObjects;
     private Pool<GameObject>[] obstaclePools;
     private Vector2 previousSpawnPosition;
