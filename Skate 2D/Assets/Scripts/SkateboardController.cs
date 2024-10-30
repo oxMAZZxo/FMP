@@ -14,7 +14,7 @@ public class SkateboardController : MonoBehaviour
     [SerializeField,Range(0.1f,5f)]private float minVelocity = 3f;
     [SerializeField,Range(1f,200f)]private float maxMovementSpeed = 150f;
     [SerializeField,Range(0.1f,10f)]private float maxVelocity = 5f;
-    [SerializeField,Range(0.5f,5f)]private float minimumJumpForce = 1f;
+    [SerializeField,Range(0.1f,1f)]private float minimumJumpForce = 1f;
     [SerializeField]private Transform groundCheck;
     [SerializeField]private LayerMask whatIsGround;
     [SerializeField,Range(0.01f,1f)]private float groundedCheckRadius = 0.2f; 
@@ -108,10 +108,10 @@ public class SkateboardController : MonoBehaviour
 
     private void Action(object sender, TouchEventArgs e)
     {
-        currentTouchTime = e.touchTime;
+        currentTouchTime = e.touchTime + 1;
         if(e.swipeDirection == SwipeDirection.NONE)
         {
-            Move();
+            // Move();
             return;
         }
 

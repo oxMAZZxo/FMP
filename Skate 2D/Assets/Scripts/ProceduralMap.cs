@@ -9,10 +9,11 @@ public class ProceduralMap : MonoBehaviour
     const float ySpawnPosition = -0.5f;
     [SerializeField]private Transform player;
     [SerializeField]private GameObject groundPrefab;
-    [SerializeField]private GameObject[] obstaclePrefabs;
+    [SerializeField]private Obstacle[] obstaclePrefabs;
     private Pool<GameObject> groundObjects;
     private Pool<GameObject>[] obstaclePools;
     private Vector2 previousSpawnPosition;
+    private SpawnAction currentSpawnAction = SpawnAction.Spawn;
 
     void Awake()
     {
@@ -44,13 +45,17 @@ public class ProceduralMap : MonoBehaviour
         
         groundObjects = new Pool<GameObject>(5,grounds);
         obstaclePools = new Pool<GameObject>[obstaclePrefabs.Length];
-        for(int i = 0; i < obstaclePrefabs.Length; i++)
-        {
-            GameObject one = Instantiate(obstaclePrefabs[i],new Vector2(0,1000),Quaternion.identity);
-            GameObject two = Instantiate(obstaclePrefabs[i],new Vector2(0,1000),Quaternion.identity);
-            GameObject three = Instantiate(obstaclePrefabs[i],new Vector2(0,1000),Quaternion.identity);
-            obstaclePools[i] = new Pool<GameObject>(2,one,two,three);
-        }
+        // for(int i = 0; i < obstaclePrefabs.Length; i++)
+        // {
+        //     foreach(GameObject obj in obstaclePrefabs[i].objects)
+        //     {
+
+        //     }
+        //     // GameObject one = Instantiate(obstaclePrefabs[i],new Vector2(0,1000),Quaternion.identity);
+        //     // GameObject two = Instantiate(obstaclePrefabs[i],new Vector2(0,1000),Quaternion.identity);
+        //     // GameObject three = Instantiate(obstaclePrefabs[i],new Vector2(0,1000),Quaternion.identity);
+        //     // obstaclePools[i] = new Pool<GameObject>(2,one,two,three);
+        // }
         
 
     }
@@ -74,11 +79,6 @@ public class ProceduralMap : MonoBehaviour
         rightGround.transform.position = placePosition;
         
         previousSpawnPosition = rightGround.transform.position;
-    }
-
-    void Update()
-    {
-        
     }
 
     /// <summary>
@@ -108,7 +108,15 @@ public class ProceduralMap : MonoBehaviour
     /// <param name="ground"></param>
     private void CreateObstacle(GameObject ground)
     {
-        GameObject currentObstacle = obstaclePools[Random.Range(0,obstaclePools.Length)].GetObject();
+        if(currentSpawnAction != SpawnAction.Spawn) 
+        {
+            currentSpawnAction = SpawnAction.Spawn;
+            return;
+        }
+        // GameObject currentObstacle = obstaclePools[Random.Range(0,obstaclePools.Length)].GetObject();
+        int obstacleType = Random.Range(0,obstaclePrefabs.Length);
+        int obstacleChoice = Random.Range(0,obstaclePrefabs[obstacleType].objects.Length);
+        GameObject currentObstacle = Instantiate(obstaclePrefabs[obstacleType].objects[obstacleChoice],transform.position,Quaternion.identity);
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
         Collider2D obstacleCollider = currentObstacle.GetComponent<Collider2D>();
         // the value 'centreToBottomDistance is needed in order to place the bottom Y bounds of an obstacle,
@@ -116,6 +124,10 @@ public class ProceduralMap : MonoBehaviour
         float centreToBottomDistance = obstacleCollider.transform.position.y - obstacleCollider.bounds.min.y; 
 
         Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.max.y + centreToBottomDistance);
+
         currentObstacle.transform.position = obstacleSpawnPos;
+        currentSpawnAction = obstaclePrefabs[obstacleType].spawnAction;
+
+        Destroy(currentObstacle,10f);
     }
 }
