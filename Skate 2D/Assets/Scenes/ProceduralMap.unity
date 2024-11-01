@@ -584,6 +584,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3088592964041584742}
   groundPrefab: {fileID: 4426653930425013092, guid: 2f89fe4fa4312fe48916369f3ba595b7, type: 3}
+  generateObstacles: 0
   obstaclePrefabs:
   - {fileID: 11400000, guid: f79bc52bcc6b20d4cbe71cf7830c0517, type: 2}
   - {fileID: 11400000, guid: b42de7b770767f0448fdedaba7d268c3, type: 2}
@@ -985,6 +986,14 @@ PrefabInstance:
     - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: minimumJumpForce
       value: 0.712
+      objectReference: {fileID: 0}
+    - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: groundedCheckRadius
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7702316996246342448, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.403
       objectReference: {fileID: 0}
     - target: {fileID: 7722678107793403919, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_Enabled

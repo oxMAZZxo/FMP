@@ -8,6 +8,7 @@ public class Spawnable : ScriptableObject
     public GameObject[] objects;
     public ObjectType type;
     public SpawnAction spawnAction;
+    [Range(1f,100f)]public int followObjectChange = 50;
     public Spawnable[] followObjs;
 }
 

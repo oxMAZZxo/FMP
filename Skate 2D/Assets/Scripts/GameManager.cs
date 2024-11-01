@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetScore(int value)
+    public void AddScore(int value)
     {
         score +=value;
         scoreDisplay.text = score.ToString();

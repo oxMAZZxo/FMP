@@ -24,6 +24,7 @@ public class SkateboardController : MonoBehaviour
     private bool isGrounded;
     private float currentTouchTime;
     private bool isGrinding;
+    private int potentialPoints; //this are points that will be awarded if a trick is landed
 
     void Start()
     {
@@ -37,6 +38,10 @@ public class SkateboardController : MonoBehaviour
         {
             rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
         }
+    }
+
+    void LateUpdate()
+    {
         //While the player is performing a grind, we want to make sure to enable physics
         //as the skateboard is reaching the end of the grindable obstacle
         if(isGrinding) 
@@ -70,9 +75,10 @@ public class SkateboardController : MonoBehaviour
 			if (colliders[i].gameObject != gameObject)
 			{
 				isGrounded = true;
-				if (!wasGrounded)
+				if (!wasGrounded) //meaning you just landed
 				{
-
+                    GameManager.Instance.AddScore(potentialPoints);
+                    potentialPoints = 0;
                 }
 			}
 		}
@@ -92,8 +98,6 @@ public class SkateboardController : MonoBehaviour
                 isGrinding = false; //which means that they would no longer be doing a grind
             }
             
-			isGrounded = false; //which means they would no longer be grounded either
-
 			rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (100 * currentTouchTime))));
         }
     }
@@ -139,22 +143,22 @@ public class SkateboardController : MonoBehaviour
         {
             case SwipeDirection.UP:
             animator.SetTrigger("ollie");
-            GameManager.Instance.SetScore(1);
+            potentialPoints +=1;
             break;
 
             case SwipeDirection.DOWN:
             animator.SetTrigger("shuvit");
-            GameManager.Instance.SetScore(2);
+            potentialPoints +=2;
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("kickflip");
-            GameManager.Instance.SetScore(5);
+            potentialPoints +=5;
             break;
 
             case SwipeDirection.LEFT:
             animator.SetTrigger("heelflip");
-            GameManager.Instance.SetScore(5);
+            potentialPoints +=5;
             break;
 
         }
@@ -184,17 +188,17 @@ public class SkateboardController : MonoBehaviour
         {
             case SwipeDirection.DOWN:
             animator.SetTrigger("50-50");
-            GameManager.Instance.SetScore(5);
+            potentialPoints +=5;
             break;
 
             case SwipeDirection.LEFT:
             animator.SetTrigger("5-0 Grind");
-            GameManager.Instance.SetScore(10);
+            potentialPoints +=10;
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("Nose Grind");
-            GameManager.Instance.SetScore(10);
+            potentialPoints +=10;
             break;
         }
 

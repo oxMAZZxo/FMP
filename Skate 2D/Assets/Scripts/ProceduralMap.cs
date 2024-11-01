@@ -10,6 +10,7 @@ public class ProceduralMap : MonoBehaviour
     const float ySpawnPosition = -0.5f;
     [SerializeField]private Transform player;
     [SerializeField]private GameObject groundPrefab;
+    [SerializeField]private bool generateObstacles;
     [SerializeField]private Spawnable[] obstaclePrefabs;
     private Pool<GameObject> groundObjects;
     private Vector2 previousSpawnPosition;
@@ -73,6 +74,7 @@ public class ProceduralMap : MonoBehaviour
     public void GenerateMap()
     {
         GameObject ground = CreateGround();
+        if(!generateObstacles) {return;}
         StartCoroutine(CreateObstacle(ground));
     }
 
@@ -114,14 +116,14 @@ public class ProceduralMap : MonoBehaviour
 
         firstObstacle.transform.position = obstacleSpawnPos;
         currentSpawnAction = obstaclePrefabs[obstacleType].spawnAction;
-        if(obstaclePrefabs[obstacleType].followObjs.Length > 0 && Random.Range(0,50) > 40)
+        if(obstaclePrefabs[obstacleType].followObjs.Length > 0 && Random.Range(0,101) > 100 - obstaclePrefabs[obstacleType].followObjectChange)
         {
-            Debug.Log($"First obstacle type is {obstaclePrefabs[obstacleType].type.ToString()}");
+            // Debug.Log($"First obstacle type is {obstaclePrefabs[obstacleType].type.ToString()}");
             int secondObstacleType = Random.Range(0,obstaclePrefabs[obstacleType].followObjs.Length);
-            Debug.Log($"Second obstacle type number is {secondObstacleType}");
-            Debug.Log($"Second obstacle type is {obstaclePrefabs[obstacleType].followObjs[secondObstacleType].type.ToString()}");
+            // Debug.Log($"Second obstacle type number is {secondObstacleType}");
+            // Debug.Log($"Second obstacle type is {obstaclePrefabs[obstacleType].followObjs[secondObstacleType].type.ToString()}");
             int secondObstacleChoice = Random.Range(0,obstaclePrefabs[obstacleType].followObjs[secondObstacleType].objects.Length);
-            Debug.Log($"From that type, the object chosen is {obstaclePrefabs[obstacleType].followObjs[secondObstacleType].objects[secondObstacleChoice].name}");
+            // Debug.Log($"From that type, the object chosen is {obstaclePrefabs[obstacleType].followObjs[secondObstacleType].objects[secondObstacleChoice].name}");
             GameObject secondObstacle = Instantiate(obstaclePrefabs[obstacleType].followObjs[secondObstacleType].objects[secondObstacleChoice],transform.position,Quaternion.identity);
 
             Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
@@ -133,8 +135,6 @@ public class ProceduralMap : MonoBehaviour
             Destroy(secondObstacle,10f);
         }
         
-
-
         Destroy(firstObstacle,10f);
     }
 }
