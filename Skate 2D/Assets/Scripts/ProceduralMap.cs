@@ -99,7 +99,7 @@ public class ProceduralMap : MonoBehaviour
         if(currentSpawnAction != SpawnAction.Spawn) 
         {
             currentSpawnAction = SpawnAction.Spawn;
-            yield return null;
+            yield break;
         }
         yield return new WaitForSeconds(0.3f);
         // GameObject currentObstacle = obstaclePools[Random.Range(0,obstaclePools.Length)].GetObject();
@@ -131,7 +131,16 @@ public class ProceduralMap : MonoBehaviour
             centreToBottomDistance = secondObstacleCollider.transform.position.y - secondObstacleCollider.bounds.min.y;
             Vector2 secondObstaclePos = new Vector2(firstObstacle.transform.position.x + firstObstacleCollider.bounds.max.x + centreToLeft + secondObstacleX_SpawnOffset, groundCollider.bounds.max.y + centreToBottomDistance);
             secondObstacle.transform.position = secondObstaclePos;
-            secondObstacleCollider.isTrigger = false;
+            switch (obstaclePrefabs[obstacleType].followObjs[secondObstacleType].type)
+            {
+                case ObjectType.Bins:
+                secondObstacleCollider.isTrigger = false;
+                break;
+                
+                case ObjectType.Unavoidable: 
+                currentSpawnAction = obstaclePrefabs[obstacleType].followObjs[secondObstacleType].spawnAction;
+                break;
+            }
             Destroy(secondObstacle,10f);
         }
         

@@ -122,6 +122,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &41148718 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8201818001491858908, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+  m_PrefabInstance: {fileID: 5740491684925399139}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &145063356
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,7 +589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3088592964041584742}
   groundPrefab: {fileID: 4426653930425013092, guid: 2f89fe4fa4312fe48916369f3ba595b7, type: 3}
-  generateObstacles: 0
+  generateObstacles: 1
   obstaclePrefabs:
   - {fileID: 11400000, guid: f79bc52bcc6b20d4cbe71cf7830c0517, type: 2}
   - {fileID: 11400000, guid: b42de7b770767f0448fdedaba7d268c3, type: 2}
@@ -694,6 +699,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1581971375 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8481983751286521546, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+  m_PrefabInstance: {fileID: 5740491684925399139}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1727760423
 GameObject:
   m_ObjectHideFlags: 0
@@ -927,10 +937,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2490113007175574201, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_GravityScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3220706696710446752, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -975,34 +981,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skateboard
       objectReference: {fileID: 0}
-    - target: {fileID: 3352248071572651824, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: minVelocity
-      value: 3.5
-      objectReference: {fileID: 0}
+      propertyPath: backWheelSparks
+      value: 
+      objectReference: {fileID: 1581971375}
     - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: minimumJumpForce
-      value: 0.712
-      objectReference: {fileID: 0}
-    - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: groundedCheckRadius
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7702316996246342448, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.403
-      objectReference: {fileID: 0}
-    - target: {fileID: 7722678107793403919, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7722678107793403919, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: frontWheelSparks
+      value: 
+      objectReference: {fileID: 41148718}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

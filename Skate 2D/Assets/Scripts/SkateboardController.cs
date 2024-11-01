@@ -20,7 +20,8 @@ public class SkateboardController : MonoBehaviour
     [SerializeField,Range(0.01f,1f)]private float groundedCheckRadius = 0.2f; 
     [SerializeField]private LayerMask whatIsGrindable;
     [SerializeField,Range(0.01f,1f)]private float grindableCheckRadius = 0.3f;
-    [SerializeField]private GameObject sparksParticle;
+    [SerializeField]private GameObject backWheelSparks;
+    [SerializeField]private GameObject frontWheelSparks;
     private bool isGrounded;
     private float currentTouchTime;
     private bool isGrinding;
@@ -38,10 +39,7 @@ public class SkateboardController : MonoBehaviour
         {
             rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
         }
-    }
 
-    void LateUpdate()
-    {
         //While the player is performing a grind, we want to make sure to enable physics
         //as the skateboard is reaching the end of the grindable obstacle
         if(isGrinding) 
@@ -52,7 +50,8 @@ public class SkateboardController : MonoBehaviour
                 rb.gravityScale = 1;
                 isGrinding = false;
                 animator.SetBool("isGrinding",false);
-                sparksParticle.SetActive(false);
+                backWheelSparks.SetActive(false);
+                frontWheelSparks.SetActive(false);
             }
 
         }else
@@ -86,8 +85,8 @@ public class SkateboardController : MonoBehaviour
 
     public void Jump()
     {
-        if (isGrounded || isGrinding)
-		{
+        // if (isGrounded || isGrinding)
+		// {
             //if the code reaches this point of execution
             //it is assumed that the player is perfoming a trick
             //therefore we reset gravity if they were performing a grind
@@ -99,7 +98,7 @@ public class SkateboardController : MonoBehaviour
             }
             
 			rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (100 * currentTouchTime))));
-        }
+        // }
     }
 
     private void Move()
@@ -126,7 +125,8 @@ public class SkateboardController : MonoBehaviour
             CheckCanGrind(e.swipeDirection); //Check If the player can grind
         }else //else if one of those conditions is true
         {
-            sparksParticle.SetActive(false);
+            backWheelSparks.SetActive(false);
+            frontWheelSparks.SetActive(false);
             ShowTrickAnimation(e.swipeDirection);//perfrom a trick
             if(isGrinding) // if they are grinding before the trick
             {
@@ -189,20 +189,23 @@ public class SkateboardController : MonoBehaviour
             case SwipeDirection.DOWN:
             animator.SetTrigger("50-50");
             potentialPoints +=5;
+            backWheelSparks.SetActive(true);
+            frontWheelSparks.SetActive(true);
             break;
 
             case SwipeDirection.LEFT:
             animator.SetTrigger("5-0 Grind");
+            backWheelSparks.SetActive(true);
             potentialPoints +=10;
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("Nose Grind");
             potentialPoints +=10;
+            frontWheelSparks.SetActive(true);
             break;
         }
 
-        sparksParticle.SetActive(true);
         animator.SetBool("isGrinding",true);   
     }
 
