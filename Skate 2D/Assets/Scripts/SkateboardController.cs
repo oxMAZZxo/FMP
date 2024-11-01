@@ -139,18 +139,22 @@ public class SkateboardController : MonoBehaviour
         {
             case SwipeDirection.UP:
             animator.SetTrigger("ollie");
+            GameManager.Instance.SetScore(1);
             break;
 
             case SwipeDirection.DOWN:
             animator.SetTrigger("shuvit");
+            GameManager.Instance.SetScore(2);
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("kickflip");
+            GameManager.Instance.SetScore(5);
             break;
 
             case SwipeDirection.LEFT:
             animator.SetTrigger("heelflip");
+            GameManager.Instance.SetScore(5);
             break;
 
         }
@@ -180,14 +184,17 @@ public class SkateboardController : MonoBehaviour
         {
             case SwipeDirection.DOWN:
             animator.SetTrigger("50-50");
+            GameManager.Instance.SetScore(5);
             break;
 
             case SwipeDirection.LEFT:
             animator.SetTrigger("5-0 Grind");
+            GameManager.Instance.SetScore(10);
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("Nose Grind");
+            GameManager.Instance.SetScore(10);
             break;
         }
 

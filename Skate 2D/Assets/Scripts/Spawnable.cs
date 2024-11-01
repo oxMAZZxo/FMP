@@ -8,6 +8,7 @@ public class Spawnable : ScriptableObject
     public GameObject[] objects;
     public ObjectType type;
     public SpawnAction spawnAction;
+    public Spawnable[] followObjs;
 }
 
 public enum ObjectType
