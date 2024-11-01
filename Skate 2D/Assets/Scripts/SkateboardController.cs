@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Pool;
 
 [RequireComponent(typeof(Animator))]
 public class SkateboardController : MonoBehaviour
