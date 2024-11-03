@@ -8,4 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ProceduralMap.unity
     guid: fa3dc8f840b777847ae6cc5835363155
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: d5db9a8b1ff08264d83a0ad6ebe2a29d, type: 2}
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: b5f416978ea30a84d849fb5542c7838c, type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 2056c0777272fcd43baeb24d939e97f7, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: fc1f59ecf4550ce4b920a268371e4024, type: 2}
