@@ -116,7 +116,7 @@ public class ProceduralMap : MonoBehaviour
 
         firstObstacle.transform.position = obstacleSpawnPos;
         currentSpawnAction = obstaclePrefabs[obstacleType].spawnAction;
-        if(obstaclePrefabs[obstacleType].followObjs.Length > 0 && Random.Range(0,101) > 100 - obstaclePrefabs[obstacleType].followObjectChange)
+        if(obstaclePrefabs[obstacleType].followObjs.Length > 0 && Random.Range(0,101) > 100 - obstaclePrefabs[obstacleType].followObjectChance)
         {
             // Debug.Log($"First obstacle type is {obstaclePrefabs[obstacleType].type.ToString()}");
             int secondObstacleType = Random.Range(0,obstaclePrefabs[obstacleType].followObjs.Length);

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
-  m_Name: Unavoidable
+  m_Name: Others
   m_EditorClassIdentifier: 
   objects:
-  - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
-  type: 4
-  spawnAction: 1
+  - {fileID: 4519162212903854901, guid: a27d5d0a57134bc4c90245cc1330060a, type: 3}
+  type: 0
+  spawnAction: 0
   followObjectChange: 50
   followObjs: []
