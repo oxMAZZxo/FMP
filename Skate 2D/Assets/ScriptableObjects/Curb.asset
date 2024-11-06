@@ -19,3 +19,4 @@ MonoBehaviour:
   followObjectChange: 60
   followObjs:
   - {fileID: 11400000, guid: 69d6e57816fa5164795610b2492a75b2, type: 2}
+  - {fileID: 11400000, guid: 7ff921a36f5bbcf48840412aae8c21de, type: 2}

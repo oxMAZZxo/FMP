@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objects:
   - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
+  - {fileID: 4519162212903854901, guid: a27d5d0a57134bc4c90245cc1330060a, type: 3}
   type: 4
   spawnAction: 1
+  followObjectChange: 50
+  followObjs: []
