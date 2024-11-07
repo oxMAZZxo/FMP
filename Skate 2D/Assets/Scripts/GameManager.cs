@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        Application.targetFrameRate = 144;
+    }
+
     void Update()
     {
         if( m_timeCounter < m_refreshTime )
