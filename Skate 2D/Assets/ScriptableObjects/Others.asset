@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
-  m_Name: Curb
+  m_Name: Others
   m_EditorClassIdentifier: 
   objects:
-  - {fileID: 3466813424133893137, guid: ca980184523ce5344bf53196c0bdafbf, type: 3}
+  - {fileID: 4519162212903854901, guid: a27d5d0a57134bc4c90245cc1330060a, type: 3}
   type: 0
-  spawnAction: 1
-  followObjectChange: 60
-  followObjs:
-  - {fileID: 11400000, guid: 69d6e57816fa5164795610b2492a75b2, type: 2}
-  - {fileID: 11400000, guid: 7ff921a36f5bbcf48840412aae8c21de, type: 2}
+  spawnAction: 0
+  followObjectChange: 50
+  followObjs: []

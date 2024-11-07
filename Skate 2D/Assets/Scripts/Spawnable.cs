@@ -8,7 +8,7 @@ public class Spawnable : ScriptableObject
     public GameObject[] objects;
     public ObjectType type;
     public SpawnAction spawnAction;
-    [Range(1f,100f)]public int followObjectChange = 50;
+    [Range(1f,100f)]public int followObjectChance = 50;
     public Spawnable[] followObjs;
 }
 
@@ -20,6 +20,7 @@ public enum ObjectType
     Kicker,
     Unavoidable,
     Bins,
+    Other
 }
 
 public enum SpawnAction
