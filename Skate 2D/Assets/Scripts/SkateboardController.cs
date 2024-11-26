@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator))]
 public class SkateboardController : MonoBehaviour
@@ -19,15 +20,18 @@ public class SkateboardController : MonoBehaviour
     [SerializeField,Range(0.01f,1f)]private float grindableCheckRadius = 0.3f;
     [SerializeField]private GameObject backWheelSparks;
     [SerializeField]private GameObject frontWheelSparks;
+    [SerializeField]private Slider jumpForceSlider;
     private bool isGrounded;
     private float currentTouchTime;
     private bool isGrinding;
     private int potentialPoints; //this are points that will be awarded if a trick is landed
+    private bool isCharging;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        jumpForceSlider.maxValue = 1.5f;
     }
 
     void FixedUpdate()
@@ -54,6 +58,13 @@ public class SkateboardController : MonoBehaviour
         }else
         {
             CheckGrounded();
+        }
+
+        if(isCharging){
+            jumpForceSlider.value += Time.fixedDeltaTime;
+        }else
+        {
+            jumpForceSlider.value = 0;
         }
     }
 
@@ -93,7 +104,8 @@ public class SkateboardController : MonoBehaviour
                 rb.gravityScale = 1;
                 isGrinding = false; //which means that they would no longer be doing a grind
             }
-            
+            Debug.Log($"Current touch time: {currentTouchTime}");
+            Debug.Log($"Jump force will be: {minimumJumpForce * (100 + (100 * currentTouchTime))}");
 			rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (100 * currentTouchTime))));
         // }
     }
@@ -109,6 +121,7 @@ public class SkateboardController : MonoBehaviour
     private void Action(object sender, TouchEventArgs e)
     {
         currentTouchTime = e.touchTime + 1;
+        if(currentTouchTime > 2.5f) {currentTouchTime = 2.5f;}
         if(e.swipeDirection == SwipeDirection.NONE)
         {
             // Move();
@@ -237,14 +250,30 @@ public class SkateboardController : MonoBehaviour
         return false;
     }
 
+    private void OnTouchStarted(object sender, EventArgs e)
+    {
+        Debug.Log("Touch Started");
+        isCharging = true;
+    }
+
+    private void OnTouchEnded(object sender, EventArgs e)
+    {
+        Debug.Log("Touch Ended");
+        isCharging = false;
+    }
+
     void OnEnable()
     {
         TouchControls.touchEvent += Action;
+        TouchControls.touchStarted += OnTouchStarted;
+        TouchControls.touchEnded += OnTouchEnded;
     }
 
     void OnDisable()
     {
         TouchControls.touchEvent -= Action;
+        TouchControls.touchStarted -= OnTouchStarted;
+        TouchControls.touchEnded -= OnTouchEnded;
     }
 
     void OnDrawGizmos()

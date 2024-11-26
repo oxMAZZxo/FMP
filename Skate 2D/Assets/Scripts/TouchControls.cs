@@ -10,6 +10,8 @@ public class TouchControls : MonoBehaviour
     [SerializeField,Range(0.01f,1f)]private float minDiagonalThreshold = 0.4f;
     [SerializeField]private InputActionReference touchInput;
     public static event EventHandler<TouchEventArgs> touchEvent;
+    public static event EventHandler<EventArgs> touchStarted;
+    public static event EventHandler<EventArgs> touchEnded;
     private Vector2 touchStart;
     private Vector2 touchEnd;
     private float worldRadius;
@@ -94,6 +96,7 @@ public class TouchControls : MonoBehaviour
         {
             touchStart = Touchscreen.current.primaryTouch.position.ReadValue();
         }
+        touchStarted?.Invoke(this, EventArgs.Empty);
     }
 
     private void OnTouchInputEnded(InputAction.CallbackContext context)
@@ -103,6 +106,7 @@ public class TouchControls : MonoBehaviour
         {
             touchEnd = Touchscreen.current.primaryTouch.position.ReadValue();
         }
+        touchEnded?.Invoke(this, EventArgs.Empty);
         DetectSwipe();
         touchStart = Vector2.zero;
         touchTime = 0;
