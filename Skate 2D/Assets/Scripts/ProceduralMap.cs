@@ -27,7 +27,7 @@ public class ProceduralMap : MonoBehaviour
         }
     }
 
-     void Start()
+    void Start()
     {
         InitPools();
         InitGround();

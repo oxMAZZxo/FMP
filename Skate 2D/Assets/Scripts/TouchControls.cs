@@ -42,6 +42,9 @@ public class TouchControls : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Detects if there is a viable swipe, else it will invoke an a plain touch input.
+    /// </summary>
     private void DetectSwipe()
     {
         
@@ -52,10 +55,13 @@ public class TouchControls : MonoBehaviour
             swipeDirection = CalculateSwipe(swipeDelta);
         }
         touchEvent?.Invoke(this, new TouchEventArgs(touchTime, swipeDirection));
-
     }
 
-
+    /// <summary>
+    /// Calculates the direction of the swipe, if there is one.
+    /// </summary>
+    /// <param name="delta">The current swipe</param>
+    /// <returns>Returns NONE if there is no swipe direction based on the variables tweaked</returns>
     private SwipeDirection CalculateSwipe(Vector2 delta)
     {
         delta.Normalize();
@@ -89,6 +95,11 @@ public class TouchControls : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Function called user touches the screen
+    /// </summary>
+    /// <param name="context">The input action context</param>
     private void OnTouchInputBegan(InputAction.CallbackContext context)
     {
         touchStart = Mouse.current.position.ReadValue();
@@ -99,6 +110,11 @@ public class TouchControls : MonoBehaviour
         touchStarted?.Invoke(this, EventArgs.Empty);
     }
 
+
+    /// <summary>
+    /// Function invoked when user lifts their finger from the screen
+    /// </summary>
+    /// <param name="context"></param>
     private void OnTouchInputEnded(InputAction.CallbackContext context)
     {
         touchEnd = Mouse.current.position.ReadValue();
@@ -126,9 +142,12 @@ public class TouchControls : MonoBehaviour
         touchInput.action.canceled -= OnTouchInputEnded;
     }
 
+    /// <summary>
+    /// Draws a debug gizmos for debugging purposes
+    /// </summary>
     void OnDrawGizmos()
     {
-        if(touchStart == Vector2.zero) {return;}
+        if(touchStart == Vector2.zero || cam == null) {return;}
         Vector3 start = cam.ScreenToWorldPoint(touchStart);
         start.z = 0;
         worldRadius = deadzone * (2 * cam.orthographicSize / Screen.height);
