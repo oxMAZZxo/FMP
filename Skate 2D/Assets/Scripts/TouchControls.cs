@@ -17,7 +17,6 @@ public class TouchControls : MonoBehaviour
     private float worldRadius;
     private float touchTime;
 
-
     void Awake()
     {
         if(Instance == null && Instance != this)
