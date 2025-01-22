@@ -9,10 +9,10 @@ public class GameManager : MonoBehaviour
     public int score {get; private set;}
     public TextMeshProUGUI scoreDisplay;
     public TextMeshProUGUI framerateDisplay;
-    private float m_timeCounter;
-    [Range(0.1f,1f)]public float m_refreshTime = 0.5f;
-    private float m_frameCounter;
-    private float m_lastFramerate;
+    private float timeCounter;
+    [Range(0.1f,1f)]public float refreshTime = 0.5f;
+    private float frameCounter;
+    private float lastFramerate;
 
     void Awake()
     {
@@ -32,18 +32,18 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if( m_timeCounter < m_refreshTime )
+        if( timeCounter < refreshTime )
         {
-            m_timeCounter += Time.deltaTime;
-            m_frameCounter++;
+            timeCounter += Time.deltaTime;
+            frameCounter++;
         }
         else
         {
             //This code will break if you set your m_refreshTime to 0, which makes no sense.
-            m_lastFramerate = (float)m_frameCounter/m_timeCounter;
-            framerateDisplay.text = "Average framerate: " + m_lastFramerate.ToString("F0");
-            m_frameCounter = 0;
-            m_timeCounter = 0.0f;
+            lastFramerate = (float)frameCounter/timeCounter;
+            framerateDisplay.text = "Average framerate: " + lastFramerate.ToString("F0");
+            frameCounter = 0;
+            timeCounter = 0.0f;
         }
     }
 
