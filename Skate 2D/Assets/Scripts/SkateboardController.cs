@@ -31,7 +31,7 @@ public class SkateboardController : MonoBehaviour
     private bool isCharging;
     private bool isStopped;
     private bool hasStarted;
-    private bool isPerfomingTrick;
+    private bool performedTrick;
     private bool isCombo;
     private int comboCounter = 1;
     private int longestCombo;
@@ -104,7 +104,7 @@ public class SkateboardController : MonoBehaviour
 				isGrounded = true;
 				if (!wasGrounded) //meaning you just landed
 				{
-                    isPerfomingTrick = false;
+                    performedTrick = false;
                     if(isCombo){
                         GameManager.Instance.IncrementNumberOfCombos();
                     }
@@ -128,7 +128,7 @@ public class SkateboardController : MonoBehaviour
             //if the code reaches this point of execution
             //it is assumed that the player is perfoming a trick
             //therefore we reset gravity if they were performing a grind
-            isPerfomingTrick = true;
+            performedTrick = true;
             // Debug.Log("Performing Trick");
             if(isGrinding)
             {
@@ -160,19 +160,15 @@ public class SkateboardController : MonoBehaviour
             return;
         }
 
-        if(isPerfomingTrick)
-        {
-            comboDisplay.gameObject.SetActive(true);
-            isCombo = true;
-            comboCounter++;
-        }
+        bool isPerformingTrick = false;
         //if the player is not on the ground and isn't grinding
         //meaning they are in the air, and they perform an action
         if(!isGrounded && !isGrinding)
         {
-            CheckCanGrind(e.swipeDirection); //Check If the player can grind
+            isPerformingTrick = CheckCanGrind(e.swipeDirection); //Check If the player can grind
         }else //else if one of those conditions is true
         {
+            isPerformingTrick = true;
             backWheelSparks.SetActive(false);
             frontWheelSparks.SetActive(false);
             ShowTrickAnimation(e.swipeDirection);//perfrom a trick
@@ -181,6 +177,13 @@ public class SkateboardController : MonoBehaviour
                 animator.SetBool("isGrinding",false); //disable the grind animations
                 //so that the trick animation can play
             }
+        }
+
+        if(performedTrick && isPerformingTrick)
+        {
+            comboDisplay.gameObject.SetActive(true);
+            isCombo = true;
+            comboCounter++;
         }
         
     }
@@ -216,11 +219,11 @@ public class SkateboardController : MonoBehaviour
         GameManager.Instance.IncrementNumberOfTricks();        
     }
 
-    private void CheckCanGrind(SwipeDirection swipeDirection)
+    private bool CheckCanGrind(SwipeDirection swipeDirection)
     {
         Collider2D other;
         bool grindable = CheckGrindable(out other); //check if player is above a grindable obstacle
-        if(!grindable || swipeDirection != SwipeDirection.DOWN && swipeDirection != SwipeDirection.LEFT && swipeDirection != SwipeDirection.RIGHT) {return;}
+        if(!grindable || swipeDirection != SwipeDirection.DOWN && swipeDirection != SwipeDirection.LEFT && swipeDirection != SwipeDirection.RIGHT) {return false;}
 
         //positions the player above the grindable obstacle
         float distanceToMove = other.bounds.max.y - GetComponent<Collider2D>().bounds.min.y;
@@ -231,6 +234,7 @@ public class SkateboardController : MonoBehaviour
         rb.rotation = 0;
         //show grind animation
         ShowGrindAnimation(swipeDirection);       
+        return true;
     }
 
     private void ShowGrindAnimation(SwipeDirection swipeDirection)
