@@ -18,6 +18,6 @@ MonoBehaviour:
   - {fileID: 558601362516956773, guid: 8a93b6089126c994380feb21f5926417, type: 3}
   type: 1
   spawnAction: 0
-  followObjectChance: 50
+  followObjectChance: 70
   followObjs:
   - {fileID: 11400000}

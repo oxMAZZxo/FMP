@@ -93,7 +93,7 @@ public class ProceduralMap : MonoBehaviour
     /// <summary>
     /// Creates a random obstacle from an array
     /// </summary>
-    /// <param name="ground"></param>
+    /// <param name="ground"></param>   
     IEnumerator CreateObstacle(GameObject ground)
     {
         if(currentSpawnAction != SpawnAction.Spawn) 
@@ -116,7 +116,7 @@ public class ProceduralMap : MonoBehaviour
 
         firstObstacle.transform.position = obstacleSpawnPos;
         currentSpawnAction = obstaclePrefabs[obstacleType].spawnAction;
-        if(obstaclePrefabs[obstacleType].followObjs.Length > 0 && Random.Range(0,101) > 100 - obstaclePrefabs[obstacleType].followObjectChance)
+        if(obstaclePrefabs[obstacleType].followObjs.Length > 0 && Random.Range(0,101) > (100 - obstaclePrefabs[obstacleType].followObjectChance))
         {
             // Debug.Log($"First obstacle type is {obstaclePrefabs[obstacleType].type.ToString()}");
             int secondObstacleType = Random.Range(0,obstaclePrefabs[obstacleType].followObjs.Length);
@@ -139,6 +139,10 @@ public class ProceduralMap : MonoBehaviour
                 
                 case ObjectType.Unavoidable: 
                 currentSpawnAction = obstaclePrefabs[obstacleType].followObjs[secondObstacleType].spawnAction;
+                break;
+
+                default:
+                currentSpawnAction = SpawnAction.Skip;
                 break;
             }
             Destroy(secondObstacle,10f);
