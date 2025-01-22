@@ -18,6 +18,7 @@ public enum ObjectType
     Bench,
     Rail,
     Kicker,
+    Pyramid,
     Unavoidable,
     Bins,
     Other

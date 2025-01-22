@@ -26,7 +26,7 @@ public class TouchControls : MonoBehaviour
             DontDestroyOnLoad(this);
         }else
         {
-            Debug.Log("An Instance of TouchControls already exists, destroying extra ones");
+            // Debug.Log("An Instance of TouchControls already exists, destroying extra ones");
             Destroy(gameObject);
         }
     }

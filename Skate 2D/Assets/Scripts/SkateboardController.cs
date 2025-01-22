@@ -40,7 +40,7 @@ public class SkateboardController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        jumpForceSlider.maxValue = 1.5f;
+        jumpForceSlider.maxValue = 1f;
     }
 
     void FixedUpdate()
@@ -153,14 +153,14 @@ public class SkateboardController : MonoBehaviour
     private void Action(object sender, TouchEventArgs e)
     {
         currentTouchTime = e.touchTime + 1;
-        if(currentTouchTime > 2.5f) {currentTouchTime = 2.5f;}
+        if(currentTouchTime > 2f) {currentTouchTime = 2f;}
         if(e.swipeDirection == SwipeDirection.NONE)
         {
             // Move();
             return;
         }
 
-        bool isPerformingTrick = false;
+        bool isPerformingTrick;
         //if the player is not on the ground and isn't grinding
         //meaning they are in the air, and they perform an action
         if(!isGrounded && !isGrinding)

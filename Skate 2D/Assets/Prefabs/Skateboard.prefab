@@ -200,8 +200,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   grindableCheckRadius: 0.25
-  backWheelSparks: {fileID: 0}
-  frontWheelSparks: {fileID: 0}
+  backWheelSparks: {fileID: 8481983751286521546}
+  frontWheelSparks: {fileID: 8201818001491858908}
+  jumpForceSlider: {fileID: 0}
+  comboDisplay: {fileID: 0}
 --- !u!1 &8199973140764820576
 GameObject:
   m_ObjectHideFlags: 0
