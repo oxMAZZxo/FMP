@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,7 @@ public class SkateboardController : MonoBehaviour
     [SerializeField]private GameObject backWheelSparks;
     [SerializeField]private GameObject frontWheelSparks;
     [SerializeField]private Slider jumpForceSlider;
+    [SerializeField]private TextMeshProUGUI comboDisplay;
     private bool isGrounded;
     private float currentTouchTime;
     private bool isGrinding;
@@ -29,6 +31,10 @@ public class SkateboardController : MonoBehaviour
     private bool isCharging;
     private bool isStopped;
     private bool hasStarted;
+    private bool isPerfomingTrick;
+    private bool isCombo;
+    private int comboCounter = 1;
+    private int longestCombo;
 
     void Start()
     {
@@ -52,7 +58,7 @@ public class SkateboardController : MonoBehaviour
         if(hasStarted && rb.velocity.x < 0.3f)
         {
             isStopped = true;
-            GameManager.Instance.SessionEnded();
+            GameManager.Instance.SessionEnded(longestCombo);
             GameOver();
         }
 
@@ -69,7 +75,6 @@ public class SkateboardController : MonoBehaviour
                 backWheelSparks.SetActive(false);
                 frontWheelSparks.SetActive(false);
             }
-
         }else
         {
             CheckGrounded();
@@ -99,8 +104,18 @@ public class SkateboardController : MonoBehaviour
 				isGrounded = true;
 				if (!wasGrounded) //meaning you just landed
 				{
+                    isPerfomingTrick = false;
+                    if(isCombo){
+                        GameManager.Instance.IncrementNumberOfCombos();
+                    }
+                    isCombo = false;
+                    if(comboCounter > longestCombo) { longestCombo = comboCounter;}
+                    comboCounter = 1;
+                    // Debug.Log("Not Perfoming Trick");
                     GameManager.Instance.AddScore(potentialPoints);
                     potentialPoints = 0;
+                    comboDisplay.gameObject.SetActive(false);
+                    comboDisplay.text = "";
                 }
 			}
 		}
@@ -113,6 +128,8 @@ public class SkateboardController : MonoBehaviour
             //if the code reaches this point of execution
             //it is assumed that the player is perfoming a trick
             //therefore we reset gravity if they were performing a grind
+            isPerfomingTrick = true;
+            // Debug.Log("Performing Trick");
             if(isGrinding)
             {
                 rb.constraints = RigidbodyConstraints2D.None;
@@ -143,6 +160,12 @@ public class SkateboardController : MonoBehaviour
             return;
         }
 
+        if(isPerfomingTrick)
+        {
+            comboDisplay.gameObject.SetActive(true);
+            isCombo = true;
+            comboCounter++;
+        }
         //if the player is not on the ground and isn't grinding
         //meaning they are in the air, and they perform an action
         if(!isGrounded && !isGrinding)
@@ -174,16 +197,19 @@ public class SkateboardController : MonoBehaviour
             case SwipeDirection.DOWN:
             animator.SetTrigger("shuvit");
             potentialPoints +=2;
+            comboDisplay.text += " Shuvit";
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("kickflip");
             potentialPoints +=5;
+            comboDisplay.text += " Kickflip";
             break;
 
             case SwipeDirection.LEFT:
             animator.SetTrigger("heelflip");
             potentialPoints +=5;
+            comboDisplay.text += " Heelflip";
             break;
 
         }
@@ -204,7 +230,7 @@ public class SkateboardController : MonoBehaviour
         isGrinding = true;    
         rb.rotation = 0;
         //show grind animation
-        ShowGrindAnimation(swipeDirection);         
+        ShowGrindAnimation(swipeDirection);       
     }
 
     private void ShowGrindAnimation(SwipeDirection swipeDirection)
@@ -216,24 +242,26 @@ public class SkateboardController : MonoBehaviour
             potentialPoints +=5;
             backWheelSparks.SetActive(true);
             frontWheelSparks.SetActive(true);
+            comboDisplay.text += " 50-50";
             break;
 
             case SwipeDirection.LEFT:
             animator.SetTrigger("5-0 Grind");
             backWheelSparks.SetActive(true);
             potentialPoints +=10;
+            comboDisplay.text += " 5-0";
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("Nose Grind");
             potentialPoints +=10;
             frontWheelSparks.SetActive(true);
+            comboDisplay.text += " Nose Grind";
             break;
         }
 
         animator.SetBool("isGrinding",true);   
-        GameManager.Instance.IncrementNumberOfTricks();        
-
+        GameManager.Instance.IncrementNumberOfTricks();
     }
 
     private bool CheckGrindable(out Collider2D outCollider)
