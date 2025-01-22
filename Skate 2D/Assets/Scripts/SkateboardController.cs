@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +27,8 @@ public class SkateboardController : MonoBehaviour
     private bool isGrinding;
     private int potentialPoints; //this are points that will be awarded if a trick is landed
     private bool isCharging;
+    private bool isStopped;
+    private bool hasStarted;
 
     void Start()
     {
@@ -36,9 +39,21 @@ public class SkateboardController : MonoBehaviour
 
     void FixedUpdate()
     {
+
+        if(isStopped) {return;}
+
+        if(Mathf.Abs(rb.velocity.x) > minVelocity) { hasStarted = true; }
+
         if(Mathf.Abs(rb.velocity.x) < minVelocity)
         {
             rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
+        }
+
+        if(hasStarted && rb.velocity.x < 0.3f)
+        {
+            isStopped = true;
+            GameManager.Instance.SessionEnded();
+            GameOver();
         }
 
         //While the player is performing a grind, we want to make sure to enable physics
@@ -104,8 +119,8 @@ public class SkateboardController : MonoBehaviour
                 rb.gravityScale = 1;
                 isGrinding = false; //which means that they would no longer be doing a grind
             }
-            Debug.Log($"Current touch time: {currentTouchTime}");
-            Debug.Log($"Jump force will be: {minimumJumpForce * (100 + (100 * currentTouchTime))}");
+            // Debug.Log($"Current touch time: {currentTouchTime}");
+            // Debug.Log($"Jump force will be: {minimumJumpForce * (100 + (100 * currentTouchTime))}");
 			rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (100 * currentTouchTime))));
         // }
     }
@@ -172,7 +187,7 @@ public class SkateboardController : MonoBehaviour
             break;
 
         }
-        
+        GameManager.Instance.IncrementNumberOfTricks();        
     }
 
     private void CheckCanGrind(SwipeDirection swipeDirection)
@@ -217,6 +232,8 @@ public class SkateboardController : MonoBehaviour
         }
 
         animator.SetBool("isGrinding",true);   
+        GameManager.Instance.IncrementNumberOfTricks();        
+
     }
 
     private bool CheckGrindable(out Collider2D outCollider)
@@ -252,24 +269,31 @@ public class SkateboardController : MonoBehaviour
 
     private void OnTouchStarted(object sender, EventArgs e)
     {
-        Debug.Log("Touch Started");
+        // Debug.Log("Touch Started");
         isCharging = true;
     }
 
     private void OnTouchEnded(object sender, EventArgs e)
     {
-        Debug.Log("Touch Ended");
+        // Debug.Log("Touch Ended");
         isCharging = false;
     }
 
     void OnEnable()
     {
+        // Debug.Log("Enabling Skateboard Controller");
         TouchControls.touchEvent += Action;
         TouchControls.touchStarted += OnTouchStarted;
         TouchControls.touchEnded += OnTouchEnded;
     }
 
     void OnDisable()
+    {
+        // Debug.Log("Disabling Skateboard Controller");
+        GameOver();
+    }
+
+    void GameOver()
     {
         TouchControls.touchEvent -= Action;
         TouchControls.touchStarted -= OnTouchStarted;

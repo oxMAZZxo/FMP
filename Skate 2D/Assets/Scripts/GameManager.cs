@@ -2,13 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance {get; private set;}
     public int score {get; private set;}
+    private int noOfTricks;
     public TextMeshProUGUI scoreDisplay;
     public TextMeshProUGUI framerateDisplay;
+    [SerializeField]private GameObject gameOverPanel;
+    [SerializeField]private TextMeshProUGUI scoreDisplayFinal;
+    [SerializeField]private TextMeshProUGUI noOfTricksDisplay;
     private float timeCounter;
     [Range(0.1f,1f)]public float refreshTime = 0.5f;
     private float frameCounter;
@@ -51,5 +56,23 @@ public class GameManager : MonoBehaviour
     {
         score +=value;
         scoreDisplay.text = score.ToString();
+    }
+
+    public void IncrementNumberOfTricks()
+    {
+        noOfTricks ++;
+    }
+
+    public void SessionEnded()
+    {
+        Debug.Log($"Session ended with a score of {score} and {noOfTricks} performed tricks");
+        scoreDisplayFinal.text += scoreDisplay.text;
+        noOfTricksDisplay.text += noOfTricks.ToString();
+        gameOverPanel.SetActive(true);
+    }
+
+    public void ExitToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

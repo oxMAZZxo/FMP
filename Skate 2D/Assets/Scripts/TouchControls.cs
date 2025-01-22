@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class TouchControls : MonoBehaviour
 {
+    public int id {get;}
     public Camera cam;
     public static TouchControls Instance;
     [SerializeField,Range(1f,1000f)]private float deadzone = 10f;
@@ -22,14 +23,17 @@ public class TouchControls : MonoBehaviour
         if(Instance == null && Instance != this)
         {
             Instance = this;
+            DontDestroyOnLoad(this);
         }else
         {
+            Debug.Log("An Instance of TouchControls already exists, destroying extra ones");
             Destroy(gameObject);
         }
     }
 
     void Start()
     {
+        touchInput.action.Enable();
         touchTime = 0;
     }
 
@@ -101,6 +105,7 @@ public class TouchControls : MonoBehaviour
     /// <param name="context">The input action context</param>
     private void OnTouchInputBegan(InputAction.CallbackContext context)
     {
+        // Debug.Log("Touch Began");
         touchStart = Mouse.current.position.ReadValue();
         if(Touchscreen.current != null)
         {
@@ -116,6 +121,7 @@ public class TouchControls : MonoBehaviour
     /// <param name="context"></param>
     private void OnTouchInputEnded(InputAction.CallbackContext context)
     {
+        // Debug.Log("Touch Ended");
         touchEnd = Mouse.current.position.ReadValue();
         if(Touchscreen.current != null)
         {
@@ -129,14 +135,14 @@ public class TouchControls : MonoBehaviour
 
     void OnEnable()
     {
-        touchInput.action.Enable();
+        // Debug.Log($"Enabling touch functionality on TouchControls {this.GetInstanceID()}");
         touchInput.action.started += OnTouchInputBegan;
         touchInput.action.canceled += OnTouchInputEnded;
     }
 
     void OnDisable()
     {
-        touchInput.action.Disable();
+        // Debug.Log($"Disabling touch functionality on TouchControls {this.GetInstanceID()}");
         touchInput.action.started -= OnTouchInputBegan;
         touchInput.action.canceled -= OnTouchInputEnded;
     }
