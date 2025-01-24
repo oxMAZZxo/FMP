@@ -10,13 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
-  m_Name: Curb
+  m_Name: WheelBarrow
   m_EditorClassIdentifier: 
-  objects:
-  - {fileID: 3466813424133893137, guid: ca980184523ce5344bf53196c0bdafbf, type: 3}
-  type: 0
-  spawnAction: 1
-  followObjectChange: 60
-  followObjs:
-  - {fileID: 11400000, guid: 69d6e57816fa5164795610b2492a75b2, type: 2}
-  - {fileID: 11400000, guid: 7ff921a36f5bbcf48840412aae8c21de, type: 2}
+  prefab: {fileID: 5520479729952212904, guid: 0c8804848091f244a99c5a88e69197f0, type: 3}
+  followObjs: []
+  followObjectChance: 1
+  followUpObjectDistance: 0

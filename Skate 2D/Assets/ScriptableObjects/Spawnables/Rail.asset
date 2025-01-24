@@ -10,12 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
-  m_Name: Kicker
+  m_Name: Rail
   m_EditorClassIdentifier: 
-  objects:
-  - {fileID: 2046111037889000440, guid: bac7b6b4d1e03a549b6d87ec3916fc43, type: 3}
-  type: 3
-  spawnAction: 0
-  followObjectChance: 80
-  followObjs:
-  - {fileID: 11400000, guid: 7ff921a36f5bbcf48840412aae8c21de, type: 2}
+  prefab: {fileID: 9009299061145675200, guid: 4f142de76c1eb024d9287d331dd5e833, type: 3}
+  followObjs: []
+  followObjectChance: 1
+  followUpObjectDistance: 1

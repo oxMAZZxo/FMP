@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
-  m_Name: Rail
+  m_Script: {fileID: 11500000, guid: aa39b56248a4f83459dbc4b322349a08, type: 3}
+  m_Name: Rails
   m_EditorClassIdentifier: 
-  objects:
-  - {fileID: 9009299061145675200, guid: 4f142de76c1eb024d9287d331dd5e833, type: 3}
+  spawnables:
+  - {fileID: 11400000, guid: bfd73eb3b34c9964a8d001343b5595a2, type: 2}
   type: 2
   spawnAction: 0
-  followObjectChange: 80
-  followObjs: []

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa39b56248a4f83459dbc4b322349a08, type: 3}
+  m_Name: Kickers
+  m_EditorClassIdentifier: 
+  spawnables:
+  - {fileID: 11400000, guid: e847b65cf07f97040a4e8f8ac62a6db6, type: 2}
+  - {fileID: 11400000, guid: 079bddfea64d001468b02a252ad132cb, type: 2}
+  - {fileID: 11400000, guid: fb2d5c734976ac2479845012b000c155, type: 2}
+  type: 3
+  spawnAction: 0

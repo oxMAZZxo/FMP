@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
-  m_Name: Others
+  m_Name: LowKicker
   m_EditorClassIdentifier: 
-  objects:
-  - {fileID: 1919092897518032947, guid: 4dc9f7c63a6f2e748aeb48e2ea282904, type: 3}
-  - {fileID: 7617363549430479556, guid: 1b15953db75c1e8438bf611f73f4af72, type: 3}
-  type: 0
-  spawnAction: 0
+  prefab: {fileID: 6147742679119598267, guid: 821dc3f04fae9e8459cb1e2bc8c75fd0, type: 3}
+  followObjs:
+  - {fileID: 558601362516956773, guid: 8a93b6089126c994380feb21f5926417, type: 3}
+  - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
+  - {fileID: 9009299061145675200, guid: 4f142de76c1eb024d9287d331dd5e833, type: 3}
   followObjectChance: 50
-  followObjs: []
+  followUpObjectDistance: 0.5

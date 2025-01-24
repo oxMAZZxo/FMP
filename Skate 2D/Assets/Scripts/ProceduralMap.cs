@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class ProceduralMap : MonoBehaviour
 {
-    private const float secondObstacleX_SpawnOffset = 1f;
     public static ProceduralMap Instance {get; private set;}
     const int groundSize = 8;
     const float ySpawnPosition = -0.5f;
     [SerializeField]private Transform player;
     [SerializeField]private GameObject groundPrefab;
     [SerializeField]private bool generateObstacles;
-    [SerializeField]private Spawnable[] obstaclePrefabs;
+    [SerializeField]private Obstacles[] obstacleTypes;
     private Pool<GameObject> groundObjects;
     private Vector2 previousSpawnPosition;
     private SpawnAction currentSpawnAction = SpawnAction.Spawn;
@@ -102,49 +101,32 @@ public class ProceduralMap : MonoBehaviour
             yield break;
         }
         yield return new WaitForSeconds(0.3f);
-        // GameObject currentObstacle = obstaclePools[Random.Range(0,obstaclePools.Length)].GetObject();
-        int obstacleType = Random.Range(0,obstaclePrefabs.Length);
-        int obstacleChoice = Random.Range(0,obstaclePrefabs[obstacleType].objects.Length);
-        GameObject firstObstacle = Instantiate(obstaclePrefabs[obstacleType].objects[obstacleChoice],transform.position,Quaternion.identity);
+        int obstacleType = Random.Range(0,obstacleTypes.Length);
+        int obstacleChoice = Random.Range(0,obstacleTypes[obstacleType].spawnables.Length);
+        GameObject firstObstacle = Instantiate(obstacleTypes[obstacleType].spawnables[obstacleChoice].prefab,transform.position,Quaternion.identity);
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
         Collider2D firstObstacleCollider = firstObstacle.GetComponent<Collider2D>();
-        // the value 'centreToBottomDistance is needed in order to place the bottom Y bounds of an obstacle,
-        // onto the top Y bounds of the current ground GameObject that was activated
+        // // the value 'centreToBottomDistance is needed in order to place the bottom Y bounds of an obstacle,
+        // // onto the top Y bounds of the current ground GameObject that was activated
         float centreToBottomDistance = firstObstacleCollider.transform.position.y - firstObstacleCollider.bounds.min.y; 
 
         Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.max.y + centreToBottomDistance);
 
         firstObstacle.transform.position = obstacleSpawnPos;
-        currentSpawnAction = obstaclePrefabs[obstacleType].spawnAction;
-        if(obstaclePrefabs[obstacleType].followObjs.Length > 0 && Random.Range(0,101) > (100 - obstaclePrefabs[obstacleType].followObjectChance))
+        currentSpawnAction = obstacleTypes[obstacleType].spawnAction;
+        if(obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length > 0 && Random.Range(0,100) <= obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjectChance)
         {
-            // Debug.Log($"First obstacle type is {obstaclePrefabs[obstacleType].type.ToString()}");
-            int secondObstacleType = Random.Range(0,obstaclePrefabs[obstacleType].followObjs.Length);
-            // Debug.Log($"Second obstacle type number is {secondObstacleType}");
-            // Debug.Log($"Second obstacle type is {obstaclePrefabs[obstacleType].followObjs[secondObstacleType].type.ToString()}");
-            int secondObstacleChoice = Random.Range(0,obstaclePrefabs[obstacleType].followObjs[secondObstacleType].objects.Length);
-            // Debug.Log($"From that type, the object chosen is {obstaclePrefabs[obstacleType].followObjs[secondObstacleType].objects[secondObstacleChoice].name}");
-            GameObject secondObstacle = Instantiate(obstaclePrefabs[obstacleType].followObjs[secondObstacleType].objects[secondObstacleChoice],transform.position,Quaternion.identity);
+            int secondObstacleChoice = Random.Range(0,obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length);
+        //     // Debug.Log($"From that type, the object chosen is {obstaclePrefabs[obstacleType].followObjs[secondObstacleType].objects[secondObstacleChoice].name}");
+            GameObject secondObstacle = Instantiate(obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs[secondObstacleChoice],transform.position,Quaternion.identity);
 
             Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
             float centreToLeft = secondObstacleCollider.transform.position.x - secondObstacleCollider.bounds.min.x;
             centreToBottomDistance = secondObstacleCollider.transform.position.y - secondObstacleCollider.bounds.min.y;
-            Vector2 secondObstaclePos = new Vector2(firstObstacle.transform.position.x + firstObstacleCollider.bounds.max.x + centreToLeft + secondObstacleX_SpawnOffset, groundCollider.bounds.max.y + centreToBottomDistance);
+            Vector2 secondObstaclePos = new Vector2(firstObstacle.transform.position.x + firstObstacleCollider.bounds.max.x + centreToLeft + obstacleTypes[obstacleType].spawnables[obstacleChoice].followUpObjectDistance, groundCollider.bounds.max.y + centreToBottomDistance);
             secondObstacle.transform.position = secondObstaclePos;
-            switch (obstaclePrefabs[obstacleType].followObjs[secondObstacleType].type)
-            {
-                case ObjectType.Bins:
-                secondObstacleCollider.isTrigger = false;
-                break;
-                
-                case ObjectType.Unavoidable: 
-                currentSpawnAction = obstaclePrefabs[obstacleType].followObjs[secondObstacleType].spawnAction;
-                break;
 
-                default:
-                currentSpawnAction = SpawnAction.Skip;
-                break;
-            }
+            currentSpawnAction = SpawnAction.Skip;
             Destroy(secondObstacle,10f);
         }
         

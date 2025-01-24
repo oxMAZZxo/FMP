@@ -1447,12 +1447,11 @@ MonoBehaviour:
   player: {fileID: 3088592964041584742}
   groundPrefab: {fileID: 4426653930425013092, guid: 2f89fe4fa4312fe48916369f3ba595b7, type: 3}
   generateObstacles: 1
-  obstaclePrefabs:
-  - {fileID: 11400000, guid: f79bc52bcc6b20d4cbe71cf7830c0517, type: 2}
-  - {fileID: 11400000, guid: b42de7b770767f0448fdedaba7d268c3, type: 2}
-  - {fileID: 11400000, guid: de1f97ad7679ea746bab7da5d75034e1, type: 2}
-  - {fileID: 11400000, guid: 69d6e57816fa5164795610b2492a75b2, type: 2}
-  - {fileID: 11400000, guid: 7ff921a36f5bbcf48840412aae8c21de, type: 2}
+  obstacleTypes:
+  - {fileID: 11400000, guid: ea21cd7a15cd99545bf9ac11ed3ee776, type: 2}
+  - {fileID: 11400000, guid: 0843d37503d85e94ba3108309ee7b9db, type: 2}
+  - {fileID: 11400000, guid: ec0b25e71ea869d43942bda469f19365, type: 2}
+  - {fileID: 11400000, guid: 24b15a2382b965a4181c642f6362e919, type: 2}
 --- !u!4 &1022530504
 Transform:
   m_ObjectHideFlags: 0
