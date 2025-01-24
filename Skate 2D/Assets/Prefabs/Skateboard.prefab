@@ -151,7 +151,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.41}
-  m_Size: {x: 0.7, y: 0.18}
+  m_Size: {x: 0.55, y: 0.18}
   m_Direction: 1
 --- !u!95 &5056399678652797089
 Animator:
@@ -199,7 +199,7 @@ MonoBehaviour:
   whatIsGrindable:
     serializedVersion: 2
     m_Bits: 128
-  grindableCheckRadius: 0.25
+  grindableCheckRadius: 0.3
   backWheelSparks: {fileID: 8481983751286521546}
   frontWheelSparks: {fileID: 8201818001491858908}
   jumpForceSlider: {fileID: 0}

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3086572499026197738}
   - component: {fileID: 4241786759630621709}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Centre
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5119425858972689461}
   - component: {fileID: 5133216642911618381}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Pyramid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,7 +179,7 @@ GameObject:
   m_Component:
   - component: {fileID: 47419941717094874}
   - component: {fileID: 2726491262154578005}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2251067225600741177}
   - component: {fileID: 6624782356223742290}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}

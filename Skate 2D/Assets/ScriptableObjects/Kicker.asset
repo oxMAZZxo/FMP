@@ -13,11 +13,9 @@ MonoBehaviour:
   m_Name: Kicker
   m_EditorClassIdentifier: 
   objects:
-  - {fileID: 6464161430064065539, guid: bf0792f1e926fda48995dbea83ad6ede, type: 3}
+  - {fileID: 2046111037889000440, guid: bac7b6b4d1e03a549b6d87ec3916fc43, type: 3}
   type: 3
   spawnAction: 0
-  followObjectChance: 50
+  followObjectChance: 80
   followObjs:
   - {fileID: 11400000, guid: 7ff921a36f5bbcf48840412aae8c21de, type: 2}
-  - {fileID: 11400000, guid: ea908c2711986c94b9cdf2927c2eda4a, type: 2}
-  - {fileID: 11400000, guid: 408bd3adb7758ea4ba5f2f37d839b8fe, type: 2}

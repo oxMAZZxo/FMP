@@ -150,4 +150,5 @@ public class ProceduralMap : MonoBehaviour
         
         Destroy(firstObstacle,10f);
     }
-}
+    
+}   
