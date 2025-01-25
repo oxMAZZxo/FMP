@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     public void SessionEnded(int longestCombo, float distanceTravelled)
     {
         Debug.Log($"Session ended with a score of {score} and {noOfTricks} performed tricks");
-        scoreDisplayFinal.text += scoreDisplay.text;
+        scoreDisplayFinal.text += score.ToString();
         noOfTricksDisplay.text += noOfTricks.ToString();
         noOfCombosDisplay.text += noOfCombos.ToString();
         longestComboDisplay.text += longestCombo.ToString();
@@ -99,16 +99,13 @@ public class GameManager : MonoBehaviour
     {
         if(value < 1000)
         {
-            Debug.Log("Pretty string is returning the value");
             return value.ToString();
         }else if(value < 1000000)
         {
-            Debug.Log("Pretty string is returning the value shortened to the thasounds with a K");
-            return (value / 1000).ToString() + "K";
+            return ((float)value / 1000).ToString("F1") + "K";
         }else if(value < 1000000000)
         {
-            Debug.Log("Pretty string is returning the value shortened to the thasounds with an M");
-            return (value / 1000000).ToString() + "M";
+            return ((float)value / 1000000).ToString("F1") + "M";
         }
 
         return "***";
