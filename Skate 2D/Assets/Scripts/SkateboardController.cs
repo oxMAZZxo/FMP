@@ -9,7 +9,6 @@ public class SkateboardController : MonoBehaviour
 {
     private Animator animator;
     private Rigidbody2D rb;
-
     [SerializeField,Range(1f,100f)]private float minMovementSpeed = 50f;
     [SerializeField,Range(0.1f,5f)]private float minVelocity = 3f;
     [SerializeField,Range(1f,200f)]private float maxMovementSpeed = 150f;
@@ -228,8 +227,9 @@ public class SkateboardController : MonoBehaviour
 
         //positions the player above the grindable obstacle
         float distanceToMove = other.bounds.max.y - GetComponent<Collider2D>().bounds.min.y;
+        Debug.Log("Making skateboard weightless");
         rb.gravityScale = 0;
-        rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         transform.position = new Vector2(transform.position.x,transform.position.y + distanceToMove);
         isGrinding = true;    
         rb.rotation = 0;
