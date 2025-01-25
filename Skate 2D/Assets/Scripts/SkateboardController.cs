@@ -35,6 +35,7 @@ public class SkateboardController : MonoBehaviour
     private bool isCombo;
     private int comboCounter = 1;
     private int longestCombo;
+    private float distanceTravelled;
 
     void Start()
     {
@@ -45,7 +46,6 @@ public class SkateboardController : MonoBehaviour
 
     void FixedUpdate()
     {
-
         if(isStopped) {return;}
 
         if(Mathf.Abs(rb.velocity.x) > minVelocity) { hasStarted = true; }
@@ -55,10 +55,12 @@ public class SkateboardController : MonoBehaviour
             rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
         }
 
+        if(transform.position.x > distanceTravelled) {distanceTravelled = transform.position.x;}
+
         if(hasStarted && rb.velocity.x < 0.3f)
         {
             isStopped = true;
-            GameManager.Instance.SessionEnded(longestCombo);
+            GameManager.Instance.SessionEnded(longestCombo,distanceTravelled);
             GameOver();
         }
 

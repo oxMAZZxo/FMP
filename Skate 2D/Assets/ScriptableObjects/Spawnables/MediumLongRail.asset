@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
-  m_Name: Rail
+  m_Name: MediumLongRail
   m_EditorClassIdentifier: 
   prefab: {fileID: 9009299061145675200, guid: 4f142de76c1eb024d9287d331dd5e833, type: 3}
+  spawnAction: 1
   followObjs: []
   followObjectChance: 1
   followUpObjectDistance: 1

@@ -8,7 +8,6 @@ public class Obstacles : ScriptableObject
 {
     public Spawnable[] spawnables;
     public ObstacleType type;
-    public SpawnAction spawnAction;
 }
 
 public enum ObstacleType

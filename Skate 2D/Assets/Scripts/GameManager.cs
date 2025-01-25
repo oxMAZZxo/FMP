@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI noOfTricksDisplay;
     [SerializeField]private TextMeshProUGUI noOfCombosDisplay;
     [SerializeField]private TextMeshProUGUI longestComboDisplay;
+    [SerializeField]private TextMeshProUGUI distanceTravelledDisplay;
 
     private int noOfTricks;
     private int noOfCombos;
@@ -78,13 +79,14 @@ public class GameManager : MonoBehaviour
         noOfCombos++;
     }
 
-    public void SessionEnded(int longestCombo)
+    public void SessionEnded(int longestCombo, float distanceTravelled)
     {
         Debug.Log($"Session ended with a score of {score} and {noOfTricks} performed tricks");
         scoreDisplayFinal.text += scoreDisplay.text;
         noOfTricksDisplay.text += noOfTricks.ToString();
         noOfCombosDisplay.text += noOfCombos.ToString();
         longestComboDisplay.text += longestCombo.ToString();
+        distanceTravelledDisplay.text += distanceTravelled.ToString("F1");
         gameOverPanel.SetActive(true);
     }
 

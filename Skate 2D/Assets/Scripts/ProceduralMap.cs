@@ -113,7 +113,7 @@ public class ProceduralMap : MonoBehaviour
         Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.max.y + centreToBottomDistance);
 
         firstObstacle.transform.position = obstacleSpawnPos;
-        currentSpawnAction = obstacleTypes[obstacleType].spawnAction;
+        currentSpawnAction = obstacleTypes[obstacleType].spawnables[obstacleChoice].spawnAction;
         if(obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length > 0 && Random.Range(0,100) <= obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjectChance)
         {
             int secondObstacleChoice = Random.Range(0,obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length);
@@ -125,9 +125,13 @@ public class ProceduralMap : MonoBehaviour
             centreToBottomDistance = secondObstacleCollider.transform.position.y - secondObstacleCollider.bounds.min.y;
             Vector2 secondObstaclePos = new Vector2(firstObstacle.transform.position.x + firstObstacleCollider.bounds.max.x + centreToLeft + obstacleTypes[obstacleType].spawnables[obstacleChoice].followUpObjectDistance, groundCollider.bounds.max.y + centreToBottomDistance);
             secondObstacle.transform.position = secondObstaclePos;
-
-            currentSpawnAction = SpawnAction.Skip;
             Destroy(secondObstacle,10f);
+            switch(obstacleTypes[obstacleType].type)
+            {
+                case ObstacleType.Curb:
+                currentSpawnAction = SpawnAction.Skip;
+                break;
+            }
         }
         
         Destroy(firstObstacle,10f);
