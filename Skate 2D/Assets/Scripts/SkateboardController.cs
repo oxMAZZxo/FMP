@@ -113,6 +113,7 @@ public class SkateboardController : MonoBehaviour
                     isCombo = false;
                     GameManager.Instance.AddScore(potentialPoints * comboCounter);
                     if(comboCounter > longestCombo) { longestCombo = comboCounter;}
+                    potentialPoints = 0;
                     comboCounter = 1;
                     comboDisplay.gameObject.SetActive(false);
                     comboDisplay.text = "";

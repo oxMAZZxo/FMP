@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
     public void AddScore(int value)
     {
         score +=value;
-        scoreDisplay.text = score.ToString();
+        scoreDisplay.text = ScoreString(score);
     }
 
     public void IncrementNumberOfTricks()
@@ -93,5 +93,24 @@ public class GameManager : MonoBehaviour
     public void ExitToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    private string ScoreString(int value) 
+    {
+        if(value < 1000)
+        {
+            Debug.Log("Pretty string is returning the value");
+            return value.ToString();
+        }else if(value < 1000000)
+        {
+            Debug.Log("Pretty string is returning the value shortened to the thasounds with a K");
+            return (value / 1000).ToString() + "K";
+        }else if(value < 1000000000)
+        {
+            Debug.Log("Pretty string is returning the value shortened to the thasounds with an M");
+            return (value / 1000000).ToString() + "M";
+        }
+
+        return "***";
     }
 }
