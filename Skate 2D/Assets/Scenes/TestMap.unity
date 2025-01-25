@@ -976,6 +976,7 @@ MonoBehaviour:
   noOfTricksDisplay: {fileID: 299643789}
   noOfCombosDisplay: {fileID: 0}
   longestComboDisplay: {fileID: 0}
+  distanceTravelledDisplay: {fileID: 0}
   refreshTime: 0.5
 --- !u!4 &480638697
 Transform:
