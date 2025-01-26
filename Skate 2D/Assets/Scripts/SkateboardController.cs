@@ -21,6 +21,8 @@ public class SkateboardController : MonoBehaviour
     [SerializeField,Range(0.01f,1f)]private float grindableCheckRadius = 0.3f;
     [SerializeField]private GameObject backWheelSparks;
     [SerializeField]private GameObject frontWheelSparks;
+    [SerializeField]private GameObject frontSmokeParticles;
+    [SerializeField]private GameObject backSmokeParticles;
     [SerializeField]private Slider jumpForceSlider;
     [SerializeField]private TextMeshProUGUI comboDisplay;
     private bool isGrounded;
@@ -105,6 +107,8 @@ public class SkateboardController : MonoBehaviour
 				isGrounded = true;
 				if (!wasGrounded) //meaning you just landed
 				{
+                    frontSmokeParticles.SetActive(true);
+                    backSmokeParticles.SetActive(true);
                     performedTrick = false;
                     if(isCombo){
                         GameManager.Instance.IncrementNumberOfCombos();
@@ -229,7 +233,7 @@ public class SkateboardController : MonoBehaviour
         float distanceToMove = other.bounds.max.y - GetComponent<Collider2D>().bounds.min.y;
         Debug.Log("Making skateboard weightless");
         rb.gravityScale = 0;
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         transform.position = new Vector2(transform.position.x,transform.position.y + distanceToMove);
         isGrinding = true;    
         rb.rotation = 0;

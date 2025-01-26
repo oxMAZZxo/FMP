@@ -2656,6 +2656,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skateboard
       objectReference: {fileID: 0}
+    - target: {fileID: 3395222802048911571, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: comboDisplay
       value: 
@@ -2664,6 +2668,10 @@ PrefabInstance:
       propertyPath: jumpForceSlider
       value: 
       objectReference: {fileID: 450742982}
+    - target: {fileID: 9199368477456937557, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
