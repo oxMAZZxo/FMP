@@ -171,13 +171,14 @@ public class SkateboardController : MonoBehaviour
         bool isPerformingTrick;
         //if the player is not on the ground and isn't grinding
         //meaning they are in the air, and they perform an action
+        string trickPerformed;
         if(!isGrounded && !isGrinding)
         {
             //I check if I can perform a grind
             Collider2D other;
             bool grindable = CheckGrindable(out other); //check if player is above a grindable obstacle
             if(!grindable || e.swipeDirection != SwipeDirection.DOWN && e.swipeDirection != SwipeDirection.LEFT && e.swipeDirection != SwipeDirection.RIGHT) {return;}
-            PerformGrind(e.swipeDirection,other);
+            trickPerformed = PerformGrind(e.swipeDirection,other);
             isPerformingTrick = true;
         }else //else if one of those conditions is true
         {
@@ -185,7 +186,7 @@ public class SkateboardController : MonoBehaviour
             isPerformingTrick = true;
             backWheelSparks.SetActive(false);
             frontWheelSparks.SetActive(false);
-            ShowTrickAnimation(e.swipeDirection);//perfrom a trick
+            trickPerformed = ShowTrickAnimation(e.swipeDirection);//perfrom a trick
             if(isGrinding) // if they are grinding before the trick
             {
                 animator.SetBool("isGrinding",false); //disable the grind animations
@@ -196,16 +197,24 @@ public class SkateboardController : MonoBehaviour
         if(performedTrick && isPerformingTrick)
         {
             isCombo = true;
+            trickPerformed = " + " + trickPerformed;
             comboCounter++;
             comboCounterDisplay.text = comboCounter.ToString();
             comboDisplay.gameObject.SetActive(true);
             comboCounterDisplay.gameObject.SetActive(true);
         }
-        
+        comboDisplay.text += trickPerformed;        
     }
 
-    private void ShowTrickAnimation(SwipeDirection swipeDirection)
+
+    /// <summary>
+    /// Triggers a trick animations with the provided swipe direction.
+    /// </summary>
+    /// <param name="swipeDirection">The swipe direction</param>
+    /// <returns>Returns the trick performed</returns>
+    private string ShowTrickAnimation(SwipeDirection swipeDirection)
     {
+        string trickOutput = "";
         switch(swipeDirection)
         {
             case SwipeDirection.UP:
@@ -216,33 +225,39 @@ public class SkateboardController : MonoBehaviour
             case SwipeDirection.DOWN:
             animator.SetTrigger("shuvit");
             potentialPoints +=2;
-            comboDisplay.text += " Shuvit";
+            trickOutput = "Shuvit";
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("kickflip");
             potentialPoints +=5;
-            comboDisplay.text += " Kickflip";
+            trickOutput = "Kickflip";
             break;
 
             case SwipeDirection.LEFT:
             animator.SetTrigger("heelflip");
             potentialPoints +=5;
-            comboDisplay.text += " Heelflip";
+            trickOutput = "Heelflip";
             break;
 
         }
-        GameManager.Instance.IncrementNumberOfTricks();        
+        
+        if(animator.GetBool("reverseOut"))
+        {
+            trickOutput = "Nollie " + trickOutput;
+        }
+        GameManager.Instance.IncrementNumberOfTricks();     
+        return trickOutput;
     }
 
 
     /// <summary>
-    /// Performs a grind on a given obstacle
+    /// Performs a grind on a given obstacle.
     /// </summary>
     /// <param name="swipeDirection">The current swipe direction</param>
     /// <param name="obstacle">the obstacle to perform the grind on</param>
-    /// <returns></returns>
-    private void PerformGrind(SwipeDirection swipeDirection, Collider2D obstacle)
+    /// <returns>Returns the grind performed</returns>
+    private string PerformGrind(SwipeDirection swipeDirection, Collider2D obstacle)
     {
         //positions the player above the grindable obstacle
         float distanceToMove = obstacle.bounds.max.y - GetComponent<Collider2D>().bounds.min.y;
@@ -252,11 +267,16 @@ public class SkateboardController : MonoBehaviour
         isGrinding = true;    
         rb.rotation = 0;
         //show grind animation
-        ShowGrindAnimation(swipeDirection);       
+        return ShowGrindAnimation(swipeDirection);       
     }
 
-    private void ShowGrindAnimation(SwipeDirection swipeDirection)
+    /// <summary>
+    /// Triggers a grind animation based on the swipe direction.
+    /// </summary>
+    /// <param name="swipeDirection">The swipe direction</param>
+    private string ShowGrindAnimation(SwipeDirection swipeDirection)
     {
+        string trickOutput = "";
         animator.SetBool("reverseOut",false);
         switch (swipeDirection)
         {
@@ -265,27 +285,27 @@ public class SkateboardController : MonoBehaviour
             potentialPoints +=5;
             backWheelSparks.SetActive(true);
             frontWheelSparks.SetActive(true);
-            comboDisplay.text += " 50-50";
+            trickOutput = "50-50";
             break;
 
             case SwipeDirection.LEFT:
             animator.SetTrigger("5-0 Grind");
             backWheelSparks.SetActive(true);
             potentialPoints +=10;
-            comboDisplay.text += " 5-0";
+            trickOutput = " 5-0";
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("Nose Grind");
             potentialPoints +=10;
             frontWheelSparks.SetActive(true);
-            comboDisplay.text += " Nose Grind";
+            trickOutput = " Nose Grind";
             animator.SetBool("reverseOut", true);
             break;
         }
-
         animator.SetBool("isGrinding",true);   
         GameManager.Instance.IncrementNumberOfTricks();
+        return trickOutput;
     }
 
     /// <summary>
