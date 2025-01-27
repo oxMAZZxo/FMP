@@ -980,7 +980,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 10
+        scalar: 5
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -5096,6 +5096,7 @@ MonoBehaviour:
   backSmokeParticles: {fileID: 9101918098425133644}
   jumpForceSlider: {fileID: 0}
   comboDisplay: {fileID: 0}
+  comboCounterDisplay: {fileID: 0}
 --- !u!1 &8199973140764820576
 GameObject:
   m_ObjectHideFlags: 0
@@ -15769,7 +15770,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 10
+        scalar: 5
         minScalar: 30
         maxCurve:
           serializedVersion: 2

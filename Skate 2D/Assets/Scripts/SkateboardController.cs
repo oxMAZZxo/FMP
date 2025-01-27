@@ -25,6 +25,7 @@ public class SkateboardController : MonoBehaviour
     [SerializeField]private GameObject backSmokeParticles;
     [SerializeField]private Slider jumpForceSlider;
     [SerializeField]private TextMeshProUGUI comboDisplay;
+    [SerializeField]private TextMeshProUGUI comboCounterDisplay;
     private bool isGrounded;
     private float currentTouchTime;
     private bool isGrinding;
@@ -107,6 +108,7 @@ public class SkateboardController : MonoBehaviour
 				isGrounded = true;
 				if (!wasGrounded) //meaning you just landed
 				{
+                    animator.SetBool("reverseOut", false);
                     frontSmokeParticles.SetActive(true);
                     backSmokeParticles.SetActive(true);
                     performedTrick = false;
@@ -119,7 +121,9 @@ public class SkateboardController : MonoBehaviour
                     potentialPoints = 0;
                     comboCounter = 1;
                     comboDisplay.gameObject.SetActive(false);
+                    comboCounterDisplay.gameObject.SetActive(false);
                     comboDisplay.text = "";
+                    comboCounterDisplay.text = "";
                 }
 			}
 		}
@@ -185,9 +189,11 @@ public class SkateboardController : MonoBehaviour
 
         if(performedTrick && isPerformingTrick)
         {
-            comboDisplay.gameObject.SetActive(true);
             isCombo = true;
             comboCounter++;
+            comboCounterDisplay.text = comboCounter.ToString();
+            comboDisplay.gameObject.SetActive(true);
+            comboCounterDisplay.gameObject.SetActive(true);
         }
         
     }
@@ -231,7 +237,6 @@ public class SkateboardController : MonoBehaviour
 
         //positions the player above the grindable obstacle
         float distanceToMove = other.bounds.max.y - GetComponent<Collider2D>().bounds.min.y;
-        Debug.Log("Making skateboard weightless");
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         transform.position = new Vector2(transform.position.x,transform.position.y + distanceToMove);
@@ -244,6 +249,7 @@ public class SkateboardController : MonoBehaviour
 
     private void ShowGrindAnimation(SwipeDirection swipeDirection)
     {
+        animator.SetBool("reverseOut",false);
         switch (swipeDirection)
         {
             case SwipeDirection.DOWN:
@@ -266,6 +272,7 @@ public class SkateboardController : MonoBehaviour
             potentialPoints +=10;
             frontWheelSparks.SetActive(true);
             comboDisplay.text += " Nose Grind";
+            animator.SetBool("reverseOut", true);
             break;
         }
 

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b5584df7b73244e4fafefc7bb9f3f0d0
+guid: 9f25fb079be67df40a93d5897d45ea5d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,7 +123,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Skateboard_Ollie_0
+      name: Nollie_0
       rect:
         serializedVersion: 2
         x: 0
@@ -137,14 +137,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7b5ebe4af8af21a4abb5793de80cb3a3
-      internalID: 1372306424
+      spriteID: 78e8f4e59d35198458f049fa5be0ff4c
+      internalID: -130530138
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Skateboard_Ollie_1
+      name: Nollie_1
       rect:
         serializedVersion: 2
         x: 64
@@ -158,14 +158,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57f88b1c59353ae40aece187435178a6
-      internalID: -1893694576
+      spriteID: 3bc1216717b7b9a4e8a13e9cee4965cc
+      internalID: 1387092302
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Skateboard_Ollie_2
+      name: Nollie_2
       rect:
         serializedVersion: 2
         x: 128
@@ -179,14 +179,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fdd221f10f6b90d4a8dc6823d94ff882
-      internalID: -877183884
+      spriteID: 9f669b3d1bf9a4d4fa24ba02d38f2e1f
+      internalID: -1271350126
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Skateboard_Ollie_3
+      name: Nollie_3
       rect:
         serializedVersion: 2
         x: 192
@@ -200,14 +200,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2ad63231032d7b1429cafbbba790e096
-      internalID: 563932330
+      spriteID: b855e62a7eab0354c8ba8ab1bbb3aeff
+      internalID: -449121201
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Skateboard_Ollie_4
+      name: Nollie_4
       rect:
         serializedVersion: 2
         x: 256
@@ -221,14 +221,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c4f612608ed077f408aeefd10a3d9733
-      internalID: -1631120012
+      spriteID: 903f87dfd0d00ea47bf7fda9b85fa5da
+      internalID: 2027036520
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Skateboard_Ollie_5
+      name: Nollie_5
       rect:
         serializedVersion: 2
         x: 320
@@ -242,8 +242,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b60e90837c51d284f8b4b95122a72742
-      internalID: 1814276217
+      spriteID: 58a7a826f04b0ba4a8e5d2fd32198414
+      internalID: -28898449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nollie_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f135751b9281284bb03e792730c2f69
+      internalID: -1862282721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nollie_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22ee6cbd4a622eb49b1cc7f3b456c0d8
+      internalID: 190723576
       vertices: []
       indices: 
       edges: []
@@ -259,12 +301,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Skateboard_Ollie_0: 1372306424
-      Skateboard_Ollie_1: -1893694576
-      Skateboard_Ollie_2: -877183884
-      Skateboard_Ollie_3: 563932330
-      Skateboard_Ollie_4: -1631120012
-      Skateboard_Ollie_5: 1814276217
+      Nollie_0: -130530138
+      Nollie_1: 1387092302
+      Nollie_2: -1271350126
+      Nollie_3: -449121201
+      Nollie_4: 2027036520
+      Nollie_5: -28898449
+      Nollie_6: -1862282721
+      Nollie_7: 190723576
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
