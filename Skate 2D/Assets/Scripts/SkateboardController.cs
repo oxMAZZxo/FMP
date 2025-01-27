@@ -240,6 +240,12 @@ public class SkateboardController : MonoBehaviour
             trickOutput = "Heelflip";
             break;
 
+            case SwipeDirection.DOWN_RIGHT:
+            animator.SetTrigger("treflip");
+            potentialPoints += 10;
+            trickOutput = "360 Kickflip";
+            break;
+
         }
         
         if(animator.GetBool("reverseOut"))
