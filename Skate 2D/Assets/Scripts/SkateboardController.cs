@@ -173,9 +173,15 @@ public class SkateboardController : MonoBehaviour
         //meaning they are in the air, and they perform an action
         if(!isGrounded && !isGrinding)
         {
-            isPerformingTrick = CheckCanGrind(e.swipeDirection); //Check If the player can grind
+            //I check if I can perform a grind
+            Collider2D other;
+            bool grindable = CheckGrindable(out other); //check if player is above a grindable obstacle
+            if(!grindable || e.swipeDirection != SwipeDirection.DOWN && e.swipeDirection != SwipeDirection.LEFT && e.swipeDirection != SwipeDirection.RIGHT) {return;}
+            PerformGrind(e.swipeDirection,other);
+            isPerformingTrick = true;
         }else //else if one of those conditions is true
         {
+            //player performs a trick
             isPerformingTrick = true;
             backWheelSparks.SetActive(false);
             frontWheelSparks.SetActive(false);
@@ -229,14 +235,17 @@ public class SkateboardController : MonoBehaviour
         GameManager.Instance.IncrementNumberOfTricks();        
     }
 
-    private bool CheckCanGrind(SwipeDirection swipeDirection)
-    {
-        Collider2D other;
-        bool grindable = CheckGrindable(out other); //check if player is above a grindable obstacle
-        if(!grindable || swipeDirection != SwipeDirection.DOWN && swipeDirection != SwipeDirection.LEFT && swipeDirection != SwipeDirection.RIGHT) {return false;}
 
+    /// <summary>
+    /// Performs a grind on a given obstacle
+    /// </summary>
+    /// <param name="swipeDirection">The current swipe direction</param>
+    /// <param name="obstacle">the obstacle to perform the grind on</param>
+    /// <returns></returns>
+    private void PerformGrind(SwipeDirection swipeDirection, Collider2D obstacle)
+    {
         //positions the player above the grindable obstacle
-        float distanceToMove = other.bounds.max.y - GetComponent<Collider2D>().bounds.min.y;
+        float distanceToMove = obstacle.bounds.max.y - GetComponent<Collider2D>().bounds.min.y;
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         transform.position = new Vector2(transform.position.x,transform.position.y + distanceToMove);
@@ -244,7 +253,6 @@ public class SkateboardController : MonoBehaviour
         rb.rotation = 0;
         //show grind animation
         ShowGrindAnimation(swipeDirection);       
-        return true;
     }
 
     private void ShowGrindAnimation(SwipeDirection swipeDirection)
@@ -280,6 +288,11 @@ public class SkateboardController : MonoBehaviour
         GameManager.Instance.IncrementNumberOfTricks();
     }
 
+    /// <summary>
+    /// Returns true if the obstacle below the skateboard is 'grindable'
+    /// </summary>
+    /// <param name="outCollider">Out parameter which is the first obstacle that is in the grind radius .</param>
+    /// <returns></returns>
     private bool CheckGrindable(out Collider2D outCollider)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, grindableCheckRadius, whatIsGrindable);
