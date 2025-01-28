@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -16,9 +18,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI noOfCombosDisplay;
     [SerializeField]private TextMeshProUGUI longestComboDisplay;
     [SerializeField]private TextMeshProUGUI distanceTravelledDisplay;
-
+    [SerializeField]private TextMeshProUGUI addedScoreDisplay;
+    [SerializeField,Range(1f,5f)]private float startVelocity = 1f;
+    [SerializeField,Range(0.01f,1f)]private float velocityIncrementPerInterval = 0.01f;
+    [SerializeField,Range(1f,60)]private float velocityIncrementInterval = 60f;
+    private float currentVelocity;
+    [SerializeField]private SkateboardController skateboardController;
     private int noOfTricks;
     private int noOfCombos;
+    private float counter;
 
     #region Framerate Variables
     private float timeCounter;
@@ -40,7 +48,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log($"Screen width and height: {Screen.width} x {Screen.height}");
         Application.targetFrameRate = 144;
+        currentVelocity = startVelocity;
+        skateboardController.SetMinVelocity(currentVelocity);
     }
 
     void Update()
@@ -55,18 +66,36 @@ public class GameManager : MonoBehaviour
         {
             //This code will break if you set your m_refreshTime to 0, which makes no sense.
             lastFramerate = (float)frameCounter/timeCounter;
-            framerateDisplay.text = "Average framerate: " + lastFramerate.ToString("F0");
+            framerateDisplay.text = lastFramerate.ToString("F0");
             frameCounter = 0;
             timeCounter = 0.0f;
         }
         #endregion
-    
+        
+        if(counter >= velocityIncrementInterval)
+        {
+            counter = 0;
+            currentVelocity += velocityIncrementPerInterval;
+            skateboardController.SetMinVelocity(currentVelocity);
+        }
+        counter += Time.deltaTime;
     }
 
     public void AddScore(int value)
     {
+        if(value == 0) {return;}
+        DisplayPointsIncrement(value);
         score +=value;
         scoreDisplay.text = ScoreString(score);
+    }
+
+    private void DisplayPointsIncrement(int value)
+    {
+        int x = Random.Range(0 + 100, Screen.width - 100);
+        int y = Random.Range(0 + 400,Screen.height - 100);
+        addedScoreDisplay.text = "+" + value.ToString();
+        addedScoreDisplay.gameObject.transform.position = new Vector3(x,y);
+        addedScoreDisplay.gameObject.SetActive(true);
     }
 
     public void IncrementNumberOfTricks()
@@ -81,7 +110,6 @@ public class GameManager : MonoBehaviour
 
     public void SessionEnded(int longestCombo, float distanceTravelled)
     {
-        Debug.Log($"Session ended with a score of {score} and {noOfTricks} performed tricks");
         scoreDisplayFinal.text += score.ToString();
         noOfTricksDisplay.text += noOfTricks.ToString();
         noOfCombosDisplay.text += noOfCombos.ToString();

@@ -10,9 +10,7 @@ public class SkateboardController : MonoBehaviour
     private Animator animator;
     private Rigidbody2D rb;
     [SerializeField,Range(1f,100f)]private float minMovementSpeed = 50f;
-    [SerializeField,Range(0.1f,5f)]private float minVelocity = 3f;
-    [SerializeField,Range(1f,200f)]private float maxMovementSpeed = 150f;
-    [SerializeField,Range(0.1f,10f)]private float maxVelocity = 5f;
+    private float minVelocity = 3f;
     [SerializeField,Range(0.1f,1f)]private float minimumJumpForce = 1f;
     [SerializeField]private Transform groundCheck;
     [SerializeField]private LayerMask whatIsGround;
@@ -150,21 +148,12 @@ public class SkateboardController : MonoBehaviour
         // }
     }
 
-    private void Move()
-    {
-        if(isGrounded && Mathf.Abs(rb.velocity.x) < maxVelocity)
-        {
-            rb.AddForce(transform.right * maxMovementSpeed);
-        }
-    }
-
     private void Action(object sender, TouchEventArgs e)
     {
         currentTouchTime = e.touchTime + 1;
         if(currentTouchTime > 2f) {currentTouchTime = 2f;}
         if(e.swipeDirection == SwipeDirection.NONE)
         {
-            // Move();
             return;
         }
 
@@ -360,6 +349,12 @@ public class SkateboardController : MonoBehaviour
     {
         // Debug.Log("Touch Ended");
         isCharging = false;
+    }
+
+    public void SetMinVelocity(float value)
+    {
+        minVelocity = value;
+        Debug.Log($"Increasing minimum velocity to {value}");
     }
 
     void OnEnable()
