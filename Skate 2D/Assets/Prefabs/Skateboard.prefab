@@ -5077,9 +5077,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minMovementSpeed: 50
-  minVelocity: 3.5
-  maxMovementSpeed: 150
-  maxVelocity: 5
   minimumJumpForce: 0.712
   groundCheck: {fileID: 7702316996246342448}
   whatIsGround:
@@ -5089,7 +5086,7 @@ MonoBehaviour:
   whatIsGrindable:
     serializedVersion: 2
     m_Bits: 128
-  grindableCheckRadius: 0.3
+  grindableCheckRadius: 0.4
   backWheelSparks: {fileID: 8481983751286521546}
   frontWheelSparks: {fileID: 8201818001491858908}
   frontSmokeParticles: {fileID: 1594715600159104892}

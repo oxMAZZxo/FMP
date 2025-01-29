@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private bool generateObstacles;
     [SerializeField]private Obstacles[] obstacleTypes;
     private Pool<GameObject> groundObjects;
+    private Pool<Obstacle> obstacles;
     private Vector2 previousSpawnPosition;
     private SpawnAction currentSpawnAction = SpawnAction.Spawn;
 
@@ -46,6 +48,10 @@ public class ProceduralMap : MonoBehaviour
         groundObjects = new Pool<GameObject>(5,grounds);
     }
 
+    private void InitObstacles()
+    {
+        
+    }
 
     /// <summary>
     /// Spawns the Initial ground GameObjects the player is on
@@ -101,8 +107,8 @@ public class ProceduralMap : MonoBehaviour
             yield break;
         }
         yield return new WaitForSeconds(0.3f);
-        int obstacleType = Random.Range(0,obstacleTypes.Length);
-        int obstacleChoice = Random.Range(0,obstacleTypes[obstacleType].spawnables.Length);
+        int obstacleType = UnityEngine.Random.Range(0,obstacleTypes.Length);
+        int obstacleChoice = UnityEngine.Random.Range(0,obstacleTypes[obstacleType].spawnables.Length);
         GameObject firstObstacle = Instantiate(obstacleTypes[obstacleType].spawnables[obstacleChoice].prefab,transform.position,Quaternion.identity);
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
         Collider2D firstObstacleCollider = firstObstacle.GetComponent<Collider2D>();
@@ -114,9 +120,11 @@ public class ProceduralMap : MonoBehaviour
 
         firstObstacle.transform.position = obstacleSpawnPos;
         currentSpawnAction = obstacleTypes[obstacleType].spawnables[obstacleChoice].spawnAction;
-        if(obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length > 0 && Random.Range(0,100) <= obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjectChance)
+        if(obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length > 0 
+        && GameManager.Instance.currentGameSpeed >= obstacleTypes[obstacleType].spawnables[obstacleChoice].minimumAcceptableGameSpeedForFollowUp
+        && UnityEngine.Random.Range(0,100) <= obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjectChance)
         {
-            int secondObstacleChoice = Random.Range(0,obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length);
+            int secondObstacleChoice = UnityEngine.Random.Range(0,obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length);
         //     // Debug.Log($"From that type, the object chosen is {obstaclePrefabs[obstacleType].followObjs[secondObstacleType].objects[secondObstacleChoice].name}");
             GameObject secondObstacle = Instantiate(obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs[secondObstacleChoice],transform.position,Quaternion.identity);
 
@@ -135,6 +143,16 @@ public class ProceduralMap : MonoBehaviour
         }
         
         Destroy(firstObstacle,10f);
+    }
+
+    /// <summary>
+    /// Returns all obstacles from list that can be spawned based on a given game speed.
+    /// </summary>
+    /// <param name="gameSpeed"></param>
+    /// <returns></returns>
+    private List<Obstacles> GetObstaclesForCurrentGameSpeed(GameSpeed gameSpeed)
+    {
+        throw new NotImplementedException();
     }
     
 }   

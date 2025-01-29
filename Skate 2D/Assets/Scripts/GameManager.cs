@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField,Range(1f,60)]private float velocityIncrementInterval = 60f;
     private float currentVelocity;
     [SerializeField]private SkateboardController skateboardController;
+    public GameSpeed currentGameSpeed {get; private set;}
     private int noOfTricks;
     private int noOfCombos;
     private float counter;
@@ -52,6 +54,7 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 144;
         currentVelocity = startVelocity;
         skateboardController.SetMinVelocity(currentVelocity);
+        currentGameSpeed = GameSpeed.Slow;
     }
 
     void Update()
@@ -78,6 +81,8 @@ public class GameManager : MonoBehaviour
             currentVelocity += velocityIncrementPerInterval;
             skateboardController.SetMinVelocity(currentVelocity);
         }
+        if(currentVelocity > 3 && currentVelocity < 4){ currentGameSpeed = GameSpeed.Medium;}
+        if(currentVelocity >= 4){ currentGameSpeed = GameSpeed.Fast;}
         counter += Time.deltaTime;
     }
 
@@ -138,4 +143,10 @@ public class GameManager : MonoBehaviour
 
         return "***";
     }
+}
+
+public enum GameSpeed{
+    Slow,
+    Medium,
+    Fast
 }

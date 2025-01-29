@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: MediumLongRail
   m_EditorClassIdentifier: 
   prefab: {fileID: 9009299061145675200, guid: 4f142de76c1eb024d9287d331dd5e833, type: 3}
+  minimumAcceptableSpeedForObstacle: 0
   spawnAction: 1
+  minimumAcceptableGameSpeedForFollowUp: 1
   followObjs:
   - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
   followObjectChance: 60

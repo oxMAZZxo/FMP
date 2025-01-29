@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: MidKicker
   m_EditorClassIdentifier: 
   prefab: {fileID: 2046111037889000440, guid: bac7b6b4d1e03a549b6d87ec3916fc43, type: 3}
+  minimumAcceptableSpeedForObstacle: 1
   spawnAction: 1
+  minimumAcceptableGameSpeedForFollowUp: 1
   followObjs:
   - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
   - {fileID: 8824112578606911030, guid: 9c95ad6087aff034287587e3af311a7e, type: 3}
