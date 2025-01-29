@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private int noOfTricks;
     private int noOfCombos;
     private float counter;
+    public bool startGame = false;
 
     #region Framerate Variables
     private float timeCounter;
@@ -50,6 +51,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        if(!startGame) 
+        {
+            skateboardController.SetMinVelocity(0);
+            return;
+        }
         Debug.Log($"Screen width and height: {Screen.width} x {Screen.height}");
         Application.targetFrameRate = 144;
         currentVelocity = startVelocity;

@@ -721,6 +721,7 @@ MonoBehaviour:
   velocityIncrementPerInterval: 0.2
   velocityIncrementInterval: 15
   skateboardController: {fileID: 3088592964041584743}
+  startGame: 1
   refreshTime: 0.5
 --- !u!4 &288360714
 Transform:
@@ -1626,10 +1627,6 @@ MonoBehaviour:
   generateObstacles: 1
   obstacleTypes:
   - {fileID: 11400000, guid: ea21cd7a15cd99545bf9ac11ed3ee776, type: 2}
-  - {fileID: 11400000, guid: ec0b25e71ea869d43942bda469f19365, type: 2}
-  - {fileID: 11400000, guid: a0834ec11e796004e898f482b61c309c, type: 2}
-  - {fileID: 11400000, guid: 0843d37503d85e94ba3108309ee7b9db, type: 2}
-  - {fileID: 11400000, guid: 24b15a2382b965a4181c642f6362e919, type: 2}
 --- !u!4 &1022530504
 Transform:
   m_ObjectHideFlags: 0
