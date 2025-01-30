@@ -32,8 +32,8 @@ public class ProceduralMap : MonoBehaviour
     void Start()
     {
         InitPools();
+        InitObstaclePool();
         InitGround();
-        InitObstacles();
     }
 
     /// <summary>
@@ -41,16 +41,16 @@ public class ProceduralMap : MonoBehaviour
     /// </summary>
     private void InitPools()
     {
-        GameObject[] grounds = new GameObject[5];
+        GameObject[] grounds = new GameObject[4];
         for(int i = 0; i < grounds.Length; i++)
         {
             grounds[i] = Instantiate(groundPrefab,new Vector2(0,100), Quaternion.identity);
         }
         
-        groundObjects = new Pool<GameObject>(5,grounds);
+        groundObjects = new Pool<GameObject>(4,grounds);
     }
 
-    private void InitObstacles()
+    private void InitObstaclePool()
     {
         List<Obstacle> temp = new List<Obstacle>();
         foreach(Obstacles obstacles in obstacleTypes)

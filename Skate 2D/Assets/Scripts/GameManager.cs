@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
     {
         int x = Random.Range(0 + 100, Screen.width - 100);
         int y = Random.Range(0 + 400,Screen.height - 100);
-        addedScoreDisplay.text = "+" + value.ToString();
+        addedScoreDisplay.text = "+" + ScoreString(value);
         addedScoreDisplay.gameObject.transform.position = new Vector3(x,y);
         addedScoreDisplay.gameObject.SetActive(true);
     }
