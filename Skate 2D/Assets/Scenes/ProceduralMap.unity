@@ -717,7 +717,7 @@ MonoBehaviour:
   longestComboDisplay: {fileID: 1830285386}
   distanceTravelledDisplay: {fileID: 1092970402}
   addedScoreDisplay: {fileID: 930265750}
-  startVelocity: 2
+  startVelocity: 5
   velocityIncrementPerInterval: 0.2
   velocityIncrementInterval: 15
   skateboardController: {fileID: 3088592964041584743}

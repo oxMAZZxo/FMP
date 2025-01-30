@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 public class ProceduralMap : MonoBehaviour
@@ -69,6 +70,7 @@ public class ProceduralMap : MonoBehaviour
         for(int i = 0; i < 3; i++)
         {
             GameObject temp = Instantiate(prefab, transform.position, Quaternion.identity);
+            temp.name += i.ToString();
             tempPrefabPool.Add(temp);
         }
         return new Pool<GameObject>(tempPrefabPool);
@@ -83,6 +85,7 @@ public class ProceduralMap : MonoBehaviour
             for(int i = 0; i < 3; i++)
             {
                 GameObject currentFollowUpObstacle = Instantiate(prefabFollowObstacle, transform.position, Quaternion.identity);
+                currentFollowUpObstacle.name += i.ToString();
                 tempObstacles.Add(currentFollowUpObstacle);
             }
             followObjs.Add(new Pool<GameObject>(tempObstacles));
@@ -119,7 +122,16 @@ public class ProceduralMap : MonoBehaviour
     {
         GameObject ground = CreateGround();
         if(!generateObstacles) {return;}
+        ClearConsole();
+
         StartCoroutine(CreateObstacleOptimised(ground));
+    }
+
+    void ClearConsole()
+    {
+        Type logEntries = Type.GetType("UnityEditor.LogEntries, UnityEditor");
+        MethodInfo clearMethod = logEntries?.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public);
+        clearMethod?.Invoke(null, null);
     }
 
     /// <summary>
@@ -151,8 +163,7 @@ public class ProceduralMap : MonoBehaviour
         GameObject firstObstacle = Instantiate(obstacleTypes[obstacleType].spawnables[obstacleChoice].prefab,transform.position,Quaternion.identity);
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
         Collider2D firstObstacleCollider = firstObstacle.GetComponent<Collider2D>();
-        // // the value 'centreToBottomDistance is needed in order to place the bottom Y bounds of an obstacle,
-        // // onto the top Y bounds of the current ground GameObject that was activated
+
         float centreToBottomDistance = firstObstacleCollider.transform.position.y - firstObstacleCollider.bounds.min.y; 
 
         Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.max.y + centreToBottomDistance);
@@ -165,14 +176,18 @@ public class ProceduralMap : MonoBehaviour
         && UnityEngine.Random.Range(0,100) <= obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjectChance)
         {
             int secondObstacleChoice = UnityEngine.Random.Range(0,obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length);
-        //     // Debug.Log($"From that type, the object chosen is {obstaclePrefabs[obstacleType].followObjs[secondObstacleType].objects[secondObstacleChoice].name}");
+
             GameObject secondObstacle = Instantiate(obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs[secondObstacleChoice],transform.position,Quaternion.identity);
 
             Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
+
             float centreToLeft = secondObstacleCollider.transform.position.x - secondObstacleCollider.bounds.min.x;
+
             centreToBottomDistance = secondObstacleCollider.transform.position.y - secondObstacleCollider.bounds.min.y;
+
             Vector2 secondObstaclePos = new Vector2(firstObstacle.transform.position.x + firstObstacleCollider.bounds.max.x + centreToLeft + obstacleTypes[obstacleType].spawnables[obstacleChoice].followUpObjectDistance, groundCollider.bounds.max.y + centreToBottomDistance);
             secondObstacle.transform.position = secondObstaclePos;
+
             Destroy(secondObstacle,10f);
             switch(obstacleTypes[obstacleType].type)
             {
@@ -193,35 +208,40 @@ public class ProceduralMap : MonoBehaviour
             yield break;
         }
         yield return new WaitForSeconds(0.3f);
+
         Obstacle current = obstacles.GetObject();
         GameObject mainObstacle = current.GetMainObstacle();
+        
         Collider2D mainObstacleCollider = mainObstacle.GetComponent<Collider2D>();
+        mainObstacle.transform.position = Vector3.zero;
+        Physics2D.SyncTransforms();
+
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
 
-        float centreToBottomDistance = mainObstacleCollider.transform.position.y - mainObstacleCollider.bounds.min.y; 
-        Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.max.y + centreToBottomDistance);
+        float obtacleBottomBoundsPosition = mainObstacleCollider.bounds.center.y - mainObstacleCollider.bounds.extents.y; 
+
+        Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obtacleBottomBoundsPosition);
 
         mainObstacle.transform.position = obstacleSpawnPos;
+        Physics2D.SyncTransforms();
 
         if(current.noOfFollowObstacleObjs > 0 && GameManager.Instance.currentGameSpeed >= current.minimumAcceptableGameSpeedForFollowUp
         && UnityEngine.Random.Range(0,100) <= current.followObjectChance)
         {
             GameObject secondObstacle = current.GetFollowUpObstacle(UnityEngine.Random.Range(0,current.noOfFollowObstacleObjs));
-            
             Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
-            Debug.Log($"Spawning second obstacle {secondObstacle.name}. Initial cordinates: {secondObstacle.transform.position.ToString("F1")}");
 
-            float centreToLeft = secondObstacleCollider.transform.position.x - secondObstacleCollider.bounds.min.x;
-            Debug.Log($"From centre to left bounds parameter is {centreToLeft}");
-            centreToBottomDistance = secondObstacleCollider.transform.position.y - secondObstacleCollider.bounds.min.y;
-            Debug.Log($"The max x bounds of the main obstacle is {mainObstacleCollider.bounds.max.x}");
-            Debug.Log($"The distance this follow up object must be from the main obstacle is {current.followUpObjectDistance}");
-            Debug.Log($"The main obstacles X position is {mainObstacle.transform.position.x}");
-            Debug.Log($"Therefore the position the second obstacle will be spawned at is {mainObstacle.transform.position.x + mainObstacleCollider.bounds.max.x + centreToLeft + current.followUpObjectDistance}");
-            Vector2 secondObstaclePos = new Vector2(mainObstacle.transform.position.x + mainObstacleCollider.bounds.max.x + centreToLeft + current.followUpObjectDistance, groundCollider.bounds.max.y + centreToBottomDistance);
+            secondObstacle.transform.position = Vector3.zero;
+            Physics2D.SyncTransforms();
+
+            obtacleBottomBoundsPosition = secondObstacleCollider.bounds.center.y - secondObstacleCollider.bounds.extents.y; 
+            
+            float mainToSecondSideToSideDistance = mainObstacleCollider.bounds.extents.x + secondObstacleCollider.bounds.extents.x;
+            
+            Vector2 secondObstaclePos = new Vector2(mainObstacle.transform.position.x + mainToSecondSideToSideDistance + current.followUpObjectDistance, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obtacleBottomBoundsPosition);
             secondObstacle.transform.position = secondObstaclePos;
+            Physics2D.SyncTransforms();
         }
-        Debug.Break();
     }
 
     /// <summary>
