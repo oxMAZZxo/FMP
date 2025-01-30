@@ -245,16 +245,5 @@ public class ProceduralMap : MonoBehaviour
             secondObstacle.transform.position = secondObstaclePos;
             Physics2D.SyncTransforms();
         }
-    }
-
-    /// <summary>
-    /// Returns all obstacles from list that can be spawned based on a given game speed.
-    /// </summary>
-    /// <param name="gameSpeed"></param>
-    /// <returns></returns>
-    private List<Obstacles> GetObstaclesForCurrentGameSpeed(GameSpeed gameSpeed)
-    {
-        throw new NotImplementedException();
-    }
-    
+    }    
 }   
