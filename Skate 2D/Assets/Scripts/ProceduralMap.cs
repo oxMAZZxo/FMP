@@ -67,9 +67,9 @@ public class ProceduralMap : MonoBehaviour
     private Pool<GameObject> CreateMainObstaclePool(GameObject prefab)
     {
         List<GameObject> tempPrefabPool = new List<GameObject>();
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < 2; i++)
         {
-            GameObject temp = Instantiate(prefab, transform.position, Quaternion.identity);
+            GameObject temp = Instantiate(prefab, new Vector2(0,100), Quaternion.identity);
             temp.name += i.ToString();
             tempPrefabPool.Add(temp);
         }
@@ -82,9 +82,9 @@ public class ProceduralMap : MonoBehaviour
         List<GameObject> tempObstacles = new List<GameObject>();
         foreach(GameObject prefabFollowObstacle in followUpObjects)
         {
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < 2; i++)
             {
-                GameObject currentFollowUpObstacle = Instantiate(prefabFollowObstacle, transform.position, Quaternion.identity);
+                GameObject currentFollowUpObstacle = Instantiate(prefabFollowObstacle, new Vector2(0,100), Quaternion.identity);
                 currentFollowUpObstacle.name += i.ToString();
                 tempObstacles.Add(currentFollowUpObstacle);
             }
@@ -209,8 +209,8 @@ public class ProceduralMap : MonoBehaviour
         }
         yield return new WaitForSeconds(0.3f);
 
-        Obstacle current = obstacles.GetObject();
-        GameObject mainObstacle = current.GetMainObstacle();
+        Obstacle currentObstacleTypeChoice = obstacles.GetObject();
+        GameObject mainObstacle = currentObstacleTypeChoice.GetMainObstacle();
         
         Collider2D mainObstacleCollider = mainObstacle.GetComponent<Collider2D>();
         mainObstacle.transform.position = Vector3.zero;
@@ -224,11 +224,14 @@ public class ProceduralMap : MonoBehaviour
 
         mainObstacle.transform.position = obstacleSpawnPos;
         Physics2D.SyncTransforms();
-
-        if(current.noOfFollowObstacleObjs > 0 && GameManager.Instance.currentGameSpeed >= current.minimumAcceptableGameSpeedForFollowUp
-        && UnityEngine.Random.Range(0,100) <= current.followObjectChance)
+        if(GameManager.Instance.currentGameSpeed != GameSpeed.Slow)
         {
-            GameObject secondObstacle = current.GetFollowUpObstacle(UnityEngine.Random.Range(0,current.noOfFollowObstacleObjs));
+            currentSpawnAction = currentObstacleTypeChoice.spawnAction;
+        }
+        if(currentObstacleTypeChoice.noOfFollowObstacleObjs > 0 && GameManager.Instance.currentGameSpeed >= currentObstacleTypeChoice.minimumAcceptableGameSpeedForFollowUp
+        && UnityEngine.Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance)
+        {
+            GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(UnityEngine.Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs));
             Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
 
             secondObstacle.transform.position = Vector3.zero;
@@ -238,7 +241,7 @@ public class ProceduralMap : MonoBehaviour
             
             float mainToSecondSideToSideDistance = mainObstacleCollider.bounds.extents.x + secondObstacleCollider.bounds.extents.x;
             
-            Vector2 secondObstaclePos = new Vector2(mainObstacle.transform.position.x + mainToSecondSideToSideDistance + current.followUpObjectDistance, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obtacleBottomBoundsPosition);
+            Vector2 secondObstaclePos = new Vector2(mainObstacle.transform.position.x + mainToSecondSideToSideDistance + currentObstacleTypeChoice.followUpObjectDistance, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obtacleBottomBoundsPosition);
             secondObstacle.transform.position = secondObstaclePos;
             Physics2D.SyncTransforms();
         }

@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Bench3
   m_EditorClassIdentifier: 
   prefab: {fileID: 558601362516956773, guid: 8a93b6089126c994380feb21f5926417, type: 3}
+  minimumAcceptableSpeedForObstacle: 0
+  spawnAction: 0
+  minimumAcceptableGameSpeedForFollowUp: 0
   followObjs:
-  - {fileID: 3921992949018577769, guid: fe989d88da9eb054ca304060018d2e15, type: 3}
   - {fileID: 586377814081109084, guid: d922febcf0e2d464bb19959cedf36474, type: 3}
+  - {fileID: 3921992949018577769, guid: fe989d88da9eb054ca304060018d2e15, type: 3}
   - {fileID: 558601362516956773, guid: 8a93b6089126c994380feb21f5926417, type: 3}
   followObjectChance: 50
   followUpObjectDistance: 2
