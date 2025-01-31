@@ -1631,6 +1631,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a0834ec11e796004e898f482b61c309c, type: 2}
   - {fileID: 11400000, guid: 0843d37503d85e94ba3108309ee7b9db, type: 2}
   - {fileID: 11400000, guid: 24b15a2382b965a4181c642f6362e919, type: 2}
+  whatIsObstacle:
+    serializedVersion: 2
+    m_Bits: 128
+  obstacleCheckRadius: 2
 --- !u!4 &1022530504
 Transform:
   m_ObjectHideFlags: 0

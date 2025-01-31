@@ -13,6 +13,8 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private GameObject groundPrefab;
     [SerializeField]private bool generateObstacles;
     [SerializeField]private Obstacles[] obstacleTypes;
+    [SerializeField]private LayerMask whatIsObstacle;
+    [SerializeField,Range(0.1f,3f)]private float obstacleCheckRadius = 1f;
     private Pool<GameObject> groundObjects;
     private Pool<Obstacle> obstacles;
     private Vector2 previousSpawnPosition;
@@ -218,12 +220,19 @@ public class ProceduralMap : MonoBehaviour
 
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
 
-        float obtacleBottomBoundsPosition = mainObstacleCollider.bounds.center.y - mainObstacleCollider.bounds.extents.y; 
+        float obstacleBottomBoundsPosition = mainObstacleCollider.bounds.center.y - mainObstacleCollider.bounds.extents.y; 
 
-        Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obtacleBottomBoundsPosition);
+        Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
 
         mainObstacle.transform.position = obstacleSpawnPos;
         Physics2D.SyncTransforms();
+        if(CheckForPreviousObjectNear(mainObstacle))
+        {
+            Debug.Log($"Moving {mainObstacle.name} 3 meters to the right");
+            obstacleSpawnPos = new Vector2(ground.transform.position.x + 3,groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
+            mainObstacle.transform.position = obstacleSpawnPos;
+            Physics2D.SyncTransforms();
+        }
         if(GameManager.Instance.currentGameSpeed != GameSpeed.Slow)
         {
             currentSpawnAction = currentObstacleTypeChoice.spawnAction;
@@ -237,13 +246,34 @@ public class ProceduralMap : MonoBehaviour
             secondObstacle.transform.position = Vector3.zero;
             Physics2D.SyncTransforms();
 
-            obtacleBottomBoundsPosition = secondObstacleCollider.bounds.center.y - secondObstacleCollider.bounds.extents.y; 
+            obstacleBottomBoundsPosition = secondObstacleCollider.bounds.center.y - secondObstacleCollider.bounds.extents.y; 
             
             float mainToSecondSideToSideDistance = mainObstacleCollider.bounds.extents.x + secondObstacleCollider.bounds.extents.x;
             
-            Vector2 secondObstaclePos = new Vector2(mainObstacle.transform.position.x + mainToSecondSideToSideDistance + currentObstacleTypeChoice.followUpObjectDistance, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obtacleBottomBoundsPosition);
+            Vector2 secondObstaclePos = new Vector2(mainObstacle.transform.position.x + mainToSecondSideToSideDistance + currentObstacleTypeChoice.followUpObjectDistance, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
             secondObstacle.transform.position = secondObstaclePos;
             Physics2D.SyncTransforms();
         }
+    }
+
+    private bool CheckForPreviousObjectNear(GameObject obstacle)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(obstacle.transform.position, obstacleCheckRadius, whatIsObstacle);
+        
+        foreach(Collider2D collider in colliders)
+        {
+            if(collider.gameObject != obstacle)
+            {
+                Debug.Log("There's an obstacle near the current obstacle position");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position,obstacleCheckRadius);
     }    
 }   
