@@ -68,7 +68,7 @@ public class ProceduralMap : MonoBehaviour
     private Pool<GameObject> CreateMainObstaclePool(GameObject prefab)
     {
         List<GameObject> tempPrefabPool = new List<GameObject>();
-        for(int i = 0; i < 2; i++)
+        for(int i = 0; i < 1; i++)
         {
             GameObject temp = Instantiate(prefab, new Vector2(0,100), Quaternion.identity);
             temp.name += i.ToString();
@@ -83,7 +83,7 @@ public class ProceduralMap : MonoBehaviour
         List<GameObject> tempObstacles = new List<GameObject>();
         foreach(GameObject prefabFollowObstacle in followUpObjects)
         {
-            for(int i = 0; i < 2; i++)
+            for(int i = 0; i < 1; i++)
             {
                 GameObject currentFollowUpObstacle = Instantiate(prefabFollowObstacle, new Vector2(0,100), Quaternion.identity);
                 currentFollowUpObstacle.name += i.ToString();

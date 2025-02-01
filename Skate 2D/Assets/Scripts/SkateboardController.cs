@@ -50,7 +50,7 @@ public class SkateboardController : MonoBehaviour
 
         if(Mathf.Abs(rb.velocity.x) > minVelocity) { hasStarted = true; }
 
-        if(Mathf.Abs(rb.velocity.x) < minVelocity)
+        if((isGrounded || isGrinding) && Mathf.Abs(rb.velocity.x) < minVelocity)
         {
             rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
         }
@@ -70,17 +70,11 @@ public class SkateboardController : MonoBehaviour
         {
             if(CheckIsGrinding() == false)
             {
-                rb.constraints = RigidbodyConstraints2D.None;
-                rb.gravityScale = 1;
-                isGrinding = false;
-                animator.SetBool("isGrinding",false);
-                backWheelSparks.SetActive(false);
-                frontWheelSparks.SetActive(false);
+                DisableGrinding();
             }
-        }else
-        {
-            CheckGrounded();
         }
+        CheckGrounded();
+        
 
         if(isCharging){
             jumpForceSlider.value += Time.fixedDeltaTime;
@@ -138,9 +132,7 @@ public class SkateboardController : MonoBehaviour
             // Debug.Log("Performing Trick");
             if(isGrinding)
             {
-                rb.constraints = RigidbodyConstraints2D.None;
-                rb.gravityScale = 1;
-                isGrinding = false; //which means that they would no longer be doing a grind
+                DisableGrinding();
             }
             // Debug.Log($"Current touch time: {currentTouchTime}");
             // Debug.Log($"Jump force will be: {minimumJumpForce * (100 + (100 * currentTouchTime))}");
@@ -195,7 +187,6 @@ public class SkateboardController : MonoBehaviour
         comboDisplay.text += trickPerformed;        
     }
 
-
     /// <summary>
     /// Triggers a trick animations with the provided swipe direction.
     /// </summary>
@@ -244,7 +235,6 @@ public class SkateboardController : MonoBehaviour
         GameManager.Instance.IncrementNumberOfTricks();     
         return trickOutput;
     }
-
 
     /// <summary>
     /// Performs a grind on a given obstacle.
@@ -337,6 +327,16 @@ public class SkateboardController : MonoBehaviour
         }
         
         return false;
+    }
+
+    private void DisableGrinding()
+    {
+        rb.constraints = RigidbodyConstraints2D.None;
+        rb.gravityScale = 1;
+        isGrinding = false;
+        animator.SetBool("isGrinding",false);
+        backWheelSparks.SetActive(false);
+        frontWheelSparks.SetActive(false);
     }
 
     private void OnTouchStarted(object sender, EventArgs e)
