@@ -354,7 +354,6 @@ public class SkateboardController : MonoBehaviour
     public void SetMinVelocity(float value)
     {
         minVelocity = value;
-        Debug.Log($"Increasing minimum velocity to {value}");
     }
 
     void OnEnable()

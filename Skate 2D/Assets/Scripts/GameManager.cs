@@ -56,7 +56,6 @@ public class GameManager : MonoBehaviour
             skateboardController.SetMinVelocity(0);
             return;
         }
-        Debug.Log($"Screen width and height: {Screen.width} x {Screen.height}");
         Application.targetFrameRate = 144;
         currentVelocity = startVelocity;
         skateboardController.SetMinVelocity(currentVelocity);

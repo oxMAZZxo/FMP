@@ -1,31 +1,44 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    private AsyncOperation asyncLoad;
+    private bool sceneReady;
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(LoadSceneAsync());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator LoadSceneAsync()
     {
+        asyncLoad = SceneManager.LoadSceneAsync("ProceduralMap");
+        asyncLoad.allowSceneActivation = false;
+        sceneReady = false;
+
+        while (!asyncLoad.isDone)
+        {
+            if (asyncLoad.progress >= 0.9f)
+            {
+                sceneReady = true;
+                break;
+            }
+
+            yield return null;
+        }
         
     }
 
     private void StartGame()
     {
-        SceneManager.LoadScene("ProceduralMap");
+        asyncLoad.allowSceneActivation = true;
     }
 
     private void OnTouch(object sender, EventArgs e){
-        StartGame();
+        if(sceneReady) {StartGame();}
     }
 
     void OnEnable()

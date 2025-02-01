@@ -59,7 +59,6 @@ public class ProceduralMap : MonoBehaviour
         {
             foreach(Spawnable spawnable in obstacles.spawnables)
             {
-                Debug.Log($"Creating a pool of obstacle of type {obstacles.type}");
                 temp.Add(new Obstacle(obstacles.type,spawnable,CreateMainObstaclePool(spawnable.prefab),CreateFollowUpObjectPool(spawnable.followObjs)));
             }
         }
