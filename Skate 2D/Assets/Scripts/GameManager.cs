@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
         currentVelocity = startVelocity;
         skateboardController.SetMinVelocity(currentVelocity);
         currentGameSpeed = GameSpeed.Slow;
+        if(SystemInfo.deviceType == DeviceType.Desktop) {return;}
         if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
         {
                 virtualCamera.m_Lens.OrthographicSize = 2.3f;

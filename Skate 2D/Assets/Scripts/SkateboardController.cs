@@ -9,6 +9,7 @@ public class SkateboardController : MonoBehaviour
 {
     private Animator animator;
     private Rigidbody2D rb;
+    [SerializeField,Range(0.01f,1f)]private float movementSmoothing = 1f;
     [SerializeField,Range(1f,100f)]private float minMovementSpeed = 50f;
     private float minVelocity = 3f;
     [SerializeField,Range(0.1f,1f)]private float minimumJumpForce = 1f;
@@ -36,6 +37,7 @@ public class SkateboardController : MonoBehaviour
     private int comboCounter = 1;
     private int longestCombo;
     private float distanceTravelled;
+    private Vector2 m_Velocity;
 
     void Start()
     {
@@ -48,21 +50,16 @@ public class SkateboardController : MonoBehaviour
     {
         if(isStopped) {return;}
 
-        if(Mathf.Abs(rb.velocity.x) > minVelocity) { hasStarted = true; }
+        if(!hasStarted && rb.velocity.x > minVelocity - 0.5f) { hasStarted = true; Debug.Log($"Game has started"); }
 
         if((isGrounded || isGrinding) && Mathf.Abs(rb.velocity.x) < minVelocity)
         {
-            rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
+            // rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
+            Vector3 targetVelocity = new Vector2(minVelocity, rb.velocity.y);
+            rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothing);
         }
 
         if(transform.position.x > distanceTravelled) {distanceTravelled = transform.position.x;}
-
-        if(hasStarted && rb.velocity.x < 0.3f)
-        {
-            isStopped = true;
-            GameManager.Instance.SessionEnded(longestCombo,distanceTravelled);
-            GameOver();
-        }
 
         //While the player is performing a grind, we want to make sure to enable physics
         //as the skateboard is reaching the end of the grindable obstacle
@@ -81,6 +78,13 @@ public class SkateboardController : MonoBehaviour
         }else
         {
             jumpForceSlider.value = 0;
+        }
+
+        if(hasStarted && rb.velocity.x < 0.5f)
+        {
+            isStopped = true;
+            GameManager.Instance.SessionEnded(longestCombo,distanceTravelled);
+            GameOver();
         }
     }
 
