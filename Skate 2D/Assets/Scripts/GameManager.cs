@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Cinemachine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,11 +25,13 @@ public class GameManager : MonoBehaviour
     [SerializeField,Range(10,50),Tooltip("This value will determine the amount of velocity incrementations based on the score added")]private int scoreIncrementValue = 10;
     private float currentVelocity;
     [SerializeField]private SkateboardController skateboardController;
+    [SerializeField]private CinemachineVirtualCamera virtualCamera;
     public GameSpeed currentGameSpeed {get; private set;}
     private int noOfTricks;
     private int noOfCombos;
-    private float counter;
     public bool startGame = false;
+    private ScreenOrientation screenOrientation;
+    private bool screenOrientationChanged;
 
     #region Framerate Variables
     private float timeCounter;
@@ -55,10 +58,18 @@ public class GameManager : MonoBehaviour
             skateboardController.SetMinVelocity(0);
             return;
         }
+        screenOrientation = Screen.orientation;
         Application.targetFrameRate = 144;
         currentVelocity = startVelocity;
         skateboardController.SetMinVelocity(currentVelocity);
         currentGameSpeed = GameSpeed.Slow;
+        if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
+        {
+                virtualCamera.m_Lens.OrthographicSize = 2.3f;
+        }else
+        {
+                virtualCamera.m_Lens.OrthographicSize = 5f;
+        }
     }
 
     void Update()
@@ -88,6 +99,27 @@ public class GameManager : MonoBehaviour
         // }
 
         // counter += Time.deltaTime;
+    }
+
+    void FixedUpdate()
+    {
+        if(screenOrientation != Screen.orientation)
+        {
+            screenOrientationChanged = true;
+            screenOrientation = Screen.orientation;
+        }
+
+        if(screenOrientationChanged)
+        {
+            screenOrientationChanged = false;
+            if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
+            {
+                virtualCamera.m_Lens.OrthographicSize = 2.3f;
+            }else
+            {
+                virtualCamera.m_Lens.OrthographicSize = 5f;
+            }
+        }
     }
 
     public void AddScore(int value)

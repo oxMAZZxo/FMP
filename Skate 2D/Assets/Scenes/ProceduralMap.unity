@@ -723,6 +723,7 @@ MonoBehaviour:
   maxNumberOfIncrements: 10
   scoreIncrementValue: 30
   skateboardController: {fileID: 3088592964041584743}
+  virtualCamera: {fileID: 825628981}
   startGame: 1
   refreshTime: 0.5
 --- !u!4 &288360714
