@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI addedScoreDisplay;
     [SerializeField,Range(1f,5f)]private float startVelocity = 1f;
     [SerializeField,Range(1f,10f)]private float maxVelocity = 1f;
-    [SerializeField,Range(0.001f,0.1f)]private float velocityIncrementPerScoreAdded = 0.1f;
+    [SerializeField,Range(0.1f,0.2f)]private float velocityIncrementPerScoreAdded = 0.1f;
     [SerializeField,Range(1,15)]private int maxNumberOfIncrements = 15;
     [SerializeField,Range(10,50),Tooltip("This value will determine the amount of velocity incrementations based on the score added")]private int scoreIncrementValue = 10;
     private float currentVelocity;
@@ -111,6 +111,7 @@ public class GameManager : MonoBehaviour
         float speedToIncrement = velocityIncrementPerScoreAdded * noOfIncrements;
         Debug.Log($"The speed to be added is {speedToIncrement}, because {velocityIncrementPerScoreAdded} * {value / scoreIncrementValue} is {speedToIncrement}");
         currentVelocity += speedToIncrement;
+        if(currentVelocity > maxVelocity) {currentVelocity = maxVelocity;}
         skateboardController.SetMinVelocity(currentVelocity);    
         Debug.Log($"Skateboard velocity is now {currentVelocity}");
         CheckGameSpeed();    
@@ -130,14 +131,19 @@ public class GameManager : MonoBehaviour
         { 
             currentGameSpeed = GameSpeed.Medium;
             scoreIncrementValue = 50;
-            velocityIncrementPerScoreAdded = 0.15f;
+            velocityIncrementPerScoreAdded = 0.1f;
         }
-        if(currentVelocity >= 4)
+        if(currentVelocity >= 4 && currentVelocity < 4.5)
         { 
             currentGameSpeed = GameSpeed.Fast;
             scoreIncrementValue = 100;
-            velocityIncrementPerScoreAdded = 0.25f;
-            
+            velocityIncrementPerScoreAdded = 0.05f;
+        }
+        if(currentVelocity > 4.5)
+        {
+            currentGameSpeed = GameSpeed.Fast;
+            scoreIncrementValue = 200;
+            velocityIncrementPerScoreAdded = 0.015f;
         }
     }
 
@@ -195,5 +201,6 @@ public class GameManager : MonoBehaviour
 public enum GameSpeed{
     Slow,
     Medium,
-    Fast
+    Fast,
+    SuperFast
 }

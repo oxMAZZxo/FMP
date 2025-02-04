@@ -719,9 +719,9 @@ MonoBehaviour:
   addedScoreDisplay: {fileID: 930265750}
   startVelocity: 2
   maxVelocity: 5.5
-  velocityIncrementPerScoreAdded: 0.05
-  maxNumberOfIncrements: 15
-  scoreIncrementValue: 10
+  velocityIncrementPerScoreAdded: 0.125
+  maxNumberOfIncrements: 10
+  scoreIncrementValue: 30
   skateboardController: {fileID: 3088592964041584743}
   startGame: 1
   refreshTime: 0.5
