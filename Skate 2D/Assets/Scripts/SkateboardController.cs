@@ -200,6 +200,7 @@ public class SkateboardController : MonoBehaviour
             case SwipeDirection.UP:
             animator.SetTrigger("ollie");
             potentialPoints +=1;
+            trickOutput = "Ollie";
             break;
 
             case SwipeDirection.DOWN:

@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -21,8 +18,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI distanceTravelledDisplay;
     [SerializeField]private TextMeshProUGUI addedScoreDisplay;
     [SerializeField,Range(1f,5f)]private float startVelocity = 1f;
-    [SerializeField,Range(0.01f,1f)]private float velocityIncrementPerInterval = 0.01f;
-    [SerializeField,Range(1f,60)]private float velocityIncrementInterval = 60f;
+    [SerializeField,Range(1f,10f)]private float maxVelocity = 1f;
+    [SerializeField,Range(0.001f,0.1f)]private float velocityIncrementPerScoreAdded = 0.1f;
+    [SerializeField,Range(1,15)]private int maxNumberOfIncrements = 15;
+    [SerializeField,Range(10,50),Tooltip("This value will determine the amount of velocity incrementations based on the score added")]private int scoreIncrementValue = 10;
     private float currentVelocity;
     [SerializeField]private SkateboardController skateboardController;
     public GameSpeed currentGameSpeed {get; private set;}
@@ -80,29 +79,72 @@ public class GameManager : MonoBehaviour
         }
         #endregion
         
-        if(counter >= velocityIncrementInterval)
-        {
-            counter = 0;
-            currentVelocity += velocityIncrementPerInterval;
-            skateboardController.SetMinVelocity(currentVelocity);
-        }
-        if(currentVelocity > 3 && currentVelocity < 4){ currentGameSpeed = GameSpeed.Medium;}
-        if(currentVelocity >= 4){ currentGameSpeed = GameSpeed.Fast;}
-        counter += Time.deltaTime;
+        // Velocity incrementation based on interval disabled.
+        // if(counter >= velocityIncrementInterval)
+        // {
+        //     counter = 0;
+        //     currentVelocity += velocityIncrementPerInterval;
+        //     skateboardController.SetMinVelocity(currentVelocity);
+        // }
+
+        // counter += Time.deltaTime;
     }
 
     public void AddScore(int value)
     {
         if(value == 0) {return;}
         DisplayPointsIncrement(value);
+        if(currentVelocity < maxVelocity)
+        {
+            IncreaseSpeed(value);
+        }
         score +=value;
         scoreDisplay.text = ScoreString(score);
     }
 
+    private void IncreaseSpeed(int value)
+    {
+        ClearConsole();
+        Debug.Log($"The incoming score {value} has {value / scoreIncrementValue} {scoreIncrementValue}s in it.");
+        int noOfIncrements = value / scoreIncrementValue;
+        if(noOfIncrements > maxNumberOfIncrements) {noOfIncrements = maxNumberOfIncrements;}
+        float speedToIncrement = velocityIncrementPerScoreAdded * noOfIncrements;
+        Debug.Log($"The speed to be added is {speedToIncrement}, because {velocityIncrementPerScoreAdded} * {value / scoreIncrementValue} is {speedToIncrement}");
+        currentVelocity += speedToIncrement;
+        skateboardController.SetMinVelocity(currentVelocity);    
+        Debug.Log($"Skateboard velocity is now {currentVelocity}");
+        CheckGameSpeed();    
+    }
+
+    
+    void ClearConsole()
+    {
+        Type logEntries = Type.GetType("UnityEditor.LogEntries, UnityEditor");
+        MethodInfo clearMethod = logEntries?.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public);
+        clearMethod?.Invoke(null, null);
+    }
+
+    private void CheckGameSpeed()
+    {
+        if(currentVelocity > 3 && currentVelocity < 4)
+        { 
+            currentGameSpeed = GameSpeed.Medium;
+            scoreIncrementValue = 50;
+            velocityIncrementPerScoreAdded = 0.15f;
+        }
+        if(currentVelocity >= 4)
+        { 
+            currentGameSpeed = GameSpeed.Fast;
+            scoreIncrementValue = 100;
+            velocityIncrementPerScoreAdded = 0.25f;
+            
+        }
+    }
+
     private void DisplayPointsIncrement(int value)
     {
-        int x = Random.Range(0 + 100, Screen.width - 100);
-        int y = Random.Range(0 + 400,Screen.height - 100);
+        int x = UnityEngine.Random.Range(0 + 100, Screen.width - 100);
+        int y = UnityEngine.Random.Range(0 + 400,Screen.height - 100);
         addedScoreDisplay.text = "+" + ScoreString(value);
         addedScoreDisplay.gameObject.transform.position = new Vector3(x,y);
         addedScoreDisplay.gameObject.SetActive(true);

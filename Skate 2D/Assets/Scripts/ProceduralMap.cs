@@ -123,18 +123,9 @@ public class ProceduralMap : MonoBehaviour
     {
         GameObject ground = CreateGround();
         if(!generateObstacles) {return;}
-        ClearConsole();
-
         StartCoroutine(CreateObstacleOptimised(ground));
     }
-
-    void ClearConsole()
-    {
-        Type logEntries = Type.GetType("UnityEditor.LogEntries, UnityEditor");
-        MethodInfo clearMethod = logEntries?.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public);
-        clearMethod?.Invoke(null, null);
-    }
-
+    
     /// <summary>
     /// Creates a new ground based on the position of where the previous ground was created
     /// </summary>
