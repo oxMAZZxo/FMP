@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -8,7 +9,7 @@ public class Pool<T>
 {
     private T[] objects;
     private int index;
-    internal int length { get; }
+    public int length { get; }
 
     /// <summary>
     /// Instantiates a pool only using an amount, no objects are in the pool
@@ -53,4 +54,21 @@ public class Pool<T>
 
     /// <returns>Returns the type of objects the pool is holding</returns>
     public string GetObjectType() {return objects[0].GetType().Name;}
+
+    /// <returns>Returns a random object except the object previously returned</returns>
+    public T GetRandomObject()
+    {
+        int indexPreviouslyUsed = index-1;
+        if(indexPreviouslyUsed == -1){indexPreviouslyUsed = objects.Length -1;}
+        int indexToReturn = 0;
+        Random rnd = new Random();
+        do
+        {
+            indexToReturn = rnd.Next(0, objects.Length);
+        }while(indexPreviouslyUsed == indexToReturn);
+
+        T currentObject = objects[index];
+        index = indexToReturn;
+        return currentObject;
+    }
 }

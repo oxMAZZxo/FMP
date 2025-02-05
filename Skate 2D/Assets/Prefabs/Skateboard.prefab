@@ -5076,8 +5076,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303750e76938a584299b0646e51f5c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minMovementSpeed: 50
-  minimumJumpForce: 0.712
+  movementSmoothing: 0.11
+  minimumJumpForce: 0.75
   groundCheck: {fileID: 7702316996246342448}
   whatIsGround:
     serializedVersion: 2

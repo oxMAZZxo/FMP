@@ -67,7 +67,7 @@ public class ProceduralMap : MonoBehaviour
     private Pool<GameObject> CreateMainObstaclePool(GameObject prefab)
     {
         List<GameObject> tempPrefabPool = new List<GameObject>();
-        for(int i = 0; i < 1; i++)
+        for(int i = 0; i < 2; i++)
         {
             GameObject temp = Instantiate(prefab, new Vector2(0,100), Quaternion.identity);
             temp.name += i.ToString();
@@ -82,7 +82,7 @@ public class ProceduralMap : MonoBehaviour
         List<GameObject> tempObstacles = new List<GameObject>();
         foreach(GameObject prefabFollowObstacle in followUpObjects)
         {
-            for(int i = 0; i < 1; i++)
+            for(int i = 0; i < 2; i++)
             {
                 GameObject currentFollowUpObstacle = Instantiate(prefabFollowObstacle, new Vector2(0,100), Quaternion.identity);
                 currentFollowUpObstacle.name += i.ToString();
@@ -205,7 +205,7 @@ public class ProceduralMap : MonoBehaviour
         }
         yield return new WaitForSeconds(0.3f);
 
-        Obstacle currentObstacleTypeChoice = obstacles.GetObject();
+        Obstacle currentObstacleTypeChoice = obstacles.GetRandomObject();
         GameObject mainObstacle = currentObstacleTypeChoice.GetMainObstacle();
         
         Collider2D mainObstacleCollider = mainObstacle.GetComponent<Collider2D>();
@@ -222,7 +222,7 @@ public class ProceduralMap : MonoBehaviour
         Physics2D.SyncTransforms();
         if(CheckForPreviousObjectNear(mainObstacleCollider,currentObstacleTypeChoice.checkRadius))
         {
-            obstacleSpawnPos = new Vector2(ground.transform.position.x + currentObstacleTypeChoice.checkRadius / 2,groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
+            obstacleSpawnPos = new Vector2(ground.transform.position.x + currentObstacleTypeChoice.checkRadius -1,groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
             mainObstacle.transform.position = obstacleSpawnPos;
             Physics2D.SyncTransforms();
         }

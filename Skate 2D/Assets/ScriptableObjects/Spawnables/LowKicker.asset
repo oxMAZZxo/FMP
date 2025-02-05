@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LowKicker
   m_EditorClassIdentifier: 
   prefab: {fileID: 6147742679119598267, guid: 821dc3f04fae9e8459cb1e2bc8c75fd0, type: 3}
-  checkRadius: 3
+  checkRadius: 4
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0
   minimumAcceptableGameSpeedForFollowUp: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HighKicker
   m_EditorClassIdentifier: 
   prefab: {fileID: 6464161430064065539, guid: bf0792f1e926fda48995dbea83ad6ede, type: 3}
-  checkRadius: 3
+  checkRadius: 4
   minimumAcceptableSpeedForObstacle: 2
   spawnAction: 1
   minimumAcceptableGameSpeedForFollowUp: 2

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Cone
   m_EditorClassIdentifier: 
   prefab: {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
-  checkRadius: 2
+  checkRadius: 4
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0
   minimumAcceptableGameSpeedForFollowUp: 0
