@@ -717,7 +717,7 @@ MonoBehaviour:
   longestComboDisplay: {fileID: 1830285386}
   distanceTravelledDisplay: {fileID: 1092970402}
   addedScoreDisplay: {fileID: 930265750}
-  startVelocity: 2
+  startVelocity: 2.2
   maxVelocity: 5.5
   velocityIncrementPerScoreAdded: 0.125
   maxNumberOfIncrements: 10
@@ -1420,7 +1420,7 @@ Transform:
   m_GameObject: {fileID: 825628980}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.615, z: -10}
+  m_LocalPosition: {x: 0, y: 1.2199999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1965,7 +1965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad980451443d70438faac0bc6c235a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 0, y: 1, z: 0}
+  m_TrackedObjectOffset: {x: 0, y: 0.22, z: 0}
   m_LookaheadTime: 1
   m_LookaheadSmoothing: 10
   m_LookaheadIgnoreY: 1
@@ -2516,7 +2516,7 @@ Transform:
   m_GameObject: {fileID: 1727760423}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.615, z: -10}
+  m_LocalPosition: {x: 0, y: 1.2199999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2946,7 +2946,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3220706696710446752, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.615
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3220706696710446752, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2984,6 +2984,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skateboard
       objectReference: {fileID: 0}
+    - target: {fileID: 3872164303532241811, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f8a8b5632bd17204b81c702da24afe88, type: 3}
+    - target: {fileID: 4284025997099451153, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533750952029635877, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: comboDisplay
       value: 
@@ -2996,6 +3008,26 @@ PrefabInstance:
       propertyPath: comboCounterDisplay
       value: 
       objectReference: {fileID: 1387938532}
+    - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: groundedCheckRadius
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629344079568082858, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849443888880013002, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7702316996246342448, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 7722678107793403919, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.92
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
