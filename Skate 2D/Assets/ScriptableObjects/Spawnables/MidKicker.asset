@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: MidKicker
   m_EditorClassIdentifier: 
   prefab: {fileID: 2046111037889000440, guid: bac7b6b4d1e03a549b6d87ec3916fc43, type: 3}
+  checkRadius: 3
   minimumAcceptableSpeedForObstacle: 1
   spawnAction: 1
   minimumAcceptableGameSpeedForFollowUp: 1
@@ -20,5 +21,5 @@ MonoBehaviour:
   - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
   - {fileID: 8824112578606911030, guid: 9c95ad6087aff034287587e3af311a7e, type: 3}
   - {fileID: 1806635548657032485, guid: 24fb1b38565ca244d9dfbe62ef40c15b, type: 3}
-  followObjectChance: 90
-  followUpObjectDistance: 1.5
+  followObjectChance: 100
+  followUpObjectDistance: 1.2

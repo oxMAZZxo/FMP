@@ -14,7 +14,6 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private bool generateObstacles;
     [SerializeField]private Obstacles[] obstacleTypes;
     [SerializeField]private LayerMask whatIsObstacle;
-    [SerializeField,Range(0.1f,3f)]private float obstacleCheckRadius = 1f;
     private Pool<GameObject> groundObjects;
     private Pool<Obstacle> obstacles;
     private Vector2 previousSpawnPosition;
@@ -139,7 +138,7 @@ public class ProceduralMap : MonoBehaviour
     }
 
     /// <summary>
-    /// Creates a random obstacle from an array
+    /// Creates a random obstacle from an array. THIS FUNCTION IS UNOPTIMISED
     /// </summary>
     /// <param name="ground"></param>   
     IEnumerator CreateObstacle(GameObject ground)
@@ -192,6 +191,11 @@ public class ProceduralMap : MonoBehaviour
         Destroy(firstObstacle,10f);
     }
 
+    /// <summary>
+    /// Creates a random obstacle from the pools.
+    /// </summary>
+    /// <param name="ground">The current ground</param>
+    /// <returns></returns>
     IEnumerator CreateObstacleOptimised(GameObject ground)
     {
         if(currentSpawnAction != SpawnAction.Spawn) 
@@ -216,13 +220,13 @@ public class ProceduralMap : MonoBehaviour
 
         mainObstacle.transform.position = obstacleSpawnPos;
         Physics2D.SyncTransforms();
-        if(CheckForPreviousObjectNear(mainObstacle))
+        if(CheckForPreviousObjectNear(mainObstacleCollider,currentObstacleTypeChoice.checkRadius))
         {
-            Debug.Log($"Moving {mainObstacle.name} 3 meters to the right");
-            obstacleSpawnPos = new Vector2(ground.transform.position.x + 3,groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
+            obstacleSpawnPos = new Vector2(ground.transform.position.x + currentObstacleTypeChoice.checkRadius / 2,groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
             mainObstacle.transform.position = obstacleSpawnPos;
             Physics2D.SyncTransforms();
         }
+
         if(GameManager.Instance.currentGameSpeed != GameSpeed.Slow)
         {
             currentSpawnAction = currentObstacleTypeChoice.spawnAction;
@@ -246,24 +250,20 @@ public class ProceduralMap : MonoBehaviour
         }
     }
 
-    private bool CheckForPreviousObjectNear(GameObject obstacle)
+    private bool CheckForPreviousObjectNear(Collider2D obstacle,float checkRadius)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(obstacle.transform.position, obstacleCheckRadius, whatIsObstacle);
+        Vector3 checkPos = new Vector3(obstacle.transform.position.x - obstacle.bounds.extents.x,obstacle.transform.position.y,obstacle.transform.position.z);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(checkPos, checkRadius, whatIsObstacle);
         
         foreach(Collider2D collider in colliders)
         {
-            if(collider.gameObject != obstacle)
+            if(collider != obstacle)
             {
-                Debug.Log("There's an obstacle near the current obstacle position");
+                Debug.Log($"There's a {collider.name} is within the check radius of {obstacle.name}");
                 return true;
             }
         }
 
         return false;
-    }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position,obstacleCheckRadius);
-    }    
+    }  
 }   

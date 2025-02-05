@@ -10,7 +10,6 @@ public class SkateboardController : MonoBehaviour
     private Animator animator;
     private Rigidbody2D rb;
     [SerializeField,Range(0.01f,1f)]private float movementSmoothing = 1f;
-    [SerializeField,Range(1f,100f)]private float minMovementSpeed = 50f;
     private float minVelocity = 3f;
     [SerializeField,Range(0.1f,1f)]private float minimumJumpForce = 1f;
     [SerializeField]private Transform groundCheck;

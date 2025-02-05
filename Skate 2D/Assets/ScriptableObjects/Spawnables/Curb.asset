@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Curb
   m_EditorClassIdentifier: 
   prefab: {fileID: 3466813424133893137, guid: ca980184523ce5344bf53196c0bdafbf, type: 3}
+  checkRadius: 4
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0
   minimumAcceptableGameSpeedForFollowUp: 1

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Obstacle
 {
     public GameObject prefab {get;}
+    public float checkRadius {get;}
     public GameSpeed minimumAcceptableSpeedForObstacle {get;}
     public SpawnAction spawnAction {get;}
     public GameSpeed minimumAcceptableGameSpeedForFollowUp {get;}
@@ -29,6 +30,7 @@ public class Obstacle
         obstacleType = newObstacleType;
         mainObstaclePool = newMainObstaclePool;
         followObstaclePools = newFollowObstaclePools;
+        checkRadius = spawnable.checkRadius;
     }
 
     /// <returns>Returns an obstacle instantiated from the prefab</returns>

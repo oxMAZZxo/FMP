@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     public GameSpeed currentGameSpeed {get; private set;}
     private int noOfTricks;
     private int noOfCombos;
-    public bool startGame = false;
+    [SerializeField]private bool startGame = false;
     private ScreenOrientation screenOrientation;
     private bool screenOrientationChanged;
 
@@ -66,10 +66,10 @@ public class GameManager : MonoBehaviour
         if(SystemInfo.deviceType == DeviceType.Desktop) {return;}
         if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
         {
-                virtualCamera.m_Lens.OrthographicSize = 2.3f;
+            virtualCamera.m_Lens.OrthographicSize = 2.3f;
         }else
         {
-                virtualCamera.m_Lens.OrthographicSize = 5f;
+            virtualCamera.m_Lens.OrthographicSize = 5f;
         }
     }
 
@@ -90,16 +90,6 @@ public class GameManager : MonoBehaviour
             timeCounter = 0.0f;
         }
         #endregion
-        
-        // Velocity incrementation based on interval disabled.
-        // if(counter >= velocityIncrementInterval)
-        // {
-        //     counter = 0;
-        //     currentVelocity += velocityIncrementPerInterval;
-        //     skateboardController.SetMinVelocity(currentVelocity);
-        // }
-
-        // counter += Time.deltaTime;
     }
 
     void FixedUpdate()
@@ -137,21 +127,17 @@ public class GameManager : MonoBehaviour
 
     private void IncreaseSpeed(int value)
     {
-        ClearConsole();
-        Debug.Log($"The incoming score {value} has {value / scoreIncrementValue} {scoreIncrementValue}s in it.");
         int noOfIncrements = value / scoreIncrementValue;
         if(noOfIncrements > maxNumberOfIncrements) {noOfIncrements = maxNumberOfIncrements;}
         float speedToIncrement = velocityIncrementPerScoreAdded * noOfIncrements;
-        Debug.Log($"The speed to be added is {speedToIncrement}, because {velocityIncrementPerScoreAdded} * {value / scoreIncrementValue} is {speedToIncrement}");
         currentVelocity += speedToIncrement;
         if(currentVelocity > maxVelocity) {currentVelocity = maxVelocity;}
         skateboardController.SetMinVelocity(currentVelocity);    
-        Debug.Log($"Skateboard velocity is now {currentVelocity}");
         CheckGameSpeed();    
     }
 
     
-    void ClearConsole()
+    public void ClearConsole()
     {
         Type logEntries = Type.GetType("UnityEditor.LogEntries, UnityEditor");
         MethodInfo clearMethod = logEntries?.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public);
