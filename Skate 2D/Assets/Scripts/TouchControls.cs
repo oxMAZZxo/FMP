@@ -57,7 +57,7 @@ public class TouchControls : MonoBehaviour
         {
             swipeDirection = CalculateSwipe(swipeDelta);
         }
-        touchEvent?.Invoke(this, new TouchEventArgs(touchTime, swipeDirection));
+        touchEvent?.Invoke(this, new TouchEventArgs(touchTime,touchStart,touchEnd,swipeDirection));
     }
 
     /// <summary>
@@ -98,7 +98,6 @@ public class TouchControls : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// Function called user touches the screen
     /// </summary>
@@ -113,7 +112,6 @@ public class TouchControls : MonoBehaviour
         }
         touchStarted?.Invoke(this, EventArgs.Empty);
     }
-
 
     /// <summary>
     /// Function invoked when user lifts their finger from the screen

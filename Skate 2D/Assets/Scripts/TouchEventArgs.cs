@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class TouchEventArgs : EventArgs
 {
     public float touchTime {get;}
     public SwipeDirection swipeDirection {get;}
+    public Vector2 startPosition {get;}
+    public Vector2 endPosition {get;}
     
     /// <summary>
     /// Instantiate empty TouchEventArgs
@@ -21,10 +24,12 @@ public class TouchEventArgs : EventArgs
     /// </summary>
     /// <param name="time">The amount of time the swipe/touch was held</param>
     /// <param name="direction">The direction of the swipe</param>
-    public TouchEventArgs(float time,SwipeDirection direction = SwipeDirection.NONE) : base()
+    public TouchEventArgs(float time, Vector2 start, Vector2 end, SwipeDirection direction = SwipeDirection.NONE) : base()
     {
         touchTime = time;
         swipeDirection = direction;
+        startPosition = start;
+        endPosition = end;
     }
 }
 

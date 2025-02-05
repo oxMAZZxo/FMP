@@ -2993,10 +2993,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 450742982}
     - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: minimumJumpForce
-      value: 0.73
-      objectReference: {fileID: 0}
-    - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: comboCounterDisplay
       value: 
       objectReference: {fileID: 1387938532}

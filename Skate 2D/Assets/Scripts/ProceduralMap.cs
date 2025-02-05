@@ -259,7 +259,6 @@ public class ProceduralMap : MonoBehaviour
         {
             if(collider != obstacle)
             {
-                Debug.Log($"There's a {collider.name} is within the check radius of {obstacle.name}");
                 return true;
             }
         }
