@@ -49,13 +49,16 @@ public class MainMenu : MonoBehaviour
 
     private void OnTouch(object sender, TouchEventArgs e)
     {
-        bool UI = CheckForButton(e.startPosition);
+        GameObject objectHit;
+        bool UI = CheckForButton(e.startPosition,out objectHit);
 
         if(!UI && sceneReady)
         {
             StartGame();
+        }else
+        {
+            Debug.Log($"{objectHit.name}");
         }
-        
     }
 
     /// <summary>
@@ -63,17 +66,18 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     /// <param name="mousePos"></param>
     /// <returns>Returns true if an interactable UI element has been clicked</returns>
-    private bool CheckForButton(Vector2 mousePos)
+    private bool CheckForButton(Vector2 mousePos, out GameObject uiObject)
     {
+        uiObject = null;
         pointerEventData = new PointerEventData(eventSystem);
         pointerEventData.position = mousePos;
 
         List<RaycastResult> results = new List<RaycastResult>();
 
         raycaster.Raycast(pointerEventData, results);
-
+        
         if(results.Count < 1) {return false;}
-
+        uiObject = results[0].gameObject;
         return true;
 	}
 
