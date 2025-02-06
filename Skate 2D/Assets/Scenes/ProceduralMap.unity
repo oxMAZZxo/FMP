@@ -2984,18 +2984,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skateboard
       objectReference: {fileID: 0}
-    - target: {fileID: 3872164303532241811, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: f8a8b5632bd17204b81c702da24afe88, type: 3}
-    - target: {fileID: 4284025997099451153, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4533750952029635877, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1
-      objectReference: {fileID: 0}
     - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: comboDisplay
       value: 
@@ -3008,25 +2996,9 @@ PrefabInstance:
       propertyPath: comboCounterDisplay
       value: 
       objectReference: {fileID: 1387938532}
-    - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: groundedCheckRadius
-      value: 0.06
-      objectReference: {fileID: 0}
-    - target: {fileID: 5629344079568082858, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6849443888880013002, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7702316996246342448, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.94
-      objectReference: {fileID: 0}
     - target: {fileID: 7722678107793403919, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_Offset.y
-      value: -0.92
+      propertyPath: m_Size.x
+      value: 0.46
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

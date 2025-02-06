@@ -53,19 +53,24 @@ public class Pool<T>
     }
 
     /// <returns>Returns the type of objects the pool is holding</returns>
-    public string GetObjectType() {return objects[0].GetType().Name;}
+    public object GetObjectType() {return objects[0].GetType();}
 
+    /// <summary>
+    /// Get a random object with a limit
+    /// </summary>
+    /// <param name="maxExclusive">The max index to choose from; EXCLUSIVE. </param>
     /// <returns>Returns a random object except the object previously returned</returns>
-    public T GetRandomObject()
+    public T GetRandomObject(int maxExclusive)
     {
         int indexPreviouslyUsed = index-1;
         if(indexPreviouslyUsed == -1){indexPreviouslyUsed = objects.Length -1;}
-        int indexToReturn = 0;
+
         Random rnd = new Random();
+        int indexToReturn;
         do
         {
-            indexToReturn = rnd.Next(0, objects.Length);
-        }while(indexPreviouslyUsed == indexToReturn);
+            indexToReturn = rnd.Next(0, maxExclusive);
+        } while (indexPreviouslyUsed == indexToReturn);
 
         T currentObject = objects[index];
         index = indexToReturn;

@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
 using UnityEngine;
 
 public class ProceduralMap : MonoBehaviour
@@ -18,6 +17,9 @@ public class ProceduralMap : MonoBehaviour
     private Pool<Obstacle> obstacles;
     private Vector2 previousSpawnPosition;
     private SpawnAction currentSpawnAction = SpawnAction.Spawn;
+    private int lastSlowObstacleIndex;
+    private int lastMediumObstacleIndex;
+    private int lastFastObstacleIndex;
 
     void Awake()
     {
@@ -61,6 +63,10 @@ public class ProceduralMap : MonoBehaviour
                 temp.Add(new Obstacle(obstacles.type,spawnable,CreateMainObstaclePool(spawnable.prefab),CreateFollowUpObjectPool(spawnable.followObjs)));
             }
         }
+        temp = temp.OrderBy(o => o.minimumAcceptableSpeedForObstacle).ToList();
+        lastSlowObstacleIndex = temp.FindLastIndex(o => o.minimumAcceptableSpeedForObstacle == GameSpeed.Slow);
+        lastMediumObstacleIndex = temp.FindLastIndex(o => o.minimumAcceptableSpeedForObstacle == GameSpeed.Medium);
+        lastFastObstacleIndex = temp.FindLastIndex(o => o.minimumAcceptableSpeedForObstacle == GameSpeed.Fast);
         obstacles = new Pool<Obstacle>(temp);
     }
 
@@ -149,8 +155,8 @@ public class ProceduralMap : MonoBehaviour
             yield break;
         }
         yield return new WaitForSeconds(0.3f);
-        int obstacleType = UnityEngine.Random.Range(0,obstacleTypes.Length);
-        int obstacleChoice = UnityEngine.Random.Range(0,obstacleTypes[obstacleType].spawnables.Length);
+        int obstacleType = Random.Range(0,obstacleTypes.Length);
+        int obstacleChoice = Random.Range(0,obstacleTypes[obstacleType].spawnables.Length);
         GameObject firstObstacle = Instantiate(obstacleTypes[obstacleType].spawnables[obstacleChoice].prefab,transform.position,Quaternion.identity);
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
         Collider2D firstObstacleCollider = firstObstacle.GetComponent<Collider2D>();
@@ -166,7 +172,7 @@ public class ProceduralMap : MonoBehaviour
         && GameManager.Instance.currentGameSpeed >= obstacleTypes[obstacleType].spawnables[obstacleChoice].minimumAcceptableGameSpeedForFollowUp
         && UnityEngine.Random.Range(0,100) <= obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjectChance)
         {
-            int secondObstacleChoice = UnityEngine.Random.Range(0,obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length);
+            int secondObstacleChoice = Random.Range(0,obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length);
 
             GameObject secondObstacle = Instantiate(obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs[secondObstacleChoice],transform.position,Quaternion.identity);
 
@@ -204,8 +210,17 @@ public class ProceduralMap : MonoBehaviour
             yield break;
         }
         yield return new WaitForSeconds(0.3f);
+        
+        int maxIndex;
+        switch (GameManager.Instance.currentGameSpeed)
+        {
+            case GameSpeed.Slow: maxIndex = lastSlowObstacleIndex; break;
+            case GameSpeed.Medium: maxIndex = lastMediumObstacleIndex; break;
+            case GameSpeed.Fast: maxIndex = lastFastObstacleIndex; break;
+            default: maxIndex = obstacles.length - 1; break;
+        }
 
-        Obstacle currentObstacleTypeChoice = obstacles.GetRandomObject();
+        Obstacle currentObstacleTypeChoice = obstacles.GetRandomObject(maxIndex + 1);
         GameObject mainObstacle = currentObstacleTypeChoice.GetMainObstacle();
         
         Collider2D mainObstacleCollider = mainObstacle.GetComponent<Collider2D>();

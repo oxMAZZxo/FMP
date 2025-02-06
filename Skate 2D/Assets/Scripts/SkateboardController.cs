@@ -51,7 +51,7 @@ public class SkateboardController : MonoBehaviour
 
         if(!hasStarted && rb.velocity.x > minVelocity - 0.5f) { hasStarted = true; Debug.Log($"Game has started"); }
 
-        if((isGrounded || isGrinding) && Mathf.Abs(rb.velocity.x) < minVelocity)
+        if(isGrounded || isGrinding)
         {
             // rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
             Vector3 targetVelocity = new Vector2(minVelocity, rb.velocity.y);
@@ -85,6 +85,19 @@ public class SkateboardController : MonoBehaviour
             GameManager.Instance.SessionEnded(longestCombo,distanceTravelled);
             GameOver();
         }
+
+        if(!isGrounded)
+        {
+            Quaternion rot = transform.rotation;
+            Vector3 euler = rot.eulerAngles;
+    
+            // Ensure angles are within the range (-180, 180) for correct clamping
+            if (euler.z > 180) euler.z -= 360;
+
+            euler.z = Mathf.Clamp(euler.z, -10f, 10f); // Adjust limits as needed
+
+            transform.rotation = Quaternion.Euler(euler);
+        }   
     }
 
     private void CheckGrounded()
@@ -119,6 +132,7 @@ public class SkateboardController : MonoBehaviour
                     comboCounterDisplay.gameObject.SetActive(false);
                     comboDisplay.text = "";
                     comboCounterDisplay.text = "";
+                    rb.constraints = RigidbodyConstraints2D.None;
                 }
 			}
 		}
