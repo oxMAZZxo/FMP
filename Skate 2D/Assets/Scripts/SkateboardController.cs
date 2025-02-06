@@ -17,6 +17,7 @@ public class SkateboardController : MonoBehaviour
     [SerializeField,Range(0.01f,1f)]private float groundedCheckRadius = 0.2f; 
     [SerializeField]private LayerMask whatIsGrindable;
     [SerializeField,Range(0.01f,1f)]private float grindableCheckRadius = 0.3f;
+    [SerializeField,Range(0.01f,1f)]private float isGrindingCheckRadius = 0.3f;
     [SerializeField]private GameObject backWheelSparks;
     [SerializeField]private GameObject frontWheelSparks;
     [SerializeField]private GameObject frontSmokeParticles;
@@ -37,6 +38,7 @@ public class SkateboardController : MonoBehaviour
     private int longestCombo;
     private float distanceTravelled;
     private Vector2 m_Velocity;
+    private bool reverseOut;
 
     void Start()
     {
@@ -117,6 +119,7 @@ public class SkateboardController : MonoBehaviour
 				if (!wasGrounded) //meaning you just landed
 				{
                     animator.SetBool("reverseOut", false);
+                    reverseOut = false;
                     frontSmokeParticles.SetActive(true);
                     backSmokeParticles.SetActive(true);
                     performedTrick = false;
@@ -174,7 +177,7 @@ public class SkateboardController : MonoBehaviour
         {
             //I check if I can perform a grind
             Collider2D other;
-            bool grindable = CheckGrindable(out other); //check if player is above a grindable obstacle
+            bool grindable = CheckGrindable(out other,GetGrindCheckPosition(e.swipeDirection)); //check if player is above a grindable obstacle
             if(!grindable || e.swipeDirection != SwipeDirection.DOWN && e.swipeDirection != SwipeDirection.LEFT && e.swipeDirection != SwipeDirection.RIGHT) {return;}
             trickPerformed = PerformGrind(e.swipeDirection,other);
             isPerformingTrick = true;
@@ -281,6 +284,7 @@ public class SkateboardController : MonoBehaviour
     {
         string trickOutput = "";
         animator.SetBool("reverseOut",false);
+        reverseOut = false;
         switch (swipeDirection)
         {
             case SwipeDirection.DOWN:
@@ -304,6 +308,7 @@ public class SkateboardController : MonoBehaviour
             frontWheelSparks.SetActive(true);
             trickOutput = " Nose Grind";
             animator.SetBool("reverseOut", true);
+            reverseOut = true;
             break;
         }
         animator.SetBool("isGrinding",true);   
@@ -311,14 +316,27 @@ public class SkateboardController : MonoBehaviour
         return trickOutput;
     }
 
+    private Vector2 GetGrindCheckPosition(SwipeDirection swipeDirection)
+    {
+        if(swipeDirection == SwipeDirection.RIGHT || swipeDirection == SwipeDirection.DOWN_RIGHT || swipeDirection == SwipeDirection.UP_RIGHT)
+        {
+            return frontWheelSparks.transform.position;
+        }
+        if(swipeDirection == SwipeDirection.LEFT || swipeDirection == SwipeDirection.DOWN_LEFT || swipeDirection == SwipeDirection.UP_LEFT)
+        {
+            return backWheelSparks.transform.position;
+        }
+        return groundCheck.position;
+    }
+
     /// <summary>
     /// Returns true if the obstacle below the skateboard is 'grindable'
     /// </summary>
     /// <param name="outCollider">Out parameter which is the first obstacle that is in the grind radius .</param>
     /// <returns></returns>
-    private bool CheckGrindable(out Collider2D outCollider)
+    private bool CheckGrindable(out Collider2D outCollider, Vector2 grindCheckPosition)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, grindableCheckRadius, whatIsGrindable);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(grindCheckPosition, grindableCheckRadius, whatIsGrindable);
         
 		foreach(Collider2D collider in colliders)
         {
@@ -334,7 +352,16 @@ public class SkateboardController : MonoBehaviour
 
     private bool CheckIsGrinding()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, grindableCheckRadius, whatIsGrindable);
+        Vector2 grindCheckPosition;
+        if(reverseOut)
+        {
+            grindCheckPosition = frontWheelSparks.transform.position;
+        }else
+        {
+            grindCheckPosition = backWheelSparks.transform.position;
+        }
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(grindCheckPosition, isGrindingCheckRadius, whatIsGrindable);
         
 		foreach(Collider2D collider in colliders)
         {
@@ -400,6 +427,11 @@ public class SkateboardController : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(groundCheck.position,groundedCheckRadius);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(groundCheck.position,grindableCheckRadius);
+        Gizmos.DrawWireSphere(backWheelSparks.transform.position,grindableCheckRadius);
+        Gizmos.DrawWireSphere(frontWheelSparks.transform.position,grindableCheckRadius);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(backWheelSparks.transform.position,isGrindingCheckRadius);
+        Gizmos.DrawWireSphere(frontWheelSparks.transform.position,isGrindingCheckRadius);
+        
     }
 }

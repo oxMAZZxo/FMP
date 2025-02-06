@@ -44,7 +44,7 @@ public class ProceduralMap : MonoBehaviour
     /// </summary>
     private void InitPools()
     {
-        GameObject[] grounds = new GameObject[4];
+        GameObject[] grounds = new GameObject[5];
         for(int i = 0; i < grounds.Length; i++)
         {
             grounds[i] = Instantiate(groundPrefab,new Vector2(0,100), Quaternion.identity);
