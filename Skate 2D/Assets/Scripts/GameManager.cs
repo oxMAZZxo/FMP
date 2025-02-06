@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
 
     private void DisplayPointsIncrement(int value)
     {
-        int x = UnityEngine.Random.Range(0 + 100, Screen.width - 100);
+        int x = UnityEngine.Random.Range(0 + 200, Screen.width - 200);
         int y = UnityEngine.Random.Range(0 + 400,Screen.height - 100);
         addedScoreDisplay.text = "+" + ScoreString(value);
         addedScoreDisplay.gameObject.transform.position = new Vector3(x,y);

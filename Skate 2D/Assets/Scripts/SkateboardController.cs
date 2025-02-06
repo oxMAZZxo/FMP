@@ -176,41 +176,61 @@ public class SkateboardController : MonoBehaviour
         }
 
         bool isPerformingTrick;
-        //if the player is not on the ground and isn't grinding
-        //meaning they are in the air, and they perform an action
         string trickPerformed;
-        if(!isGrounded && !isGrinding)
+        
+        isPerformingTrick = CalculateAction(e.swipeDirection,out trickPerformed);
+        if(!isPerformingTrick) {return;}
+        DisplayTrick(trickPerformed);
+    }
+
+    /// <summary>
+    /// Calculates if an action can be performed
+    /// </summary>
+    /// <param name="swipeDirection">The current swipe direction</param>
+    /// <param name="trickPerformed">An out parameter which will return the action being performed</param>
+    /// <returns>True if an action is being performed</returns>
+    private bool CalculateAction(SwipeDirection swipeDirection, out string trickPerformed)
+    {
+        trickPerformed = "";
+        bool isPerformingTrick = false;
+        if (!isGrounded && !isGrinding)
         {
             //I check if I can perform a grind
             Collider2D other;
-            bool grindable = CheckGrindable(out other,GetGrindCheckPosition(e.swipeDirection)); //check if player is above a grindable obstacle
-            if(!grindable || e.swipeDirection != SwipeDirection.DOWN && e.swipeDirection != SwipeDirection.LEFT && e.swipeDirection != SwipeDirection.RIGHT) {return;}
-            trickPerformed = PerformGrind(e.swipeDirection,other);
+            bool grindable = CheckGrindable(out other, GetGrindCheckPosition(swipeDirection)); //check if player is above a grindable obstacle
+            if (!grindable || swipeDirection != SwipeDirection.DOWN && swipeDirection != SwipeDirection.LEFT && swipeDirection != SwipeDirection.RIGHT) { return false; }
+            trickPerformed = PerformGrind(swipeDirection, other);
             isPerformingTrick = true;
-        }else //else if one of those conditions is true
+        }
+        else //else if one of those conditions is true
         {
             //player performs a trick
             isPerformingTrick = true;
             backWheelSparks.SetActive(false);
             frontWheelSparks.SetActive(false);
-            trickPerformed = ShowTrickAnimation(e.swipeDirection);//perfrom a trick
-            if(isGrinding) // if they are grinding before the trick
+            trickPerformed = ShowTrickAnimation(swipeDirection);//perfrom a trick
+            if (isGrinding) // if they are grinding before the trick
             {
-                animator.SetBool("isGrinding",false); //disable the grind animations
+                animator.SetBool("isGrinding", false); //disable the grind animations
                 //so that the trick animation can play
             }
         }
 
-        if(performedTrick && isPerformingTrick)
+        return isPerformingTrick;
+    }
+
+    private void DisplayTrick(string trickPerformed)
+    {
+        if(performedTrick) 
         {
-            isCombo = true;
             trickPerformed = " + " + trickPerformed;
+            isCombo = true;
             comboCounter++;
-            comboCounterDisplay.text = comboCounter.ToString();
-            comboDisplay.gameObject.SetActive(true);
-            comboCounterDisplay.gameObject.SetActive(true);
         }
-        comboDisplay.text += trickPerformed;        
+        comboCounterDisplay.text = comboCounter.ToString();
+        comboDisplay.gameObject.SetActive(true);
+        comboCounterDisplay.gameObject.SetActive(true);
+        comboDisplay.text += trickPerformed;  
     }
 
     /// <summary>
