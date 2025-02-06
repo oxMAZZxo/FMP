@@ -140,6 +140,7 @@ public class ProceduralMap : MonoBehaviour
         Vector2 spawnPos = new Vector2(previousSpawnPosition.x + groundSize, ySpawnPosition);
         currentGround.transform.position = spawnPos;
         previousSpawnPosition = spawnPos;
+        Physics2D.SyncTransforms();
         return currentGround;
     }
 
@@ -235,11 +236,10 @@ public class ProceduralMap : MonoBehaviour
 
         mainObstacle.transform.position = obstacleSpawnPos;
         Physics2D.SyncTransforms();
+        
         if(CheckForPreviousObjectNear(mainObstacleCollider,currentObstacleTypeChoice.checkRadius))
         {
-            obstacleSpawnPos = new Vector2(ground.transform.position.x + currentObstacleTypeChoice.checkRadius -1,groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
-            mainObstacle.transform.position = obstacleSpawnPos;
-            Physics2D.SyncTransforms();
+            MoveObstacle(currentObstacleTypeChoice,mainObstacle,groundCollider,obstacleBottomBoundsPosition);
         }
 
         if(GameManager.Instance.currentGameSpeed != GameSpeed.Slow)
@@ -281,4 +281,19 @@ public class ProceduralMap : MonoBehaviour
 
         return false;
     }  
+
+    private void MoveObstacle(Obstacle currentObstacle, GameObject mainObstacle, Collider2D ground, float obstacleBottomBoundsPosition)
+    {
+        if(currentObstacle.obstacleType == ObstacleType.Unavoidable)
+        {
+            mainObstacle.transform.position = Vector3.zero;
+            Physics2D.SyncTransforms();
+        }else
+        {
+            
+            mainObstacle.transform.position = new Vector2(ground.gameObject.transform.position.x + currentObstacle.checkRadius -1,ground.bounds.center.y + ground.bounds.extents.y - obstacleBottomBoundsPosition);;
+            Physics2D.SyncTransforms();
+
+        }
+    }
 }   

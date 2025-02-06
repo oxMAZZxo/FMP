@@ -1,14 +1,14 @@
 using System;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Animator),typeof(Rigidbody2D),typeof(Collider2D))]
 public class SkateboardController : MonoBehaviour
 {
     private Animator animator;
     private Rigidbody2D rb;
+    private Collider2D myCollider;
     [SerializeField,Range(0.01f,1f)]private float movementSmoothing = 1f;
     private float minVelocity = 3f;
     [SerializeField,Range(0.1f,1f)]private float minimumJumpForce = 1f;
@@ -16,8 +16,8 @@ public class SkateboardController : MonoBehaviour
     [SerializeField]private LayerMask whatIsGround;
     [SerializeField,Range(0.01f,1f)]private float groundedCheckRadius = 0.2f; 
     [SerializeField]private LayerMask whatIsGrindable;
-    [SerializeField,Range(0.01f,1f)]private float grindableCheckRadius = 0.3f;
-    [SerializeField,Range(0.01f,1f)]private float isGrindingCheckRadius = 0.3f;
+    [SerializeField]private Vector2 grindableCheckBoxSize;
+    [SerializeField]private Vector2 isGrindingCheckBoxSize;
     [SerializeField]private GameObject backWheelSparks;
     [SerializeField]private GameObject frontWheelSparks;
     [SerializeField]private GameObject frontSmokeParticles;
@@ -40,11 +40,13 @@ public class SkateboardController : MonoBehaviour
     private float distanceTravelled;
     private Vector2 m_Velocity;
     private bool reverseOut;
+    private double oldPosX;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        myCollider = GetComponent<Collider2D>();
         jumpForceSlider.maxValue = 1f;
     }
 
@@ -52,7 +54,7 @@ public class SkateboardController : MonoBehaviour
     {
         if(isStopped) {return;}
 
-        if(!hasStarted && rb.velocity.x > minVelocity - 0.5f) { hasStarted = true; Debug.Log($"Game has started"); }
+        if(!hasStarted && transform.position.x > 1) { hasStarted = true; Debug.Log($"Game has started"); }
 
         if(isGrounded || isGrinding)
         {
@@ -82,7 +84,7 @@ public class SkateboardController : MonoBehaviour
             jumpForceSlider.value = 0;
         }
 
-        if(hasStarted && rb.velocity.x < 0.5f)
+        if(hasStarted && (transform.position.x - oldPosX) == 0)
         {
             isStopped = true;
             GameManager.Instance.SessionEnded(longestCombo,distanceTravelled);
@@ -100,7 +102,8 @@ public class SkateboardController : MonoBehaviour
             euler.z = Mathf.Clamp(euler.z, -10f, 10f); // Adjust limits as needed
 
             transform.rotation = Quaternion.Euler(euler);
-        }   
+        }
+        oldPosX = transform.position.x;   
     }
 
     private void CheckGrounded()
@@ -269,10 +272,10 @@ public class SkateboardController : MonoBehaviour
     private string PerformGrind(SwipeDirection swipeDirection, Collider2D obstacle)
     {
         //positions the player above the grindable obstacle
-        float distanceToMove = obstacle.bounds.max.y - GetComponent<Collider2D>().bounds.min.y;
+        float distanceToMoveY = obstacle.bounds.max.y - myCollider.bounds.min.y;
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-        transform.position = new Vector2(transform.position.x,transform.position.y + distanceToMove);
+        transform.position = new Vector2(transform.position.x, transform.position.y + distanceToMoveY);
         isGrinding = true;    
         rb.rotation = 0;
         //show grind animation
@@ -339,8 +342,7 @@ public class SkateboardController : MonoBehaviour
     /// <returns></returns>
     private bool CheckGrindable(out Collider2D outCollider, Vector2 grindCheckPosition)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(grindCheckPosition, grindableCheckRadius, whatIsGrindable);
-        
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(grindCheckPosition, grindableCheckBoxSize, whatIsGrindable);
 		foreach(Collider2D collider in colliders)
         {
             outCollider = collider;
@@ -364,7 +366,7 @@ public class SkateboardController : MonoBehaviour
             grindCheckPosition = backWheelSparks.transform.position;
         }
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(grindCheckPosition, isGrindingCheckRadius, whatIsGrindable);
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(grindCheckPosition, isGrindingCheckBoxSize, whatIsGrindable);
         
 		foreach(Collider2D collider in colliders)
         {
@@ -430,11 +432,10 @@ public class SkateboardController : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(groundCheck.position,groundedCheckRadius);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(backWheelSparks.transform.position,grindableCheckRadius);
-        Gizmos.DrawWireSphere(frontWheelSparks.transform.position,grindableCheckRadius);
+        Gizmos.DrawWireCube(backWheelSparks.transform.position,grindableCheckBoxSize);
+        Gizmos.DrawWireCube(frontWheelSparks.transform.position,grindableCheckBoxSize);
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(backWheelSparks.transform.position,isGrindingCheckRadius);
-        Gizmos.DrawWireSphere(frontWheelSparks.transform.position,isGrindingCheckRadius);
-        
+        Gizmos.DrawWireCube(backWheelSparks.transform.position,isGrindingCheckBoxSize);
+        Gizmos.DrawWireCube(frontWheelSparks.transform.position,isGrindingCheckBoxSize);
     }
 }

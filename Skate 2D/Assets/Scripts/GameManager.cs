@@ -207,13 +207,24 @@ public class GameManager : MonoBehaviour
             return value.ToString();
         }else if(value < 1000000)
         {
-            return ((float)value / 1000).ToString("F1") + "K";
+            return GetDecimalPoint((float)value / 1000,1) + "K";
         }else if(value < 1000000000)
         {
-            return ((float)value / 1000000).ToString("F1") + "M";
+            return GetDecimalPoint((float)value / 1000000,1) + "M";
         }
 
         return "***";
+    }
+
+    private string GetDecimalPoint(float value, int decimalPoint)
+    {
+        string temp = ""; temp += value.ToString()[0] + ".";
+        for(int i = 2; i < value.ToString().Length; i ++)
+        {
+            if((i - 2) >= decimalPoint) {break;}
+            temp += value.ToString()[i];
+        }
+        return temp;
     }
 }
 
