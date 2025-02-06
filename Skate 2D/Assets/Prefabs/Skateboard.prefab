@@ -223,7 +223,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
+      maxColor: {r: 0.48235294, g: 0.48235294, b: 0.48235294, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4853,8 +4853,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -796993523
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -4902,6 +4902,7 @@ GameObject:
   - component: {fileID: 7722678107793403919}
   - component: {fileID: 5056399678652797089}
   - component: {fileID: 5255054917638017984}
+  - component: {fileID: 2211915514947516166}
   m_Layer: 3
   m_Name: Skateboard
   m_TagString: Player
@@ -4969,7 +4970,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2128687969
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f8a8b5632bd17204b81c702da24afe88, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5097,6 +5098,55 @@ MonoBehaviour:
   jumpForceSlider: {fileID: 0}
   comboDisplay: {fileID: 0}
   comboCounterDisplay: {fileID: 0}
+--- !u!114 &2211915514947516166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3352248071572651824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f1167b16aab3fc43b1c21c36be7463c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isGlobal: 0
+  sounds:
+  - name: Rolling
+    clip: {fileID: 8300000, guid: 1048860569f34924bb542bf35514da33, type: 3}
+    volume: 0.2
+    pitch: 1
+    spatialBlend: 0
+    source: {fileID: 0}
+    loop: 1
+  - name: Tail Snap
+    clip: {fileID: 8300000, guid: ac29bdd1154114740b663d15b7526aad, type: 3}
+    volume: 0.2
+    pitch: 1
+    spatialBlend: 0
+    source: {fileID: 0}
+    loop: 0
+  - name: Landed
+    clip: {fileID: 8300000, guid: 4dc970faf790d2e469fefceaad5b7edf, type: 3}
+    volume: 0.1
+    pitch: 1
+    spatialBlend: 0
+    source: {fileID: 0}
+    loop: 0
+  - name: Grind
+    clip: {fileID: 8300000, guid: 32981731f4781e94aa6b436f403d4a61, type: 3}
+    volume: 0.2
+    pitch: 1
+    spatialBlend: 0
+    source: {fileID: 0}
+    loop: 1
+  - name: Wheel Spinning
+    clip: {fileID: 8300000, guid: ff36dac9418c3ec47b4e91095f2334a8, type: 3}
+    volume: 0.1
+    pitch: 1
+    spatialBlend: 0
+    source: {fileID: 0}
+    loop: 1
 --- !u!1 &7357346109206956288
 GameObject:
   m_ObjectHideFlags: 0
@@ -5318,9 +5368,9 @@ ParticleSystem:
         m_RotationOrder: 4
     startColor:
       serializedVersion: 2
-      minMaxState: 0
-      minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      minMaxState: 2
+      minColor: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
+      maxColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -6405,24 +6455,24 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
+        key0: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
         key1: {r: 1, g: 1, b: 1, a: 1}
-        key2: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 0}
+        key2: {r: 1, g: 1, b: 1, a: 0}
         key3: {r: 1, g: 1, b: 1, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
-        ctime1: 16384
-        ctime2: 32768
+        ctime1: 32768
+        ctime2: 65535
         ctime3: 65535
         ctime4: 0
         ctime5: 0
         ctime6: 0
         ctime7: 0
         atime0: 0
-        atime1: 32768
+        atime1: 32382
         atime2: 65535
         atime3: 0
         atime4: 0
@@ -6431,7 +6481,7 @@ ParticleSystem:
         atime7: 0
         m_Mode: 0
         m_ColorSpace: 0
-        m_NumColorKeys: 4
+        m_NumColorKeys: 3
         m_NumAlphaKeys: 3
       minGradient:
         serializedVersion: 2
@@ -9892,8 +9942,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -796993523
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -14754,8 +14804,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -796993523
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -19585,8 +19635,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -796993523
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -19843,7 +19893,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
+      maxColor: {r: 0.48235294, g: 0.48235294, b: 0.48235294, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -24473,8 +24523,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -796993523
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0

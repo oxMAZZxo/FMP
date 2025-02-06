@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator),typeof(Rigidbody2D),typeof(Collider2D))]
+[RequireComponent(typeof(AudioManager))]
 public class SkateboardController : MonoBehaviour
 {
     private Animator animator;
     private Rigidbody2D rb;
     private Collider2D myCollider;
+    private AudioManager audioManager;
     [SerializeField,Range(0.01f,1f)]private float movementSmoothing = 1f;
     private float minVelocity = 3f;
     [SerializeField,Range(0.1f,1f)]private float minimumJumpForce = 1f;
@@ -47,6 +49,7 @@ public class SkateboardController : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<Collider2D>();
+        audioManager = GetComponent<AudioManager>();
         jumpForceSlider.maxValue = 1f;
     }
 
@@ -87,6 +90,7 @@ public class SkateboardController : MonoBehaviour
         if(hasStarted && (transform.position.x - oldPosX) == 0)
         {
             isStopped = true;
+            audioManager.Stop("Rolling");
             GameManager.Instance.SessionEnded(longestCombo,distanceTravelled);
             GameOver();
         }
@@ -122,48 +126,51 @@ public class SkateboardController : MonoBehaviour
 				isGrounded = true;
 				if (!wasGrounded) //meaning you just landed
 				{
-                    animator.SetBool("reverseOut", false);
-                    reverseOut = false;
-                    frontSmokeParticles.SetActive(true);
-                    backSmokeParticles.SetActive(true);
-                    rollingSmokeParticles.SetActive(true);
-                    performedTrick = false;
-                    if(isCombo){
-                        GameManager.Instance.IncrementNumberOfCombos();
-                    }
-                    isCombo = false;
-                    GameManager.Instance.AddScore(potentialPoints * comboCounter);
-                    if(comboCounter > longestCombo) { longestCombo = comboCounter;}
-                    potentialPoints = 0;
-                    comboCounter = 1;
-                    comboDisplay.gameObject.SetActive(false);
-                    comboCounterDisplay.gameObject.SetActive(false);
-                    comboDisplay.text = "";
-                    comboCounterDisplay.text = "";
-                    rb.constraints = RigidbodyConstraints2D.None;
+                    OnLand();
                 }
 			}
 		}
     }
 
+    private void OnLand()
+    {
+        animator.SetBool("reverseOut", false);
+        reverseOut = false;
+        frontSmokeParticles.SetActive(true);
+        backSmokeParticles.SetActive(true);
+        rollingSmokeParticles.SetActive(true);
+        performedTrick = false;
+        if(isCombo){
+            GameManager.Instance.IncrementNumberOfCombos();
+        }
+        isCombo = false;
+        GameManager.Instance.AddScore(potentialPoints * comboCounter);
+        if(comboCounter > longestCombo) { longestCombo = comboCounter;}
+        potentialPoints = 0;
+        comboCounter = 1;
+        comboDisplay.gameObject.SetActive(false);
+        comboCounterDisplay.gameObject.SetActive(false);
+        comboDisplay.text = "";
+        comboCounterDisplay.text = "";
+        rb.constraints = RigidbodyConstraints2D.None;
+        audioManager.Play("Landed");
+        audioManager.Play("Rolling");
+        audioManager.Stop("Wheel Spinning");
+    }
+
     public void Jump()
     {
-        // if (isGrounded || isGrinding)
-		// {
-            //if the code reaches this point of execution
-            //it is assumed that the player is perfoming a trick
-            //therefore we reset gravity if they were performing a grind
-            performedTrick = true;
-            // Debug.Log("Performing Trick");
-            if(isGrinding)
-            {
-                DisableGrinding();
-            }
-            // Debug.Log($"Current touch time: {currentTouchTime}");
-            // Debug.Log($"Jump force will be: {minimumJumpForce * (100 + (100 * currentTouchTime))}");
-            rollingSmokeParticles.SetActive(false);
-			rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (100 * currentTouchTime))));
-        // }
+        performedTrick = true;
+        if(isGrinding)
+        {
+            DisableGrinding();
+        }
+        rollingSmokeParticles.SetActive(false);
+        audioManager.Play("Tail Snap");
+        audioManager.Play("Wheel Spinning");
+        rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (100 * currentTouchTime))));
+        audioManager.Stop("Mid Grind");
+        audioManager.Stop("Rolling");
     }
 
     private void Action(object sender, TouchEventArgs e)
@@ -339,6 +346,8 @@ public class SkateboardController : MonoBehaviour
         }
         animator.SetBool("isGrinding",true);   
         GameManager.Instance.IncrementNumberOfTricks();
+        audioManager.Play("Start Grind");
+        audioManager.Play("Mid Grind");
         return trickOutput;
     }
 
@@ -392,10 +401,12 @@ public class SkateboardController : MonoBehaviour
         {
             if(collider.CompareTag("Grindable"))
             {
+                audioManager.Stop("Wheel Spinning");
                 return true;
             }
         }
-        
+
+        audioManager.Stop("Mid Grind");
         return false;
     }
 
