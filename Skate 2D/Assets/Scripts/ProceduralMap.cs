@@ -6,7 +6,6 @@ using UnityEngine;
 public class ProceduralMap : MonoBehaviour
 {
     public static ProceduralMap Instance {get; private set;}
-    const int groundSize = 8;
     const float ySpawnPosition = -0.5f;
     [SerializeField]private Transform player;
     [SerializeField]private GameObject groundPrefab;
@@ -15,7 +14,7 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private LayerMask whatIsObstacle;
     private Pool<GameObject> groundObjects;
     private Pool<Obstacle> obstacles;
-    private Vector2 previousSpawnPosition;
+    private Collider2D previousGround;
     private SpawnAction currentSpawnAction = SpawnAction.Spawn;
     private int lastSlowObstacleIndex;
     private int lastMediumObstacleIndex;
@@ -110,15 +109,16 @@ public class ProceduralMap : MonoBehaviour
         Vector2 placePosition = new Vector2(player.position.x,ySpawnPosition);
         middleGround.transform.position = placePosition;
 
-        placePosition = new Vector2(middleGround.transform.position.x - groundSize, ySpawnPosition);
+        placePosition = new Vector2(middleGround.transform.position.x - middleGround.GetComponent<Collider2D>().bounds.extents.x, ySpawnPosition);
         GameObject leftGround = groundObjects.GetObject();
         leftGround.transform.position = placePosition;
 
-        placePosition = new Vector2(middleGround.transform.position.x + groundSize,ySpawnPosition);
+        placePosition = new Vector2(middleGround.transform.position.x + middleGround.GetComponent<Collider2D>().bounds.extents.x,ySpawnPosition);
         GameObject rightGround = groundObjects.GetObject();
         rightGround.transform.position = placePosition;
         
-        previousSpawnPosition = rightGround.transform.position;
+        previousGround = rightGround.GetComponent<Collider2D>();
+        Physics2D.SyncTransforms();
     }
 
     /// <summary>
@@ -137,10 +137,12 @@ public class ProceduralMap : MonoBehaviour
     private GameObject CreateGround()
     {
         GameObject currentGround = groundObjects.GetObject();
-        Vector2 spawnPos = new Vector2(previousSpawnPosition.x + groundSize, ySpawnPosition);
+        Collider2D currentGourndCollider = currentGround.GetComponent<Collider2D>();
+        float previousGroundRightBounds = previousGround.gameObject.transform.position.x + previousGround.bounds.extents.x;
+        Vector2 spawnPos = new Vector2(previousGroundRightBounds + currentGourndCollider.bounds.extents.x, ySpawnPosition);
         currentGround.transform.position = spawnPos;
-        previousSpawnPosition = spawnPos;
         Physics2D.SyncTransforms();
+        previousGround = currentGourndCollider;
         return currentGround;
     }
 
