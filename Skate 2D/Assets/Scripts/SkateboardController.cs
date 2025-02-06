@@ -22,6 +22,7 @@ public class SkateboardController : MonoBehaviour
     [SerializeField]private GameObject frontWheelSparks;
     [SerializeField]private GameObject frontSmokeParticles;
     [SerializeField]private GameObject backSmokeParticles;
+    [SerializeField]private GameObject rollingSmokeParticles;
     [SerializeField]private Slider jumpForceSlider;
     [SerializeField]private TextMeshProUGUI comboDisplay;
     [SerializeField]private TextMeshProUGUI comboCounterDisplay;
@@ -122,6 +123,7 @@ public class SkateboardController : MonoBehaviour
                     reverseOut = false;
                     frontSmokeParticles.SetActive(true);
                     backSmokeParticles.SetActive(true);
+                    rollingSmokeParticles.SetActive(true);
                     performedTrick = false;
                     if(isCombo){
                         GameManager.Instance.IncrementNumberOfCombos();
@@ -156,6 +158,7 @@ public class SkateboardController : MonoBehaviour
             }
             // Debug.Log($"Current touch time: {currentTouchTime}");
             // Debug.Log($"Jump force will be: {minimumJumpForce * (100 + (100 * currentTouchTime))}");
+            rollingSmokeParticles.SetActive(false);
 			rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (100 * currentTouchTime))));
         // }
     }
