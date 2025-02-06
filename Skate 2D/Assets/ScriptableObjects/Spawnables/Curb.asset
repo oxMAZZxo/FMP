@@ -17,6 +17,7 @@ MonoBehaviour:
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0
   minimumAcceptableGameSpeedForFollowUp: 1
+  followObjectSpawnAction: 1
   followObjs:
   - {fileID: 158139782263735027, guid: 4998f6a13a0e05f4ca47e1744d72b739, type: 3}
   - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}

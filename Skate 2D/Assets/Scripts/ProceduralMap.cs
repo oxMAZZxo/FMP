@@ -247,9 +247,9 @@ public class ProceduralMap : MonoBehaviour
             currentSpawnAction = currentObstacleTypeChoice.spawnAction;
         }
         if(currentObstacleTypeChoice.noOfFollowObstacleObjs > 0 && GameManager.Instance.currentGameSpeed >= currentObstacleTypeChoice.minimumAcceptableGameSpeedForFollowUp
-        && UnityEngine.Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance)
+        && Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance)
         {
-            GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(UnityEngine.Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs));
+            GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs));
             Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
 
             secondObstacle.transform.position = Vector3.zero;
@@ -262,6 +262,7 @@ public class ProceduralMap : MonoBehaviour
             Vector2 secondObstaclePos = new Vector2(mainObstacle.transform.position.x + mainToSecondSideToSideDistance + currentObstacleTypeChoice.followUpObjectDistance, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
             secondObstacle.transform.position = secondObstaclePos;
             Physics2D.SyncTransforms();
+            currentSpawnAction = currentObstacleTypeChoice.followObjectSpawnAction;
         }
     }
 

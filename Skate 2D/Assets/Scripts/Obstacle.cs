@@ -9,6 +9,7 @@ public class Obstacle
     public GameSpeed minimumAcceptableSpeedForObstacle {get;}
     public SpawnAction spawnAction {get;}
     public GameSpeed minimumAcceptableGameSpeedForFollowUp {get;}
+    public SpawnAction followObjectSpawnAction {get;}
     public int noOfFollowObstacleObjs {get;}
     public int followObjectChance {get;}
     public float followUpObjectDistance {get;}
@@ -31,6 +32,7 @@ public class Obstacle
         mainObstaclePool = newMainObstaclePool;
         followObstaclePools = newFollowObstaclePools;
         checkRadius = spawnable.checkRadius;
+        followObjectSpawnAction = spawnable.followObjectSpawnAction;
     }
 
     /// <returns>Returns an obstacle instantiated from the prefab</returns>
