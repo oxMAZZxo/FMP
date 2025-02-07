@@ -156,13 +156,13 @@ public class GameManager : MonoBehaviour
         { 
             currentGameSpeed = GameSpeed.Fast;
             scoreIncrementValue = 100;
-            velocityIncrementPerScoreAdded = 0.05f;
+            velocityIncrementPerScoreAdded = 0.075f;
         }
         if(currentVelocity > 5)
         {
             currentGameSpeed = GameSpeed.SuperFast;
-            scoreIncrementValue = 200;
-            velocityIncrementPerScoreAdded = 0.015f;
+            scoreIncrementValue = 120;
+            velocityIncrementPerScoreAdded = 0.05f;
         }
     }
 

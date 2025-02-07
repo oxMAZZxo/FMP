@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +44,8 @@ public class SkateboardController : MonoBehaviour
     private Vector2 m_Velocity;
     private bool reverseOut;
     private double oldPosX;
+    private float grindingTime;
+    private int pointsToBeAdded;
 
     void Start()
     {
@@ -76,6 +79,7 @@ public class SkateboardController : MonoBehaviour
             {
                 DisableGrinding();
             }
+            grindingTime += Time.fixedDeltaTime;
         }
         CheckGrounded();
         
@@ -299,12 +303,14 @@ public class SkateboardController : MonoBehaviour
     private string PerformGrind(SwipeDirection swipeDirection, Collider2D obstacle)
     {
         //positions the player above the grindable obstacle
-        float distanceToMoveY = obstacle.bounds.max.y - myCollider.bounds.min.y;
+        float skateboardBottomBounds = myCollider.bounds.center.y - myCollider.bounds.extents.y;
+        float obstacleTopBounds = obstacle.bounds.center.y + obstacle.bounds.extents.y;
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-        transform.position = new Vector2(transform.position.x, transform.position.y + distanceToMoveY);
+        transform.position = new Vector2(transform.position.x, transform.position.y + obstacleTopBounds - skateboardBottomBounds);
         isGrinding = true;    
         rb.rotation = 0;
+        Physics2D.SyncTransforms();
         //show grind animation
         return ShowGrindAnimation(swipeDirection);       
     }
@@ -322,7 +328,7 @@ public class SkateboardController : MonoBehaviour
         {
             case SwipeDirection.DOWN:
             animator.SetTrigger("50-50");
-            potentialPoints +=5;
+            pointsToBeAdded = 5;
             backWheelSparks.SetActive(true);
             frontWheelSparks.SetActive(true);
             trickOutput = "50-50";
@@ -331,19 +337,20 @@ public class SkateboardController : MonoBehaviour
             case SwipeDirection.LEFT:
             animator.SetTrigger("5-0 Grind");
             backWheelSparks.SetActive(true);
-            potentialPoints +=10;
+            pointsToBeAdded = 10;
             trickOutput = " 5-0";
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("Nose Grind");
-            potentialPoints +=10;
+            pointsToBeAdded = 10;
             frontWheelSparks.SetActive(true);
             trickOutput = " Nose Grind";
             animator.SetBool("reverseOut", true);
             reverseOut = true;
             break;
         }
+        potentialPoints += pointsToBeAdded;
         animator.SetBool("isGrinding",true);   
         GameManager.Instance.IncrementNumberOfTricks();
         audioManager.Play("Start Grind");
@@ -412,12 +419,19 @@ public class SkateboardController : MonoBehaviour
 
     private void DisableGrinding()
     {
+        if(grindingTime < 0.2)
+        {
+            Debug.Log($"Grinding time is less than 0.2, so removing addedPoints");
+            potentialPoints -= pointsToBeAdded;
+        }
         rb.constraints = RigidbodyConstraints2D.None;
         rb.gravityScale = 1;
         isGrinding = false;
         animator.SetBool("isGrinding",false);
         backWheelSparks.SetActive(false);
         frontWheelSparks.SetActive(false);
+        grindingTime = 0;
+
     }
 
     private void OnTouchStarted(object sender, EventArgs e)
