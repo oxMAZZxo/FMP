@@ -5089,7 +5089,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   grindableCheckBoxSize: {x: 0.25, y: 0.8}
-  isGrindingCheckBoxSize: {x: 0.15, y: 0.2}
+  isGrindingCheckBoxSize: {x: 0.15, y: 0.13}
   backWheelSparks: {fileID: 8481983751286521546}
   frontWheelSparks: {fileID: 8201818001491858908}
   frontSmokeParticles: {fileID: 1594715600159104892}
@@ -5114,7 +5114,7 @@ MonoBehaviour:
   sounds:
   - name: Rolling
     clip: {fileID: 8300000, guid: 1048860569f34924bb542bf35514da33, type: 3}
-    volume: 0.2
+    volume: 0.1
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
@@ -5126,6 +5126,13 @@ MonoBehaviour:
     spatialBlend: 0
     source: {fileID: 0}
     loop: 0
+  - name: Wheel Spinning
+    clip: {fileID: 8300000, guid: ff36dac9418c3ec47b4e91095f2334a8, type: 3}
+    volume: 0.015
+    pitch: 1
+    spatialBlend: 0
+    source: {fileID: 0}
+    loop: 1
   - name: Landed
     clip: {fileID: 8300000, guid: 4dc970faf790d2e469fefceaad5b7edf, type: 3}
     volume: 0.1
@@ -5133,15 +5140,15 @@ MonoBehaviour:
     spatialBlend: 0
     source: {fileID: 0}
     loop: 0
-  - name: Grind
-    clip: {fileID: 8300000, guid: 32981731f4781e94aa6b436f403d4a61, type: 3}
-    volume: 0.2
+  - name: Start Grind
+    clip: {fileID: 8300000, guid: f69ccc5155cfd304bab6c78369a61cf7, type: 3}
+    volume: 0.15
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
-    loop: 1
-  - name: Wheel Spinning
-    clip: {fileID: 8300000, guid: ff36dac9418c3ec47b4e91095f2334a8, type: 3}
+    loop: 0
+  - name: Mid Grind
+    clip: {fileID: 8300000, guid: 2a8ff0b0d273f45449227aceb5500891, type: 3}
     volume: 0.1
     pitch: 1
     spatialBlend: 0

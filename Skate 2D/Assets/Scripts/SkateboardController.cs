@@ -419,9 +419,9 @@ public class SkateboardController : MonoBehaviour
 
     private void DisableGrinding()
     {
-        if(grindingTime < 0.2)
+        if(grindingTime < 0.1)
         {
-            Debug.Log($"Grinding time is less than 0.2, so removing addedPoints");
+            Debug.Log($"Grinding time is less than 0.1, so removing addedPoints");
             potentialPoints -= pointsToBeAdded;
         }
         rb.constraints = RigidbodyConstraints2D.None;
