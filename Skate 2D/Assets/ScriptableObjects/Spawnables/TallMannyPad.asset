@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
+  m_Name: TallMannyPad
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 5347375017383630457, guid: 42a901ce37334c845aa57007aa44efd3, type: 3}
+  checkRadius: 4
+  minimumAcceptableSpeedForObstacle: 1
+  spawnAction: 1
+  minimumAcceptableGameSpeedForFollowUp: 1
+  followObjectSpawnAction: 1
+  followObjs:
+  - {fileID: 6196515861311528971, guid: bde3ba0018a8aaf4e8566a13862f73f0, type: 3}
+  - {fileID: 8770690727045251444, guid: 0e81f11c791f8a649b4122e917d0a733, type: 3}
+  - {fileID: 158139782263735027, guid: 4998f6a13a0e05f4ca47e1744d72b739, type: 3}
+  followObjectChance: 90
+  followUpObjectDistance: 0
