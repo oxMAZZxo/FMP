@@ -9,21 +9,29 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance {get; private set;}
     public int score {get; private set;}
-    public TextMeshProUGUI scoreDisplay;
     public TextMeshProUGUI framerateDisplay;
+    [Header("UI Elements")]
+    public TextMeshProUGUI scoreDisplay;
+    public TextMeshProUGUI distanceTravelledDisplay;
     [SerializeField]private GameObject gameOverPanel;
     [SerializeField]private TextMeshProUGUI scoreDisplayFinal;
     [SerializeField]private TextMeshProUGUI noOfTricksDisplay;
     [SerializeField]private TextMeshProUGUI noOfCombosDisplay;
     [SerializeField]private TextMeshProUGUI longestComboDisplay;
-    [SerializeField]private TextMeshProUGUI distanceTravelledDisplay;
+    [SerializeField]private TextMeshProUGUI distanceTravelledDisplayFinal;
     [SerializeField]private TextMeshProUGUI addedScoreDisplay;
+    [Header("Start Game Velocity Fields")]
     [SerializeField,Range(1f,5f)]private float startVelocity = 1f;
     [SerializeField,Range(1f,10f)]private float maxVelocity = 1f;
     [SerializeField,Range(0.1f,0.2f)]private float velocityIncrementPerScoreAdded = 0.1f;
     [SerializeField,Range(1,15)]private int maxNumberOfIncrements = 15;
     [SerializeField,Range(10,50),Tooltip("This value will determine the amount of velocity incrementations based on the score added")]private int scoreIncrementValue = 10;
+    [Header("Automatic Speed Incrementation Fields")]
+    [SerializeField,Range(0.01f,0.5f)]private float velocityToAdd = 0.25f;
+    [SerializeField,Range(0f,60f)]private float incrementationInterval = 30f;
+    private float counter;
     private float currentVelocity;
+    [Header("In Game")]
     [SerializeField]private SkateboardController skateboardController;
     [SerializeField]private CinemachineVirtualCamera virtualCamera;
     public GameSpeed currentGameSpeed {get; private set;}
@@ -35,10 +43,13 @@ public class GameManager : MonoBehaviour
 
     #region Framerate Variables
     private float timeCounter;
-    [Range(0.1f,1f)]public float refreshTime = 0.5f;
+    private float refreshTime = 0.5f;
     private float frameCounter;
     private float lastFramerate;
     #endregion
+
+    private float skateboardStartX;
+    private float skateboardOldX;
 
     void Awake()
     {
@@ -71,6 +82,8 @@ public class GameManager : MonoBehaviour
         {
             virtualCamera.m_Lens.OrthographicSize = 5f;
         }
+        skateboardStartX = skateboardController.gameObject.transform.position.x;
+        skateboardOldX = skateboardStartX;
     }
 
     void Update()
@@ -90,6 +103,18 @@ public class GameManager : MonoBehaviour
             timeCounter = 0.0f;
         }
         #endregion
+        
+        if(currentVelocity >= maxVelocity) {return;}
+        if(counter >= incrementationInterval)
+        {
+            Debug.Log($"Increasing Velocity by {velocityToAdd}");
+            currentVelocity += velocityToAdd;
+            skateboardController.SetMinVelocity(currentVelocity);
+            CheckGameSpeed();
+            counter = 0;
+        }
+
+        counter += Time.deltaTime;
     }
 
     void FixedUpdate()
@@ -111,6 +136,14 @@ public class GameManager : MonoBehaviour
                 virtualCamera.m_Lens.OrthographicSize = 5f;
             }
         }
+
+        if(skateboardOldX < skateboardController.gameObject.transform.position.x)
+        {
+            float distanceTravelled = skateboardController.gameObject.transform.position.x - skateboardStartX;
+            distanceTravelledDisplay.text = distanceTravelled.ToString("F0");
+        }
+
+        skateboardOldX = skateboardController.gameObject.transform.position.x;
     }
 
     public void AddScore(int value)
@@ -122,7 +155,7 @@ public class GameManager : MonoBehaviour
             IncreaseSpeed(value);
         }
         score +=value;
-        scoreDisplay.text = ScoreString(score);
+        scoreDisplay.text = PrettyNumberString(score);
     }
 
     private void IncreaseSpeed(int value)
@@ -170,7 +203,7 @@ public class GameManager : MonoBehaviour
     {
         int x = UnityEngine.Random.Range(0 + 200, Screen.width - 200);
         int y = UnityEngine.Random.Range(0 + 400,Screen.height - 100);
-        addedScoreDisplay.text = "+" + ScoreString(value);
+        addedScoreDisplay.text = "+" + PrettyNumberString(value);
         addedScoreDisplay.gameObject.transform.position = new Vector3(x,y);
         addedScoreDisplay.gameObject.SetActive(true);
     }
@@ -191,7 +224,7 @@ public class GameManager : MonoBehaviour
         noOfTricksDisplay.text += noOfTricks.ToString();
         noOfCombosDisplay.text += noOfCombos.ToString();
         longestComboDisplay.text += longestCombo.ToString();
-        distanceTravelledDisplay.text += distanceTravelled.ToString("F1");
+        distanceTravelledDisplayFinal.text += distanceTravelled.ToString("F1");
         gameOverPanel.SetActive(true);
     }
 
@@ -200,7 +233,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    private string ScoreString(int value) 
+    private string PrettyNumberString(float value) 
     {
         if(value < 1000)
         {
