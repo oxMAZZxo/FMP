@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
-  m_Name: Curb
+  m_Name: LowMannyPad
   m_EditorClassIdentifier: 
-  prefab: {fileID: 3466813424133893137, guid: ca980184523ce5344bf53196c0bdafbf, type: 3}
-  checkRadius: 4
+  prefab: {fileID: 6196515861311528971, guid: bde3ba0018a8aaf4e8566a13862f73f0, type: 3}
+  checkRadius: 5
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0
-  minimumAcceptableGameSpeedForFollowUp: 1
-  followObjectSpawnAction: 1
+  minimumAcceptableGameSpeedForFollowUp: 0
+  followObjectSpawnAction: 0
   followObjs:
-  - {fileID: 158139782263735027, guid: 4998f6a13a0e05f4ca47e1744d72b739, type: 3}
-  - {fileID: 8824112578606911030, guid: 9c95ad6087aff034287587e3af311a7e, type: 3}
+  - {fileID: 9009299061145675200, guid: 4f142de76c1eb024d9287d331dd5e833, type: 3}
   - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
-  followObjectChance: 70
+  - {fileID: 3921992949018577769, guid: fe989d88da9eb054ca304060018d2e15, type: 3}
+  followObjectChance: 80
   followUpObjectDistance: 1

@@ -191,7 +191,7 @@ public class ProceduralMap : MonoBehaviour
             Destroy(secondObstacle,10f);
             switch(obstacleTypes[obstacleType].type)
             {
-                case ObstacleType.Curb:
+                case ObstacleType.ManualPad:
                 currentSpawnAction = SpawnAction.Skip;
                 break;
             }

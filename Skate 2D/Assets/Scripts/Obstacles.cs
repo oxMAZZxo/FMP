@@ -12,7 +12,7 @@ public class Obstacles : ScriptableObject
 
 public enum ObstacleType
 {
-    Curb,
+    ManualPad,
     Bench,
     Rail,
     Kicker,
