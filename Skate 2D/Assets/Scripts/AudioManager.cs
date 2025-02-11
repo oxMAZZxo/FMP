@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -6,7 +7,8 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Global;
     public bool isGlobal = false;
     public Sound[] sounds;
-
+    private Dictionary<string, Sound> playableSounds;
+    
     void Awake()
     {
         foreach(Sound sound in sounds)
@@ -19,6 +21,7 @@ public class AudioManager : MonoBehaviour
             sound.source.loop = sound.loop;
             sound.source.spatialBlend = sound.spatialBlend;
         }
+        CreateDictionary();
         if(!isGlobal) {return;}
         if(Global != this && Global != null)
         {
@@ -30,8 +33,19 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    private void CreateDictionary()
+    {
+        playableSounds = new Dictionary<string, Sound>();
+
+        foreach(Sound sound in sounds)
+        {
+            playableSounds.Add(sound.name,sound);
+        }
+    }
+
     public void Play(string name)
     {
+        // Sound sound = playableSounds[name];
         Sound sound = Array.Find(sounds, sound => sound.name == name);
         if(sound == null) 
         {
