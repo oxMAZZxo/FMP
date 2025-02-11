@@ -169,12 +169,11 @@ public class SkateboardController : MonoBehaviour
         {
             DisableGrinding();
         }
+        if(isGrounded) {audioManager.Stop("Rolling");}
         rollingSmokeParticles.SetActive(false);
         audioManager.Play("Tail Snap");
         audioManager.Play("Wheel Spinning");
         rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (100 * currentTouchTime))));
-        audioManager.Stop("Mid Grind");
-        audioManager.Stop("Rolling");
     }
 
     private void Action(object sender, TouchEventArgs e)
@@ -393,13 +392,11 @@ public class SkateboardController : MonoBehaviour
 
     private bool CheckIsGrinding()
     {
-        Vector2 grindCheckPosition;
+        Vector2 grindCheckPosition = backWheelSparks.transform.position;
+        
         if(reverseOut)
         {
             grindCheckPosition = frontWheelSparks.transform.position;
-        }else
-        {
-            grindCheckPosition = backWheelSparks.transform.position;
         }
 
         Collider2D[] colliders = Physics2D.OverlapBoxAll(grindCheckPosition, isGrindingCheckBoxSize, whatIsGrindable);
@@ -413,7 +410,6 @@ public class SkateboardController : MonoBehaviour
             }
         }
 
-        audioManager.Stop("Mid Grind");
         return false;
     }
 
@@ -424,6 +420,7 @@ public class SkateboardController : MonoBehaviour
             Debug.Log($"Grinding time is less than 0.1, so removing addedPoints");
             potentialPoints -= pointsToBeAdded;
         }
+        audioManager.Stop("Mid Grind");
         rb.constraints = RigidbodyConstraints2D.None;
         rb.gravityScale = 1;
         isGrinding = false;
