@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http.Headers;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,23 +13,29 @@ public class SkateboardController : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D myCollider;
     private AudioManager audioManager;
+    [Header("Movement & Tricks")]
     [SerializeField,Range(0.01f,1f)]private float movementSmoothing = 1f;
     private float minVelocity = 3f;
     [SerializeField,Range(0.1f,1f)]private float minimumJumpForce = 1f;
     [SerializeField]private Transform groundCheck;
     [SerializeField]private LayerMask whatIsGround;
     [SerializeField,Range(0.01f,1f)]private float groundedCheckRadius = 0.2f; 
+    [Header("Grinds")]
     [SerializeField]private LayerMask whatIsGrindable;
     [SerializeField]private Vector2 grindableCheckBoxSize;
     [SerializeField]private Vector2 isGrindingCheckBoxSize;
+    [Header("SFX")]
     [SerializeField]private GameObject backWheelSparks;
     [SerializeField]private GameObject frontWheelSparks;
     [SerializeField]private GameObject frontSmokeParticles;
     [SerializeField]private GameObject backSmokeParticles;
     [SerializeField]private GameObject rollingSmokeParticles;
+    [Header("UI")]
     [SerializeField]private Slider jumpForceSlider;
     [SerializeField]private TextMeshProUGUI comboDisplay;
     [SerializeField]private TextMeshProUGUI comboCounterDisplay;
+    [Header("Visualisation")]
+    public bool drawGizmos;
     private bool isGrounded;
     private float currentTouchTime;
     private bool isGrinding;
@@ -65,7 +72,7 @@ public class SkateboardController : MonoBehaviour
         if(isGrounded || isGrinding)
         {
             // rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
-            Vector3 targetVelocity = new Vector2(minVelocity, rb.velocity.y);
+            Vector3 targetVelocity = new Vector2(minVelocity * 50 * Time.fixedDeltaTime, rb.velocity.y);
             rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothing);
         }
 
@@ -471,6 +478,7 @@ public class SkateboardController : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        if(!drawGizmos) {return;}
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(groundCheck.position,groundedCheckRadius);
         Gizmos.color = Color.red;
