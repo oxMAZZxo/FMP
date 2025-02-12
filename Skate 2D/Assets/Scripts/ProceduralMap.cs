@@ -137,6 +137,7 @@ public class ProceduralMap : MonoBehaviour
     private GameObject CreateGround()
     {
         GameObject currentGround = groundObjects.GetObject();
+        currentGround.GetComponentInChildren<GroundTrigger>().Reset();
         Collider2D currentGourndCollider = currentGround.GetComponent<Collider2D>();
         float previousGroundRightBounds = previousGround.gameObject.transform.position.x + previousGround.bounds.extents.x;
         Vector2 spawnPos = new Vector2(previousGroundRightBounds + currentGourndCollider.bounds.extents.x, ySpawnPosition);
