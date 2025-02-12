@@ -21,7 +21,7 @@ public class AudioManager : MonoBehaviour
             sound.source.loop = sound.loop;
             sound.source.spatialBlend = sound.spatialBlend;
         }
-        CreateDictionary();
+        // CreateDictionary();
         if(!isGlobal) {return;}
         if(Global != this && Global != null)
         {
@@ -43,21 +43,23 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Plays the sound with the provided name, if it exists and not already playing
+    /// </summary>
+    /// <param name="name"></param>
     public void Play(string name)
     {
-        // Sound sound = playableSounds[name];
-        Sound sound = Array.Find(sounds, sound => sound.name == name);
-        if(sound == null) 
+        foreach(Sound currentSound in sounds)
         {
-            Debug.LogWarning("Sound with name '" + name + "' does not exist");
-            return;
+            if(currentSound == null || currentSound.name != name) { continue; }
+            if(currentSound.source.isPlaying && !Global)
+            {
+                Debug.LogWarning("Sound is already playing");
+                return;
+            }
+            currentSound.source.Play();
+            break;
         }
-        if(sound.source.isPlaying && !isGlobal) 
-        {
-            //Debug.LogWarning("Sound is already playing");
-            return;
-        }
-        sound.source.Play();
     }
 
     /// <summary>

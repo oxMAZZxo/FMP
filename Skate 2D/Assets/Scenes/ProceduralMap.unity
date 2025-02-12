@@ -3270,10 +3270,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3352248071572651824, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_Icon
-      value: 
-      objectReference: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
-    - target: {fileID: 3352248071572651824, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_Name
       value: Skateboard
       objectReference: {fileID: 0}
@@ -3285,10 +3281,6 @@ PrefabInstance:
       propertyPath: jumpForceSlider
       value: 
       objectReference: {fileID: 450742982}
-    - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: minimumJumpForce
-      value: 0.75
-      objectReference: {fileID: 0}
     - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: comboCounterDisplay
       value: 

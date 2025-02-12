@@ -4906,7 +4906,7 @@ GameObject:
   m_Layer: 3
   m_Name: Skateboard
   m_TagString: Player
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -5079,7 +5079,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSmoothing: 0.05
-  minimumJumpForce: 0.74
+  minimumJumpForce: 0.75
   groundCheck: {fileID: 7702316996246342448}
   whatIsGround:
     serializedVersion: 2

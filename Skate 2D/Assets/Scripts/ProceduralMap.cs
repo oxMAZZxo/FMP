@@ -244,10 +244,8 @@ public class ProceduralMap : MonoBehaviour
             MoveObstacle(currentObstacleTypeChoice,mainObstacle,groundCollider,obstacleBottomBoundsPosition);
         }
 
-        if(GameManager.Instance.currentGameSpeed != GameSpeed.Slow)
-        {
-            currentSpawnAction = currentObstacleTypeChoice.spawnAction;
-        }
+        currentSpawnAction = currentObstacleTypeChoice.spawnAction;
+        
         if(currentObstacleTypeChoice.noOfFollowObstacleObjs > 0 && GameManager.Instance.currentGameSpeed >= currentObstacleTypeChoice.minimumAcceptableGameSpeedForFollowUp
         && Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance)
         {
