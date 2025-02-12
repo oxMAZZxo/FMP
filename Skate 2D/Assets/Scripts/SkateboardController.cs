@@ -30,6 +30,7 @@ public class SkateboardController : MonoBehaviour
     [SerializeField]private GameObject frontSmokeParticles;
     [SerializeField]private GameObject backSmokeParticles;
     [SerializeField]private GameObject rollingSmokeParticles;
+    [SerializeField]private TrailRenderer grindingTrail;
     [Header("UI")]
     [SerializeField]private Slider jumpForceSlider;
     [SerializeField]private TextMeshProUGUI comboDisplay;
@@ -85,6 +86,8 @@ public class SkateboardController : MonoBehaviour
             if(CheckIsGrinding() == false)
             {
                 DisableGrinding();
+            }else
+            {
             }
             grindingTime += Time.fixedDeltaTime;
         }
@@ -218,6 +221,9 @@ public class SkateboardController : MonoBehaviour
             if (!grindable || swipeDirection != SwipeDirection.DOWN && swipeDirection != SwipeDirection.LEFT && swipeDirection != SwipeDirection.RIGHT) { return false; }
             trickPerformed = PerformGrind(swipeDirection, other);
             isPerformingTrick = true;
+            grindingTrail.transform.position = backWheelSparks.transform.position;
+            if(reverseOut){grindingTrail.transform.position = frontWheelSparks.transform.position;}
+            grindingTrail.emitting = true;
         }
         else //else if one of those conditions is true
         {
@@ -435,6 +441,7 @@ public class SkateboardController : MonoBehaviour
         backWheelSparks.SetActive(false);
         frontWheelSparks.SetActive(false);
         grindingTime = 0;
+        grindingTrail.emitting = false;
 
     }
 
