@@ -9,12 +9,18 @@ public class ProceduralMap : MonoBehaviour
     const float ySpawnPosition = -0.5f;
     [SerializeField]private Transform player;
     [SerializeField]private GameObject groundPrefab;
+    [Header("Obstacle Generation")]
     [SerializeField]private bool generateObstacles;
     [SerializeField]private Obstacles[] obstacleTypes;
     [SerializeField]private LayerMask whatIsObstacle;
+    [Header("Background Environment Generation")]
+    [SerializeField]private bool generateEnvironment;
+    [SerializeField]private GameObject[] environmentPrefabs;
     private Pool<GameObject> groundObjects;
     private Pool<Obstacle> obstacles;
+    
     private Collider2D previousGround;
+    private Collider2D previousEnvironment;
     private SpawnAction currentSpawnAction = SpawnAction.Spawn;
     private int lastSlowObstacleIndex;
     private int lastMediumObstacleIndex;
@@ -127,8 +133,10 @@ public class ProceduralMap : MonoBehaviour
     public void GenerateMap()
     {
         GameObject ground = CreateGround();
-        if(!generateObstacles) {return;}
-        StartCoroutine(CreateObstacleOptimised(ground));
+        if(generateObstacles) {StartCoroutine(CreateObstacleOptimised(ground));}
+        
+        if(generateEnvironment) {CreateBuildings(ground.GetComponent<Collider2D>());}
+
     }
     
     /// <summary>
@@ -145,6 +153,27 @@ public class ProceduralMap : MonoBehaviour
         Physics2D.SyncTransforms();
         previousGround = currentGourndCollider;
         return currentGround;
+    }
+
+    private void CreateBuildings(Collider2D ground)
+    {
+        Collider2D currentEnvironemnt = Instantiate(environmentPrefabs[0],transform.position,Quaternion.identity).GetComponent<Collider2D>();
+        currentEnvironemnt.transform.position = Vector3.zero;
+        Physics2D.SyncTransforms();
+
+        float centreToBottomDistance = currentEnvironemnt.bounds.center.y - currentEnvironemnt.bounds.extents.y; 
+        float mainToSecondSideToSideDistance = 0;
+        float currentXPosition = ground.transform.position.x;
+        if(previousEnvironment != null)
+        {
+            mainToSecondSideToSideDistance = previousEnvironment.bounds.extents.x + currentEnvironemnt.bounds.extents.x;
+            currentXPosition = previousEnvironment.transform.position.x;
+        }
+
+        Vector2 newPos = new Vector2(currentXPosition + mainToSecondSideToSideDistance,ground.bounds.center.y + ground.bounds.extents.y - centreToBottomDistance + 0.28f);
+        currentEnvironemnt.transform.position = newPos;
+        Physics2D.SyncTransforms();
+        previousEnvironment = currentEnvironemnt;
     }
 
     /// <summary>
