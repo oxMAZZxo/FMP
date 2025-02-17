@@ -157,7 +157,7 @@ public class ProceduralMap : MonoBehaviour
 
     private void CreateBuildings(Collider2D ground)
     {
-        Collider2D currentEnvironemnt = Instantiate(environmentPrefabs[0],transform.position,Quaternion.identity).GetComponent<Collider2D>();
+        Collider2D currentEnvironemnt = Instantiate(environmentPrefabs[1],transform.position,Quaternion.identity).GetComponent<Collider2D>();
         currentEnvironemnt.transform.position = Vector3.zero;
         Physics2D.SyncTransforms();
 

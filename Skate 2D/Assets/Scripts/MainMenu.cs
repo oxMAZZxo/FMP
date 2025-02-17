@@ -25,7 +25,7 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator LoadSceneAsync()
     {
-        asyncLoad = SceneManager.LoadSceneAsync("ProceduralMap");
+        asyncLoad = SceneManager.LoadSceneAsync("ProceduralMap",LoadSceneMode.Additive);
         asyncLoad.allowSceneActivation = false;
         sceneReady = false;
 
