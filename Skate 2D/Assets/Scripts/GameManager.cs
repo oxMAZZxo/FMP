@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Reflection;
 using Cinemachine;
 using TMPro;
@@ -82,12 +83,41 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         if(gameHasStarted) {return;}
+        StartCameraAnimations();
+
         currentVelocity = startVelocity;
         skateboardController.SetMinVelocity(currentVelocity);
         gameHasStarted = true;
         currentGameSpeed = GameSpeed.Slow;
         skateboardStartX = skateboardController.gameObject.transform.position.x;
         skateboardOldX = skateboardStartX;
+    }
+
+    private void StartCameraAnimations()
+    {
+        StartCoroutine(VM_ZoomOutAnim());
+        StartCoroutine(VM_TrackedObjectOffsetAnim());
+    }
+
+    private IEnumerator VM_ZoomOutAnim()
+    {
+        while(virtualCamera.m_Lens.OrthographicSize < 2.3f)
+        {
+            virtualCamera.m_Lens.OrthographicSize += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    private IEnumerator VM_TrackedObjectOffsetAnim()
+    {
+        CinemachineFramingTransposer framingTransposer = virtualCamera.GetComponentInChildren<CinemachineFramingTransposer>();
+        Vector3 newOffset = framingTransposer.m_TrackedObjectOffset;
+        while(framingTransposer.m_TrackedObjectOffset.y < 0.22f)
+        {
+            newOffset.y += Time.deltaTime;
+            framingTransposer.m_TrackedObjectOffset = newOffset;
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     void Update()
