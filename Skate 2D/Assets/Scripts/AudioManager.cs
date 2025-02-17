@@ -54,7 +54,7 @@ public class AudioManager : MonoBehaviour
             if(currentSound == null || currentSound.name != name) { continue; }
             if(currentSound.source.isPlaying && !Global)
             {
-                Debug.LogWarning("Sound is already playing");
+                // Debug.LogWarning("Sound is already playing");
                 return;
             }
             currentSound.source.Play();

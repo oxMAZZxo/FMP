@@ -45,4 +45,19 @@ public class Obstacle
     {
         return followObstaclePools[index].GetObject();
     }
+
+    /// <returns>The main obstacle pool as an array.</returns>
+    public GameObject[] GetAllMainObstacles()
+    {
+        return mainObstaclePool.GetObjects();
+    }
+
+    /// <param name="index">The index of the item in the list of pools</param>
+    /// <returns>Pool of follow up obstacles from a list using the given index</returns>
+    public GameObject[] GetFollowUpObjectsAt(int index)
+    {
+        return followObstaclePools[index].GetObjects();
+    }
+
+    public int GetCountOfFollowUpObstacles() {return followObstaclePools.Count;}
 }

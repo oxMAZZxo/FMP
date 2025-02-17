@@ -66,7 +66,7 @@ public class SkateboardController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(isStopped) {return;}
+        if(isStopped || !GameManager.Instance.gameHasStarted) {return;}
 
         if(!hasStarted && transform.position.x > 1) { hasStarted = true; Debug.Log($"Game has started"); }
 

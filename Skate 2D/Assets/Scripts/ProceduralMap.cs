@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ public class ProceduralMap : MonoBehaviour
     const float ySpawnPosition = -0.5f;
     [SerializeField]private Transform player;
     [SerializeField]private GameObject groundPrefab;
+    [SerializeField]private Collider2D startGround;
     [Header("Obstacle Generation")]
     [SerializeField]private bool generateObstacles;
     [SerializeField]private Obstacles[] obstacleTypes;
@@ -41,7 +43,14 @@ public class ProceduralMap : MonoBehaviour
     {
         InitPools();
         InitObstaclePool();
-        InitGround();
+        // InitGround();
+        if(startGround == null)
+        {
+            Debug.LogError("The variable Start Ground in the Procedural Map Component is null. Cannot generate ground, obstacles or environment without that");
+        }else
+        {
+            previousGround = startGround;
+        }
     }
 
     /// <summary>
@@ -83,6 +92,7 @@ public class ProceduralMap : MonoBehaviour
             GameObject temp = Instantiate(prefab, new Vector2(0,100), Quaternion.identity);
             temp.name += i.ToString();
             tempPrefabPool.Add(temp);
+            temp.SetActive(false);
         }
         return new Pool<GameObject>(tempPrefabPool);
     }
@@ -98,33 +108,13 @@ public class ProceduralMap : MonoBehaviour
                 GameObject currentFollowUpObstacle = Instantiate(prefabFollowObstacle, new Vector2(0,100), Quaternion.identity);
                 currentFollowUpObstacle.name += i.ToString();
                 tempObstacles.Add(currentFollowUpObstacle);
+                currentFollowUpObstacle.SetActive(false);
+
             }
             followObjs.Add(new Pool<GameObject>(tempObstacles));
             tempObstacles.Clear();
         }
         return followObjs;
-    }
-
-
-    /// <summary>
-    /// Spawns the Initial ground GameObjects the player is on
-    /// </summary>
-    private void InitGround()
-    {
-        GameObject middleGround = groundObjects.GetObject();
-        Vector2 placePosition = new Vector2(player.position.x,ySpawnPosition);
-        middleGround.transform.position = placePosition;
-
-        placePosition = new Vector2(middleGround.transform.position.x - middleGround.GetComponent<Collider2D>().bounds.extents.x, ySpawnPosition);
-        GameObject leftGround = groundObjects.GetObject();
-        leftGround.transform.position = placePosition;
-
-        placePosition = new Vector2(middleGround.transform.position.x + middleGround.GetComponent<Collider2D>().bounds.extents.x,ySpawnPosition);
-        GameObject rightGround = groundObjects.GetObject();
-        rightGround.transform.position = placePosition;
-        
-        previousGround = rightGround.GetComponent<Collider2D>();
-        Physics2D.SyncTransforms();
     }
 
     /// <summary>
@@ -133,7 +123,7 @@ public class ProceduralMap : MonoBehaviour
     public void GenerateMap()
     {
         GameObject ground = CreateGround();
-        if(generateObstacles) {StartCoroutine(CreateObstacleOptimised(ground));}
+        if(generateObstacles) {StartCoroutine(CreateObstacle(ground));}
         
         if(generateEnvironment) {CreateBuildings(ground.GetComponent<Collider2D>());}
 
@@ -180,7 +170,7 @@ public class ProceduralMap : MonoBehaviour
     /// Creates a random obstacle from an array. THIS FUNCTION IS UNOPTIMISED
     /// </summary>
     /// <param name="ground"></param>   
-    IEnumerator CreateObstacle(GameObject ground)
+    IEnumerator CreateObstacleNonOptimised(GameObject ground)
     {
         if(currentSpawnAction != SpawnAction.Spawn) 
         {
@@ -188,8 +178,8 @@ public class ProceduralMap : MonoBehaviour
             yield break;
         }
         yield return new WaitForSeconds(0.3f);
-        int obstacleType = Random.Range(0,obstacleTypes.Length);
-        int obstacleChoice = Random.Range(0,obstacleTypes[obstacleType].spawnables.Length);
+        int obstacleType = UnityEngine.Random.Range(0,obstacleTypes.Length);
+        int obstacleChoice = UnityEngine.Random.Range(0,obstacleTypes[obstacleType].spawnables.Length);
         GameObject firstObstacle = Instantiate(obstacleTypes[obstacleType].spawnables[obstacleChoice].prefab,transform.position,Quaternion.identity);
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
         Collider2D firstObstacleCollider = firstObstacle.GetComponent<Collider2D>();
@@ -205,7 +195,7 @@ public class ProceduralMap : MonoBehaviour
         && GameManager.Instance.currentGameSpeed >= obstacleTypes[obstacleType].spawnables[obstacleChoice].minimumAcceptableGameSpeedForFollowUp
         && UnityEngine.Random.Range(0,100) <= obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjectChance)
         {
-            int secondObstacleChoice = Random.Range(0,obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length);
+            int secondObstacleChoice = UnityEngine.Random.Range(0,obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs.Length);
 
             GameObject secondObstacle = Instantiate(obstacleTypes[obstacleType].spawnables[obstacleChoice].followObjs[secondObstacleChoice],transform.position,Quaternion.identity);
 
@@ -235,7 +225,7 @@ public class ProceduralMap : MonoBehaviour
     /// </summary>
     /// <param name="ground">The current ground</param>
     /// <returns></returns>
-    IEnumerator CreateObstacleOptimised(GameObject ground)
+    IEnumerator CreateObstacle(GameObject ground)
     {
         if(currentSpawnAction != SpawnAction.Spawn) 
         {
@@ -260,6 +250,8 @@ public class ProceduralMap : MonoBehaviour
         mainObstacle.transform.position = Vector3.zero;
         Physics2D.SyncTransforms();
 
+        if(!mainObstacle.activeInHierarchy) {mainObstacle.SetActive(true);}
+        
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
 
         float obstacleBottomBoundsPosition = mainObstacleCollider.bounds.center.y - mainObstacleCollider.bounds.extents.y; 
@@ -277,13 +269,14 @@ public class ProceduralMap : MonoBehaviour
         currentSpawnAction = currentObstacleTypeChoice.spawnAction;
         
         if(currentObstacleTypeChoice.noOfFollowObstacleObjs > 0 && GameManager.Instance.currentGameSpeed >= currentObstacleTypeChoice.minimumAcceptableGameSpeedForFollowUp
-        && Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance)
+        && UnityEngine.Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance)
         {
-            GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs));
+            GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(UnityEngine.Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs));
             Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
 
             secondObstacle.transform.position = Vector3.zero;
             Physics2D.SyncTransforms();
+            if(!secondObstacle.activeInHierarchy) {secondObstacle.SetActive(true);}
 
             obstacleBottomBoundsPosition = secondObstacleCollider.bounds.center.y - secondObstacleCollider.bounds.extents.y; 
             
@@ -325,5 +318,41 @@ public class ProceduralMap : MonoBehaviour
             Physics2D.SyncTransforms();
 
         }
+    }
+
+    private void ResetMap(object sender, EventArgs e)
+    {
+        previousGround = startGround;
+        DisableObstacles();
+    }
+
+    private void DisableObstacles()
+    {
+        foreach(Obstacle obstacle in obstacles.GetObjects())
+        {
+            DisableGameObjects(obstacle.GetAllMainObstacles());
+            for(int i = 0; i < obstacle.GetCountOfFollowUpObstacles(); i++)
+            {
+                DisableGameObjects(obstacle.GetFollowUpObjectsAt(i));
+            }
+        }
+    }
+
+    private void DisableGameObjects(GameObject[] gameObjects)
+    {
+        foreach(GameObject gameObject in gameObjects)
+        {
+            if(gameObject.activeInHierarchy) {gameObject.SetActive(false);}
+        }
+    }
+
+    void OnEnable()
+    {
+        GameManager.reset += ResetMap;
+    }
+
+    void OnDisable()
+    {
+        GameManager.reset -= ResetMap;
     }
 }   

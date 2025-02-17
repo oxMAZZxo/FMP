@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
     public GameSpeed currentGameSpeed {get; private set;}
     private int noOfTricks;
     private int noOfCombos;
-    [SerializeField]private bool startGame = false;
     private ScreenOrientation screenOrientation;
     private bool screenOrientationChanged;
 
@@ -50,6 +49,8 @@ public class GameManager : MonoBehaviour
 
     private float skateboardStartX;
     private float skateboardOldX;
+    public bool gameHasStarted {get; private set;}
+    public static event EventHandler<EventArgs> reset;
 
     void Awake()
     {
@@ -64,16 +65,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        if(!startGame) 
-        {
-            skateboardController.SetMinVelocity(0);
-            return;
-        }
         screenOrientation = Screen.orientation;
         Application.targetFrameRate = 144;
-        currentVelocity = startVelocity;
-        skateboardController.SetMinVelocity(currentVelocity);
-        currentGameSpeed = GameSpeed.Slow;
+        
         if(SystemInfo.deviceType == DeviceType.Desktop) {return;}
         if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
         {
@@ -82,6 +76,16 @@ public class GameManager : MonoBehaviour
         {
             virtualCamera.m_Lens.OrthographicSize = 5f;
         }
+        gameHasStarted = false;
+    }
+
+    public void StartGame()
+    {
+        if(gameHasStarted) {return;}
+        currentVelocity = startVelocity;
+        skateboardController.SetMinVelocity(currentVelocity);
+        gameHasStarted = true;
+        currentGameSpeed = GameSpeed.Slow;
         skateboardStartX = skateboardController.gameObject.transform.position.x;
         skateboardOldX = skateboardStartX;
     }
@@ -103,7 +107,7 @@ public class GameManager : MonoBehaviour
             timeCounter = 0.0f;
         }
         #endregion
-        
+        if(!gameHasStarted) {return;}
         if(currentVelocity >= maxVelocity) {return;}
         if(counter >= incrementationInterval)
         {
@@ -137,6 +141,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if(!gameHasStarted) {return;}
+
         if(skateboardOldX < skateboardController.gameObject.transform.position.x)
         {
             float distanceTravelled = skateboardController.gameObject.transform.position.x - skateboardStartX;
@@ -168,8 +174,6 @@ public class GameManager : MonoBehaviour
         skateboardController.SetMinVelocity(currentVelocity);    
         CheckGameSpeed();    
     }
-
-    
     public void ClearConsole()
     {
         Type logEntries = Type.GetType("UnityEditor.LogEntries, UnityEditor");
@@ -212,12 +216,12 @@ public class GameManager : MonoBehaviour
     {
         noOfTricks ++;
     }
-
+    
     public void IncrementNumberOfCombos()
     {
         noOfCombos++;
     }
-
+    
     public void SessionEnded(int longestCombo, float distanceTravelled)
     {
         scoreDisplayFinal.text += score.ToString();
@@ -226,11 +230,6 @@ public class GameManager : MonoBehaviour
         longestComboDisplay.text += longestCombo.ToString();
         distanceTravelledDisplayFinal.text += distanceTravelled.ToString("F1");
         gameOverPanel.SetActive(true);
-    }
-
-    public void ExitToMainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
     }
 
     private string PrettyNumberString(float value) 
@@ -248,7 +247,7 @@ public class GameManager : MonoBehaviour
 
         return "***";
     }
-
+    
     private string GetDecimalPoint(float value, int decimalPoint)
     {
         string temp = ""; temp += value.ToString()[0] + ".";
@@ -258,6 +257,19 @@ public class GameManager : MonoBehaviour
             temp += value.ToString()[i];
         }
         return temp;
+    }
+
+    public void Reset()
+    {
+        Vector3 newPos = new Vector3(0,0.735f,0);
+        skateboardController.transform.position = newPos;
+        reset?.Invoke(this, EventArgs.Empty);
+        Invoke("DisableGameOverPanel",0.3f);
+    }
+
+    private void DisableGameOverPanel()
+    {
+        gameOverPanel.SetActive(false);
     }
 }
 

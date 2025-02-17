@@ -76,4 +76,6 @@ public class Pool<T>
         index = indexToReturn;
         return currentObject;
     }
+    
+    public T[] GetObjects() {return objects;}
 }
