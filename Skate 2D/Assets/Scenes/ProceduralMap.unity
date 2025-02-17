@@ -3500,10 +3500,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1822607863439272278, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: m_SortingOrder
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3220706696710446752, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.861
@@ -3561,8 +3557,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1387938532}
     - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
-      propertyPath: grindableCheckBoxSize.x
-      value: 0.18
+      propertyPath: groundedCheckRadius
+      value: 0.07
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
