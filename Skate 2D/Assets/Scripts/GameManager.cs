@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance {get; private set;}
     public int score {get; private set;}
+    public bool isGamePaused {get; private set;}
     public TextMeshProUGUI framerateDisplay;
     [Header("UI Elements")]
     [SerializeField]private TextMeshProUGUI scoreDisplay;
@@ -136,7 +137,7 @@ public class GameManager : MonoBehaviour
             timeCounter = 0.0f;
         }
         #endregion
-        if(!gameHasStarted) {return;}
+        if(!gameHasStarted || isGamePaused) {return;}
         if(currentVelocity >= maxVelocity) {return;}
         if(counter >= incrementationInterval)
         {
@@ -170,7 +171,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(!gameHasStarted) {return;}
+        if(!gameHasStarted || isGamePaused) {return;}
 
         if(skateboardOldX < skateboardController.gameObject.transform.position.x)
         {
@@ -289,7 +290,6 @@ public class GameManager : MonoBehaviour
         return temp;
     }
 
-
     public void Reset()
     {
         gameHasStarted = false;
@@ -318,6 +318,18 @@ public class GameManager : MonoBehaviour
         noOfTricksDisplay.text = "Tricks: ";
         noOfCombosDisplay.text = "Combos: ";
         longestComboDisplay.text = "Longest: ";
+    }
+
+    public void PauseGame()
+    {
+        isGamePaused = true;
+        skateboardController.Pause();
+    }
+
+    public void ResumeGame()
+    {
+        isGamePaused = false;
+        skateboardController.Resume();
     }
 }
 

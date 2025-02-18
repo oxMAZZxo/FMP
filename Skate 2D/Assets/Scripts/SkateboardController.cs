@@ -54,6 +54,8 @@ public class SkateboardController : MonoBehaviour
     private double oldPosX;
     private float grindingTime;
     private int pointsToBeAdded;
+    private bool wasPaused;
+    private float unPausedCounter;
 
     void Start()
     {
@@ -67,8 +69,16 @@ public class SkateboardController : MonoBehaviour
     void FixedUpdate()
     {
         if(isStopped || !GameManager.Instance.gameHasStarted) {return;}
+        if(GameManager.Instance.isGamePaused)
+        {
+            return;
+        }
 
-        if(!hasStarted && transform.position.x > 1) { hasStarted = true; Debug.Log($"Game has started"); }
+        if(!hasStarted && transform.position.x > 0.01f) 
+        { 
+            hasStarted = true;
+            audioManager.Play("Rolling");
+        }
 
         if(isGrounded || isGrinding)
         {
@@ -101,14 +111,6 @@ public class SkateboardController : MonoBehaviour
             jumpForceSlider.value = 0;
         }
 
-        if(hasStarted && (transform.position.x - oldPosX) == 0)
-        {
-            isStopped = true;
-            audioManager.Stop("Rolling");
-            GameManager.Instance.SessionEnded(longestCombo,distanceTravelled);
-            DisableInput();
-        }
-
         if(!isGrounded)
         {
             Quaternion rot = transform.rotation;
@@ -122,6 +124,40 @@ public class SkateboardController : MonoBehaviour
             transform.rotation = Quaternion.Euler(euler);
         }
         oldPosX = transform.position.x;   
+    }
+
+    void LateUpdate()
+    {
+        if(!GameManager.Instance.isGamePaused && wasPaused)
+        {
+            unPausedCounter += Time.deltaTime;
+            if(unPausedCounter > 0.5f)
+            {
+                wasPaused = false;
+                unPausedCounter = 0;
+            }
+        }
+
+        if(!wasPaused && hasStarted && (transform.position.x - oldPosX) == 0)
+        {
+            isStopped = true;
+            audioManager.Stop("Rolling");
+            GameManager.Instance.SessionEnded(longestCombo,distanceTravelled);
+            DisableInput();
+        }
+    }
+
+    public void Pause()
+    {
+        rb.simulated = false;
+        DisableInput();
+        wasPaused = true;
+    }
+
+    public void Resume()
+    {
+        rb.simulated = true;
+        EnableInput();
     }
 
     private void CheckGrounded()
@@ -148,6 +184,7 @@ public class SkateboardController : MonoBehaviour
 
     private void OnLand()
     {
+        if(!hasStarted) {return;}
         animator.SetBool("reverseOut", false);
         reverseOut = false;
         frontSmokeParticles.SetActive(true);
