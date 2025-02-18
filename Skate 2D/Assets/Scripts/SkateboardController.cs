@@ -525,6 +525,8 @@ public class SkateboardController : MonoBehaviour
 
     public void Reset()
     {
+        comboCounter = 0;
+        longestCombo = 0;
         isStopped = false;
         EnableInput();
     }

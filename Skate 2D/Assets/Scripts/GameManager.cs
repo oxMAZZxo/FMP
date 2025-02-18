@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
         if(SystemInfo.deviceType == DeviceType.Desktop) {return;}
         if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
         {
-            virtualCamera.m_Lens.OrthographicSize = 2.3f;
+            virtualCamera.m_Lens.OrthographicSize = 1.2f;
         }else
         {
             virtualCamera.m_Lens.OrthographicSize = 5f;
