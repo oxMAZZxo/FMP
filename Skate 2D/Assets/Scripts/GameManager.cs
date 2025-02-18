@@ -4,7 +4,6 @@ using System.Reflection;
 using Cinemachine;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,8 +11,8 @@ public class GameManager : MonoBehaviour
     public int score {get; private set;}
     public TextMeshProUGUI framerateDisplay;
     [Header("UI Elements")]
-    public TextMeshProUGUI scoreDisplay;
-    public TextMeshProUGUI distanceTravelledDisplay;
+    [SerializeField]private TextMeshProUGUI scoreDisplay;
+    [SerializeField]private TextMeshProUGUI distanceTravelledDisplay;
     [SerializeField]private GameObject gameOverPanel;
     [SerializeField]private TextMeshProUGUI scoreDisplayFinal;
     [SerializeField]private TextMeshProUGUI noOfTricksDisplay;
@@ -204,6 +203,7 @@ public class GameManager : MonoBehaviour
         skateboardController.SetMinVelocity(currentVelocity);    
         CheckGameSpeed();    
     }
+    
     public void ClearConsole()
     {
         Type logEntries = Type.GetType("UnityEditor.LogEntries, UnityEditor");
@@ -289,17 +289,35 @@ public class GameManager : MonoBehaviour
         return temp;
     }
 
+
     public void Reset()
     {
+        gameHasStarted = false;
+        distanceTravelledDisplay.text = "0";
+        scoreDisplay.text = "0";
+        score = 0;
+        noOfTricks = 0;
+        noOfCombos = 0;
         Vector3 newPos = new Vector3(0,0.735f,0);
+        CinemachineFramingTransposer framingTransposer = virtualCamera.GetComponentInChildren<CinemachineFramingTransposer>();
+        framingTransposer.m_TrackedObjectOffset.y = 0;
+        virtualCamera.m_Lens.OrthographicSize = 1.2f;
         skateboardController.transform.position = newPos;
         reset?.Invoke(this, EventArgs.Empty);
+        virtualCamera.enabled = false;
         Invoke("DisableGameOverPanel",0.3f);
+        skateboardController.Reset();
     }
 
     private void DisableGameOverPanel()
     {
+        virtualCamera.enabled = true;
         gameOverPanel.SetActive(false);
+        distanceTravelledDisplayFinal.text = "Distance: ";
+        scoreDisplayFinal.text = "Score: ";
+        noOfTricksDisplay.text = "Tricks: ";
+        noOfCombosDisplay.text = "Combos: ";
+        longestComboDisplay.text = "Longest: ";
     }
 }
 

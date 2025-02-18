@@ -106,7 +106,7 @@ public class SkateboardController : MonoBehaviour
             isStopped = true;
             audioManager.Stop("Rolling");
             GameManager.Instance.SessionEnded(longestCombo,distanceTravelled);
-            GameOver();
+            DisableInput();
         }
 
         if(!isGrounded)
@@ -464,7 +464,11 @@ public class SkateboardController : MonoBehaviour
 
     void OnEnable()
     {
-        // Debug.Log("Enabling Skateboard Controller");
+        EnableInput();
+    }
+
+    private void EnableInput()
+    {
         TouchControls.touchEvent += Action;
         TouchControls.touchStarted += OnTouchStarted;
         TouchControls.touchEnded += OnTouchEnded;
@@ -472,15 +476,20 @@ public class SkateboardController : MonoBehaviour
 
     void OnDisable()
     {
-        // Debug.Log("Disabling Skateboard Controller");
-        GameOver();
+        DisableInput();
     }
 
-    void GameOver()
+    private void DisableInput()
     {
         TouchControls.touchEvent -= Action;
         TouchControls.touchStarted -= OnTouchStarted;
         TouchControls.touchEnded -= OnTouchEnded;
+    }
+
+    public void Reset()
+    {
+        isStopped = false;
+        EnableInput();
     }
 
     void OnDrawGizmos()

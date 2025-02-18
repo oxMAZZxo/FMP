@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 public class GroundTrigger : MonoBehaviour
@@ -20,5 +22,20 @@ public class GroundTrigger : MonoBehaviour
     public void Reset()
     {
         triggered = false;
+    }
+
+    private void GameReset(object sender, EventArgs e)
+    {
+        Reset();
+    }
+
+    void OnEnable()
+    {
+        GameManager.reset += GameReset;
+    }
+
+    void OnDisable()
+    {
+        GameManager.reset -= GameReset;
     }
 }

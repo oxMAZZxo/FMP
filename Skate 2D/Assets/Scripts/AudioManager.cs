@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Global;
-    public bool isGlobal = false;
-    public Sound[] sounds;
-    private Dictionary<string, Sound> playableSounds;
+    public static AudioManager Global {get; private set;}
+    [SerializeField]private bool isGlobal = false;
+    [SerializeField]private Sound[] sounds;
+    [SerializeField]private AudioMixerGroup soundEffectMixer;
+    [SerializeField]private AudioMixerGroup musicMixer;
     
     void Awake()
     {
@@ -20,6 +22,12 @@ public class AudioManager : MonoBehaviour
             sound.source.playOnAwake = false;
             sound.source.loop = sound.loop;
             sound.source.spatialBlend = sound.spatialBlend;
+            sound.source.playOnAwake = sound.playOnAwake;
+            sound.source.outputAudioMixerGroup = soundEffectMixer;
+            if(sound.isMusic)
+            {
+                sound.source.outputAudioMixerGroup = musicMixer;
+            }
         }
         // CreateDictionary();
         if(!isGlobal) {return;}
@@ -30,16 +38,6 @@ public class AudioManager : MonoBehaviour
         {
             Global = this;
             DontDestroyOnLoad(gameObject);
-        }
-    }
-
-    private void CreateDictionary()
-    {
-        playableSounds = new Dictionary<string, Sound>();
-
-        foreach(Sound sound in sounds)
-        {
-            playableSounds.Add(sound.name,sound);
         }
     }
 
