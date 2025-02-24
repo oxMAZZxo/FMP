@@ -8381,6 +8381,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skateboard
       objectReference: {fileID: 0}
+    - target: {fileID: 3872164303532241811, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3872164303532241811, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3872164303532241811, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -859734094, guid: f8a8b5632bd17204b81c702da24afe88, type: 3}
+    - target: {fileID: 3872164303532241811, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5135363455696468011, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_IsActive
       value: 0
