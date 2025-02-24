@@ -1,4 +1,4 @@
-# Skate2D (TBD) : Final Major Project
+# City Skaters : Final Major Project
 
 
 ## Table of Contents
