@@ -68,11 +68,7 @@ public class SkateboardController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(isStopped || !GameManager.Instance.gameHasStarted) {return;}
-        if(GameManager.Instance.isGamePaused)
-        {
-            return;
-        }
+        if(isStopped || !GameManager.Instance.gameHasStarted || GameManager.Instance.isGamePaused) {return;}
 
         if(!hasStarted && transform.position.x > 0.01f) 
         { 
@@ -96,8 +92,6 @@ public class SkateboardController : MonoBehaviour
             if(CheckIsGrinding() == false)
             {
                 DisableGrinding();
-            }else
-            {
             }
             grindingTime += Time.fixedDeltaTime;
         }
@@ -152,12 +146,30 @@ public class SkateboardController : MonoBehaviour
         rb.simulated = false;
         DisableInput();
         wasPaused = true;
+
+        if(isGrounded)
+        {
+            audioManager.Stop("Rolling");
+        }
+        if(isGrinding)
+        {
+            audioManager.Stop("Mid Grind");
+        }
     }
 
     public void Resume()
     {
         rb.simulated = true;
         EnableInput();
+
+        if(isGrounded)
+        {
+            audioManager.Play("Rolling");
+        }
+        if(isGrinding)
+        {
+            audioManager.Play("Mid Grind");
+        }
     }
 
     private void CheckGrounded()
@@ -479,7 +491,6 @@ public class SkateboardController : MonoBehaviour
         frontWheelSparks.SetActive(false);
         grindingTime = 0;
         grindingTrail.emitting = false;
-
     }
 
     private void OnTouchStarted(object sender, EventArgs e)
@@ -525,9 +536,17 @@ public class SkateboardController : MonoBehaviour
 
     public void Reset()
     {
+        comboDisplay.gameObject.SetActive(false);
+        comboCounterDisplay.gameObject.SetActive(false);
+        comboDisplay.text = "";
+        comboCounterDisplay.text = "";
         comboCounter = 0;
         longestCombo = 0;
         isStopped = false;
+        hasStarted = false;
+        wasPaused = false;
+        rb.simulated = true;
+        rb.velocity = Vector2.zero;
         EnableInput();
     }
 

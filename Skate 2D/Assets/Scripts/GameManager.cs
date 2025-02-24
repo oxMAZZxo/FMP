@@ -293,6 +293,7 @@ public class GameManager : MonoBehaviour
     public void Reset()
     {
         gameHasStarted = false;
+        isGamePaused = false;
         distanceTravelledDisplay.text = "0";
         scoreDisplay.text = "0";
         score = 0;

@@ -7334,7 +7334,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1865957275}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1948319111}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 288360713}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: Reset
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1865957275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8269,6 +8293,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1665768474198987978, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1822607863439272278, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
       value: 0
@@ -8353,6 +8381,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skateboard
       objectReference: {fileID: 0}
+    - target: {fileID: 5135363455696468011, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5255054917638017984, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: comboDisplay
       value: 
@@ -8376,6 +8408,10 @@ PrefabInstance:
     - target: {fileID: 5795130725777197492, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: EmissionModule.rateOverDistance.scalar
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8845620774389643706, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

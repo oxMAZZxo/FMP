@@ -10,26 +10,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField]private Sound[] sounds;
     [SerializeField]private AudioMixerGroup soundEffectMixer;
     [SerializeField]private AudioMixerGroup musicMixer;
+    private Dictionary<string, int> soundIndexes;
     
     void Awake()
     {
-        foreach(Sound sound in sounds)
-        {
-            sound.source = gameObject.AddComponent<AudioSource>();
-            sound.source.clip = sound.clip;
-            sound.source.volume = sound.volume;
-            sound.source.pitch = sound.pitch;
-            sound.source.playOnAwake = false;
-            sound.source.loop = sound.loop;
-            sound.source.spatialBlend = sound.spatialBlend;
-            sound.source.playOnAwake = sound.playOnAwake;
-            sound.source.outputAudioMixerGroup = soundEffectMixer;
-            if(sound.isMusic)
-            {
-                sound.source.outputAudioMixerGroup = musicMixer;
-            }
-        }
-        // CreateDictionary();
+        CreateSounds();
         if(!isGlobal) {return;}
         if(Global != this && Global != null)
         {
@@ -41,23 +26,60 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    private void CreateSounds()
+    {
+        soundIndexes = new Dictionary<string, int>();
+        for(int i = 0; i < sounds.Length; i++)
+        {
+            sounds[i].source = gameObject.AddComponent<AudioSource>();
+            sounds[i].source.clip = sounds[i].clip;
+            sounds[i].source.volume = sounds[i].volume;
+            sounds[i].source.pitch = sounds[i].pitch;
+            sounds[i].source.playOnAwake = false;
+            sounds[i].source.loop = sounds[i].loop;
+            sounds[i].source.spatialBlend = sounds[i].spatialBlend;
+            sounds[i].source.playOnAwake = sounds[i].playOnAwake;
+            sounds[i].source.outputAudioMixerGroup = soundEffectMixer;
+            if(sounds[i].isMusic)
+            {
+                sounds[i].source.outputAudioMixerGroup = musicMixer;
+            }
+            soundIndexes.Add(sounds[i].name,i);
+        }
+        // foreach(Sound sound in sounds)
+        // {
+        //     sound.source = gameObject.AddComponent<AudioSource>();
+        //     sound.source.clip = sound.clip;
+        //     sound.source.volume = sound.volume;
+        //     sound.source.pitch = sound.pitch;
+        //     sound.source.playOnAwake = false;
+        //     sound.source.loop = sound.loop;
+        //     sound.source.spatialBlend = sound.spatialBlend;
+        //     sound.source.playOnAwake = sound.playOnAwake;
+        //     sound.source.outputAudioMixerGroup = soundEffectMixer;
+        //     if(sound.isMusic)
+        //     {
+        //         sound.source.outputAudioMixerGroup = musicMixer;
+        //     }
+        // }
+    }
+
     /// <summary>
     /// Plays the sound with the provided name, if it exists and not already playing
     /// </summary>
     /// <param name="name"></param>
     public void Play(string name)
     {
-        foreach(Sound currentSound in sounds)
+        if(!soundIndexes.ContainsKey(name)) {return;}
+        int soundIndex = soundIndexes[name];
+        Sound sound = sounds[soundIndex];
+        if(sound == null) {return;}
+        if(sound.source.isPlaying && !Global)
         {
-            if(currentSound == null || currentSound.name != name) { continue; }
-            if(currentSound.source.isPlaying && !Global)
-            {
-                // Debug.LogWarning("Sound is already playing");
-                return;
-            }
-            currentSound.source.Play();
-            break;
+            Debug.LogWarning("Sound is already playing");
+            return;
         }
+        sound.source.Play();
     }
 
     /// <summary>
@@ -66,16 +88,11 @@ public class AudioManager : MonoBehaviour
     /// <param name="name">The name of the sound to stop playing</param>
     public void Stop(string name)
     {
-        Sound sound = Array.Find(sounds, sound => sound.name == name);
-        if(sound == null)
-        {
-            Debug.LogWarning("Sound with name '" + name + "' does not exist");
-            return;
-        }
-        if(sound.source.isPlaying)
-        {
-            sound.source.Stop();
-        }
+        if(!soundIndexes.ContainsKey(name)) {return;}
+        int soundIndex = soundIndexes[name];
+        Sound sound = sounds[soundIndex];
+        if(sound == null) {return;}
+        sound.source.Stop();
     }
 
     /// <summary>
@@ -98,13 +115,14 @@ public class AudioManager : MonoBehaviour
     /// <returns>True if the sound with the given name is playing</returns>
     public bool IsSoundPlaying(string name)
     {
-        Sound sound = Array.Find(sounds, sound => sound.name == name);
-        if(sound == null)
+        if(!soundIndexes.ContainsKey(name)) {return false;}
+        int soundIndex = soundIndexes[name];
+        Sound sound = sounds[soundIndex];
+        if(sound == null) {return false;}
+        if(sound.source.isPlaying && !Global)
         {
-            Debug.LogWarning("Sound with name '" + name + "' does not exist");
-            return false;
+            return true;
         }
-        if(sound.source.isPlaying) {return true;}
         return false;
     }
 }
