@@ -347,7 +347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2847396179614841599, guid: f30a0c51a428c464499e48621ba644c5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: -0.729
       objectReference: {fileID: 0}
     - target: {fileID: 2847396179614841599, guid: f30a0c51a428c464499e48621ba644c5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4197,10 +4197,12 @@ MonoBehaviour:
   whatIsObstacle:
     serializedVersion: 2
     m_Bits: 128
-  generateEnvironment: 0
+  generateEnvironment: 1
   environmentPrefabs:
   - {fileID: 817552318757949849, guid: 09f5a44a184dd16499f9721996c53cfd, type: 3}
   - {fileID: 348413320980182632, guid: 62293b12a4551394cac41e37b84da8f6, type: 3}
+  - {fileID: 3112157809993679595, guid: ba0b990e0330778449d0ea9d94236b0d, type: 3}
+  - {fileID: 2544002121340179087, guid: 000b34e5f1664bb4486f1d9122404c51, type: 3}
 --- !u!4 &1022530504
 Transform:
   m_ObjectHideFlags: 0
@@ -7134,7 +7136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2847396179614841599, guid: f30a0c51a428c464499e48621ba644c5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: -0.729
       objectReference: {fileID: 0}
     - target: {fileID: 2847396179614841599, guid: f30a0c51a428c464499e48621ba644c5, type: 3}
       propertyPath: m_LocalPosition.z

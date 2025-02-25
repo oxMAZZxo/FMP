@@ -132,7 +132,7 @@ public class SkateboardController : MonoBehaviour
             }
         }
 
-        if(!wasPaused && hasStarted && (transform.position.x - oldPosX) == 0)
+        if(!isStopped && !wasPaused && hasStarted && (transform.position.x - oldPosX) == 0)
         {
             isStopped = true;
             audioManager.Stop("Rolling");
