@@ -10,6 +10,7 @@ public class MenuManager : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField]private GameObject mainMenuPanel;
     [SerializeField]private GameObject gameplayPanel;
+    [SerializeField]private GameObject settingsPanel;
     private GraphicRaycaster raycaster;
     private PointerEventData pointerEventData;
     private EventSystem eventSystem;
@@ -22,7 +23,7 @@ public class MenuManager : MonoBehaviour
 
     private void OnTouch(object sender, TouchEventArgs e)
     {
-        if(GameManager.Instance.gameHasStarted) {return;}
+        if(GameManager.Instance.gameHasStarted || settingsPanel.activeInHierarchy) {return;}
         GameObject objectHit;
         bool UI = CheckForButton(e.startPosition,out objectHit);
 

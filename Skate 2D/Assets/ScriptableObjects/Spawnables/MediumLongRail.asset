@@ -19,6 +19,7 @@ MonoBehaviour:
   minimumAcceptableGameSpeedForFollowUp: 1
   followObjectSpawnAction: 0
   followObjs:
+  - {fileID: 7528899764830829493, guid: a6659a40d1f310b43b618ebea9be976a, type: 3}
   - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
   followObjectChance: 100
   followUpObjectDistance: 1.5
