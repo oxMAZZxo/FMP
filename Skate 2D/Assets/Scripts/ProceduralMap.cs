@@ -279,6 +279,7 @@ public class ProceduralMap : MonoBehaviour
         }
 
         currentSpawnAction = currentObstacleTypeChoice.spawnAction;
+        if(currentObstacleTypeChoice.obstacleType == ObstacleType.Unavoidable && GameManager.Instance.currentGameSpeed == GameSpeed.Slow) {currentSpawnAction = SpawnAction.Spawn;}
         
         if(currentObstacleTypeChoice.noOfFollowObstacleObjs > 0 && ((GameManager.Instance.currentGameSpeed >= currentObstacleTypeChoice.minimumAcceptableGameSpeedForFollowUp
         && UnityEngine.Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance) || comboRush))

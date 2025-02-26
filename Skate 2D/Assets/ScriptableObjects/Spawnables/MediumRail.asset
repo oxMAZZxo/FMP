@@ -20,5 +20,5 @@ MonoBehaviour:
   followObjectSpawnAction: 0
   followObjs:
   - {fileID: 558601362516956773, guid: 8a93b6089126c994380feb21f5926417, type: 3}
-  followObjectChance: 50
+  followObjectChance: 70
   followUpObjectDistance: 2

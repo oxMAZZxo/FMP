@@ -78,7 +78,6 @@ public class SkateboardController : MonoBehaviour
 
         if(isGrounded || isGrinding)
         {
-            // rb.AddForce(transform.right * minMovementSpeed * 10 * Time.fixedDeltaTime);
             Vector3 targetVelocity = new Vector2(minVelocity * 50 * Time.fixedDeltaTime, rb.velocity.y);
             rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothing);
         }
@@ -224,15 +223,18 @@ public class SkateboardController : MonoBehaviour
     public void Jump()
     {
         performedTrick = true;
+        float jumpForce = minimumJumpForce * (100 + (100 * currentTouchTime));
+        if(!isGrinding && !isGrounded) {jumpForce += 25;}
         if(isGrinding)
         {
+            jumpForce += 15;
             DisableGrinding();
         }
         if(isGrounded) {audioManager.Stop("Rolling");}
         rollingSmokeParticles.SetActive(false);
         audioManager.Play("Tail Snap");
         // audioManager.Play("Wheel Spinning");
-        rb.AddForce(new Vector2(0f, minimumJumpForce * (100 + (100 * currentTouchTime))));
+        rb.AddForce(new Vector2(0f, jumpForce));
     }
 
     private void Action(object sender, TouchEventArgs e)

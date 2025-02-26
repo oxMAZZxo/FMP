@@ -2,14 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AddedScoreDisplay : MonoBehaviour
+public class AddedScoreDisplay : DisableMe
 {
     private bool run;
-
-    public void Disable()
-    {
-        gameObject.SetActive(false);
-    }
 
     private IEnumerator MoveUp()
     {

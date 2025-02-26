@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]private GameSpeed comboRushGameSpeed;
     [SerializeField,Range(1,100)]private float comboRushActivateChance;
     [SerializeField,Range(10,60)]private float comboRushActivationCooldown;
+    [SerializeField]private GameObject comboRushDisplay;
     private bool canActivateComboRush;
     public GameSpeed currentGameSpeed {get; private set;}
     private int noOfTricks;
@@ -256,6 +257,7 @@ public class GameManager : MonoBehaviour
         if(canActivateComboRush && currentGameSpeed >= comboRushGameSpeed && UnityEngine.Random.Range(0,100) <= comboRushActivateChance)
         {
             canActivateComboRush = false;
+            comboRushDisplay.SetActive(true);
             ProceduralMap.Instance.StartComboRush();
             StartCoroutine(ComboRushCooldown());
         }
