@@ -11,8 +11,9 @@ public class GroundTrigger : MonoBehaviour
         if(!triggered && other.CompareTag("Player"))
         {
             triggered = true;
-            //GameManager will create a new ground
+            GameManager.Instance.CalculateComboRush();
             ProceduralMap.Instance.GenerateMap();
+
         }
     }
 

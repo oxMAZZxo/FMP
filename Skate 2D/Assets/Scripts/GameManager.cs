@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour
     [Header("In Game")]
     [SerializeField]private SkateboardController skateboardController;
     [SerializeField]private CinemachineVirtualCamera virtualCamera;
+    [Header("Combo Rush")]
+    [SerializeField]private GameSpeed comboRushGameSpeed;
+    [SerializeField,Range(1,100)]private float comboRushActivateChance;
     public GameSpeed currentGameSpeed {get; private set;}
     private int noOfTricks;
     private int noOfCombos;
@@ -182,6 +185,10 @@ public class GameManager : MonoBehaviour
         skateboardOldX = skateboardController.gameObject.transform.position.x;
     }
 
+    /// <summary>
+    /// Adds the provided points to the player's overall score, and may increase the game speed depending on the number of points provided
+    /// </summary>
+    /// <param name="value"></param>
     public void AddScore(int value)
     {
         if(value == 0) {return;}
@@ -194,6 +201,10 @@ public class GameManager : MonoBehaviour
         scoreDisplay.text = PrettyNumberString(score);
     }
 
+    /// <summary>
+    /// Increases game speed based on the given points
+    /// </summary>
+    /// <param name="value"></param>
     private void IncreaseSpeed(int value)
     {
         int noOfIncrements = value / scoreIncrementValue;
@@ -212,6 +223,9 @@ public class GameManager : MonoBehaviour
         clearMethod?.Invoke(null, null);
     }
 
+    /// <summary>
+    /// Updates currentGameSpeed based on current Velocity
+    /// </summary>
     private void CheckGameSpeed()
     {
         if(currentVelocity > 3 && currentVelocity < 4)
@@ -234,6 +248,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void CalculateComboRush()
+    {
+        if(currentGameSpeed >= comboRushGameSpeed && UnityEngine.Random.Range(0,100) <= comboRushActivateChance)
+        {
+            ProceduralMap.Instance.StartComboRush();
+        }
+    }
+
+    /// <summary>
+    /// Displays the current points added to the players score
+    /// </summary>
+    /// <param name="value"></param>
     private void DisplayPointsIncrement(int value)
     {
         int x = UnityEngine.Random.Range(0 + 200, Screen.width - 200);
@@ -261,8 +287,11 @@ public class GameManager : MonoBehaviour
         longestComboDisplay.text += longestCombo.ToString();
         distanceTravelledDisplayFinal.text += distanceTravelled.ToString("F1");
         gameOverPanel.SetActive(true);
+        gameHasStarted = false;
     }
 
+    /// <param name="value"></param>
+    /// <returns>Returns a shortened version of a number with the appropriate suffix</returns>
     private string PrettyNumberString(float value) 
     {
         if(value < 1000)
@@ -279,6 +308,9 @@ public class GameManager : MonoBehaviour
         return "***";
     }
     
+    /// <param name="value">The number you wish to reduce to specific decimal points</param>
+    /// <param name="decimalPoint">The decimal point you want to receive</param>
+    /// <returns>Returns a string float number with the provided decimal points, if any</returns>
     private string GetDecimalPoint(float value, int decimalPoint)
     {
         string temp = ""; temp += value.ToString()[0] + ".";
@@ -290,9 +322,11 @@ public class GameManager : MonoBehaviour
         return temp;
     }
 
+    /// <summary>
+    /// Resets the game to default positions and values
+    /// </summary>
     public void Reset()
     {
-        gameHasStarted = false;
         isGamePaused = false;
         distanceTravelledDisplay.text = "0";
         scoreDisplay.text = "0";

@@ -366,6 +366,7 @@ public class ProceduralMap : MonoBehaviour
     public void StartComboRush()
     {
         if(comboRush) {return;}
+        Debug.Log("Starting combo rush");
         comboRush = true;
         StartCoroutine(DisableComboRush());
     }

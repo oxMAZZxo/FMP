@@ -105,7 +105,7 @@ public class SkateboardController : MonoBehaviour
             jumpForceSlider.value = 0;
         }
 
-        if(!isGrounded)
+        if(!isGrounded && !isGrinding)
         {
             Quaternion rot = transform.rotation;
             Vector3 euler = rot.eulerAngles;

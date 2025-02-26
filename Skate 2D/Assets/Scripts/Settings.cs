@@ -9,6 +9,11 @@ public class Settings : MonoBehaviour
     [SerializeField]private Slider musicSlider;
     [SerializeField]private Slider sfxSlider;
 
+    void Start()
+    {
+        SaveSystem.LoadData(Application.persistentDataPath + ("/SettingsData.txt"));
+    }
+
     public void AdjustVolume(string parameter)
     {
         float volume = 0;
