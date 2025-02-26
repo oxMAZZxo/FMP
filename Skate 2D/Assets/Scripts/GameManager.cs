@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
     [Header("Combo Rush")]
     [SerializeField]private GameSpeed comboRushGameSpeed;
     [SerializeField,Range(1,100)]private float comboRushActivateChance;
+    [SerializeField,Range(10,60)]private float comboRushActivationCooldown;
+    private bool canActivateComboRush;
     public GameSpeed currentGameSpeed {get; private set;}
     private int noOfTricks;
     private int noOfCombos;
@@ -81,6 +83,7 @@ public class GameManager : MonoBehaviour
             virtualCamera.m_Lens.OrthographicSize = 5f;
         }
         gameHasStarted = false;
+        canActivateComboRush = true;
     }
 
     public void StartGame()
@@ -250,12 +253,19 @@ public class GameManager : MonoBehaviour
 
     public void CalculateComboRush()
     {
-        if(currentGameSpeed >= comboRushGameSpeed && UnityEngine.Random.Range(0,100) <= comboRushActivateChance)
+        if(canActivateComboRush && currentGameSpeed >= comboRushGameSpeed && UnityEngine.Random.Range(0,100) <= comboRushActivateChance)
         {
+            canActivateComboRush = false;
             ProceduralMap.Instance.StartComboRush();
+            StartCoroutine(ComboRushCooldown());
         }
     }
 
+    private IEnumerator ComboRushCooldown()
+    {
+        yield return new WaitForSeconds(comboRushActivationCooldown);
+        canActivateComboRush = true;
+    }
     /// <summary>
     /// Displays the current points added to the players score
     /// </summary>
@@ -288,6 +298,7 @@ public class GameManager : MonoBehaviour
         distanceTravelledDisplayFinal.text += distanceTravelled.ToString("F1");
         gameOverPanel.SetActive(true);
         gameHasStarted = false;
+        GameData.Instance.SetValues(score,longestCombo,distanceTravelled);
     }
 
     /// <param name="value"></param>
