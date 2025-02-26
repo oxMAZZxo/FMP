@@ -46,22 +46,6 @@ public class AudioManager : MonoBehaviour
             }
             soundIndexes.Add(sounds[i].name,i);
         }
-        // foreach(Sound sound in sounds)
-        // {
-        //     sound.source = gameObject.AddComponent<AudioSource>();
-        //     sound.source.clip = sound.clip;
-        //     sound.source.volume = sound.volume;
-        //     sound.source.pitch = sound.pitch;
-        //     sound.source.playOnAwake = false;
-        //     sound.source.loop = sound.loop;
-        //     sound.source.spatialBlend = sound.spatialBlend;
-        //     sound.source.playOnAwake = sound.playOnAwake;
-        //     sound.source.outputAudioMixerGroup = soundEffectMixer;
-        //     if(sound.isMusic)
-        //     {
-        //         sound.source.outputAudioMixerGroup = musicMixer;
-        //     }
-        // }
     }
 
     /// <summary>

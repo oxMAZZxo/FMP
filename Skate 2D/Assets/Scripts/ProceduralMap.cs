@@ -15,12 +15,15 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private bool generateObstacles;
     [SerializeField]private Obstacles[] obstacleTypes;
     [SerializeField]private LayerMask whatIsObstacle;
+    [Header("Combo Rush")]
+    [SerializeField]private bool comboRush = false;
+    [SerializeField,Range(1f,10f),Tooltip("How long can the comboRushLast")]private float comboRushDuration;
     [Header("Background Environment Generation")]
     [SerializeField]private bool generateEnvironment;
     [SerializeField]private GameObject[] environmentPrefabs;
     private Pool<GameObject> groundObjects;
     private Pool<Obstacle> obstacles;
-    
+    private Pool<Obstacle> grindableObstacles;
     private Collider2D previousGround;
     private Collider2D previousEnvironment;
     private SpawnAction currentSpawnAction = SpawnAction.Spawn;
@@ -70,11 +73,17 @@ public class ProceduralMap : MonoBehaviour
     private void InitObstaclePool()
     {
         List<Obstacle> temp = new List<Obstacle>();
+        List<Obstacle> grindableTemp = new List<Obstacle>();
         foreach(Obstacles obstacles in obstacleTypes)
         {
             foreach(Spawnable spawnable in obstacles.spawnables)
             {
-                temp.Add(new Obstacle(obstacles.type,spawnable,CreateMainObstaclePool(spawnable.prefab),CreateFollowUpObjectPool(spawnable.followObjs)));
+                Obstacle current = new Obstacle(obstacles.type,spawnable,CreateMainObstaclePool(spawnable.prefab),CreateFollowUpObjectPool(spawnable.followObjs));
+                temp.Add(current);
+                if(current.obstacleType == ObstacleType.Bench || current.obstacleType == ObstacleType.Rail)
+                {
+                    grindableTemp.Add(current);
+                }
             }
         }
         temp = temp.OrderBy(o => o.minimumAcceptableSpeedForObstacle).ToList();
@@ -82,6 +91,7 @@ public class ProceduralMap : MonoBehaviour
         lastMediumObstacleIndex = temp.FindLastIndex(o => o.minimumAcceptableSpeedForObstacle == GameSpeed.Medium);
         lastFastObstacleIndex = temp.FindLastIndex(o => o.minimumAcceptableSpeedForObstacle == GameSpeed.Fast);
         obstacles = new Pool<Obstacle>(temp);
+        grindableObstacles = new Pool<Obstacle>(grindableTemp);
     }
 
     private Pool<GameObject> CreateMainObstaclePool(GameObject prefab)
@@ -242,8 +252,10 @@ public class ProceduralMap : MonoBehaviour
             case GameSpeed.Fast: maxIndex = lastFastObstacleIndex; break;
             default: maxIndex = obstacles.length - 1; break;
         }
+        Pool<Obstacle> obstaclePoolToChooseFrom = obstacles;
+        if(comboRush) {obstaclePoolToChooseFrom = grindableObstacles; maxIndex = grindableObstacles.length - 1;}
 
-        Obstacle currentObstacleTypeChoice = obstacles.GetRandomObject(maxIndex + 1);
+        Obstacle currentObstacleTypeChoice = obstaclePoolToChooseFrom.GetRandomObject(maxIndex + 1);
         GameObject mainObstacle = currentObstacleTypeChoice.GetMainObstacle();
         
         Collider2D mainObstacleCollider = mainObstacle.GetComponent<Collider2D>();
@@ -268,25 +280,30 @@ public class ProceduralMap : MonoBehaviour
 
         currentSpawnAction = currentObstacleTypeChoice.spawnAction;
         
-        if(currentObstacleTypeChoice.noOfFollowObstacleObjs > 0 && GameManager.Instance.currentGameSpeed >= currentObstacleTypeChoice.minimumAcceptableGameSpeedForFollowUp
-        && UnityEngine.Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance)
+        if(currentObstacleTypeChoice.noOfFollowObstacleObjs > 0 && ((GameManager.Instance.currentGameSpeed >= currentObstacleTypeChoice.minimumAcceptableGameSpeedForFollowUp
+        && UnityEngine.Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance) || comboRush))
         {
-            GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(UnityEngine.Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs));
-            Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
-
-            secondObstacle.transform.position = Vector3.zero;
-            Physics2D.SyncTransforms();
-            if(!secondObstacle.activeInHierarchy) {secondObstacle.SetActive(true);}
-
-            obstacleBottomBoundsPosition = secondObstacleCollider.bounds.center.y - secondObstacleCollider.bounds.extents.y; 
-            
-            float mainToSecondSideToSideDistance = mainObstacleCollider.bounds.extents.x + secondObstacleCollider.bounds.extents.x;
-            
-            Vector2 secondObstaclePos = new Vector2(mainObstacle.transform.position.x + mainToSecondSideToSideDistance + currentObstacleTypeChoice.followUpObjectDistance, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
-            secondObstacle.transform.position = secondObstaclePos;
-            Physics2D.SyncTransforms();
-            currentSpawnAction = currentObstacleTypeChoice.followObjectSpawnAction;
+            CreateSecondObstacle(currentObstacleTypeChoice,mainObstacleCollider,groundCollider);
         }
+    }
+
+    private void CreateSecondObstacle(Obstacle currentObstacleTypeChoice,Collider2D mainObstacleCollider, Collider2D groundCollider)
+    {
+        GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(UnityEngine.Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs));
+        Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
+
+        secondObstacle.transform.position = Vector3.zero;
+        Physics2D.SyncTransforms();
+        if(!secondObstacle.activeInHierarchy) {secondObstacle.SetActive(true);}
+
+        float obstacleBottomBoundsPosition = secondObstacleCollider.bounds.center.y - secondObstacleCollider.bounds.extents.y; 
+        
+        float mainToSecondSideToSideDistance = mainObstacleCollider.bounds.extents.x + secondObstacleCollider.bounds.extents.x;
+        
+        Vector2 secondObstaclePos = new Vector2(mainObstacleCollider.transform.position.x + mainToSecondSideToSideDistance + currentObstacleTypeChoice.followUpObjectDistance, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
+        secondObstacle.transform.position = secondObstaclePos;
+        Physics2D.SyncTransforms();
+        currentSpawnAction = currentObstacleTypeChoice.followObjectSpawnAction;
     }
 
     private bool CheckForPreviousObjectNear(Collider2D obstacle,float checkRadius)
@@ -344,6 +361,19 @@ public class ProceduralMap : MonoBehaviour
         {
             if(gameObject.activeInHierarchy) {gameObject.SetActive(false);}
         }
+    }
+
+    public void StartComboRush()
+    {
+        if(comboRush) {return;}
+        comboRush = true;
+        StartCoroutine(DisableComboRush());
+    }
+
+    private IEnumerator DisableComboRush()
+    {
+        yield return new WaitForSeconds(comboRushDuration);
+        comboRush = false;
     }
 
     void OnEnable()
