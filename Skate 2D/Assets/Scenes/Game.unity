@@ -3016,6 +3016,7 @@ MonoBehaviour:
   cam: {fileID: 1727760425}
   mainMenuPanel: {fileID: 1955194285}
   gameplayPanel: {fileID: 103669459}
+  settingsPanel: {fileID: 1609449496}
 --- !u!1 &533708130
 GameObject:
   m_ObjectHideFlags: 0

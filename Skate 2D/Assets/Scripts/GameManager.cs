@@ -338,6 +338,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Reset()
     {
+        gameHasStarted = false;
         isGamePaused = false;
         distanceTravelledDisplay.text = "0";
         scoreDisplay.text = "0";
