@@ -1,3 +1,4 @@
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -11,7 +12,20 @@ public class Settings : MonoBehaviour
 
     void Start()
     {
-        SaveSystem.LoadData(Application.persistentDataPath + ("/SettingsData.txt"));
+        string data = SaveSystem.LoadData(Application.persistentDataPath + ("/SettingsData.txt"));
+        if(!string.IsNullOrEmpty(data) && !string.IsNullOrWhiteSpace(data))
+        {
+            DeconstructData(data);
+        }
+    }
+
+    private void DeconstructData(string data)
+    {
+        string[] temp = data.Split(',');
+
+        masterSlider.value = float.Parse(temp[0]);
+        musicSlider.value = float.Parse(temp[1]);
+        sfxSlider.value = float.Parse(temp[2]);
     }
 
     public void AdjustVolume(string parameter)
@@ -31,5 +45,6 @@ public class Settings : MonoBehaviour
         }
         if(volume < -10f) {volume = -80f;}
         mainMixer.SetFloat(parameter,volume);
+        SaveSystem.SaveData($"{masterSlider.value},{musicSlider.value},{sfxSlider.value}",Application.persistentDataPath + ("/SettingsData.txt"));
     }
 }
