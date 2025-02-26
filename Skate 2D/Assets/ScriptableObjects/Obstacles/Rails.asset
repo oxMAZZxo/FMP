@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Rails
   m_EditorClassIdentifier: 
   spawnables:
+  - {fileID: 11400000, guid: 48d98a62ad1a1584592b1f90a96f1586, type: 2}
   - {fileID: 11400000, guid: bfd73eb3b34c9964a8d001343b5595a2, type: 2}
-  type: 2
-  spawnAction: 0
+  type: 1
