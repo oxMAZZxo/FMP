@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField]private GameObject mainMenuPanel;
     [SerializeField]private GameObject gameplayPanel;
     [SerializeField]private GameObject settingsPanel;
+    [SerializeField]private TextMeshProUGUI highScoreDisplay;
     private GraphicRaycaster raycaster;
     private PointerEventData pointerEventData;
     private EventSystem eventSystem;
@@ -62,17 +64,25 @@ public class MenuManager : MonoBehaviour
     {
         mainMenuPanel.SetActive(true);
         gameplayPanel.SetActive(false);
+        OnMenuShown(sender, e);
+    }
+
+    private void OnMenuShown(object sender, EventArgs e)
+    {
+        highScoreDisplay.text = Utilities.PrettyNumberString(GameData.Instance.highScore);
     }
 
     void OnEnable()
     {
         TouchControls.touchEvent += OnTouch; 
         GameManager.reset += ResetMenu;
+        GameData.dataLoaded += OnMenuShown;
     }
 
     void OnDisable()
     {
         TouchControls.touchEvent -= OnTouch; 
         GameManager.reset -= ResetMenu;
+        GameData.dataLoaded -= OnMenuShown;
     }
 }

@@ -202,7 +202,7 @@ public class GameManager : MonoBehaviour
             IncreaseSpeed(value);
         }
         score +=value;
-        scoreDisplay.text = PrettyNumberString(score);
+        scoreDisplay.text = Utilities.PrettyNumberString(score);
     }
 
     /// <summary>
@@ -218,13 +218,6 @@ public class GameManager : MonoBehaviour
         if(currentVelocity > maxVelocity) {currentVelocity = maxVelocity;}
         skateboardController.SetMinVelocity(currentVelocity);    
         CheckGameSpeed();    
-    }
-    
-    public void ClearConsole()
-    {
-        Type logEntries = Type.GetType("UnityEditor.LogEntries, UnityEditor");
-        MethodInfo clearMethod = logEntries?.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public);
-        clearMethod?.Invoke(null, null);
     }
 
     /// <summary>
@@ -268,6 +261,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(comboRushActivationCooldown);
         canActivateComboRush = true;
     }
+    
     /// <summary>
     /// Displays the current points added to the players score
     /// </summary>
@@ -276,7 +270,7 @@ public class GameManager : MonoBehaviour
     {
         int x = UnityEngine.Random.Range(0 + 200, Screen.width - 200);
         int y = UnityEngine.Random.Range(0 + 400,Screen.height - 100);
-        addedScoreDisplay.text = "+" + PrettyNumberString(value);
+        addedScoreDisplay.text = "+" + Utilities.PrettyNumberString(value);
         addedScoreDisplay.gameObject.transform.position = new Vector3(x,y);
         addedScoreDisplay.gameObject.SetActive(true);
     }
@@ -301,38 +295,6 @@ public class GameManager : MonoBehaviour
         gameOverPanel.SetActive(true);
         gameHasStarted = false;
         GameData.Instance.SetValues(score,longestCombo,distanceTravelled);
-    }
-
-    /// <param name="value"></param>
-    /// <returns>Returns a shortened version of a number with the appropriate suffix</returns>
-    private string PrettyNumberString(float value) 
-    {
-        if(value < 1000)
-        {
-            return value.ToString();
-        }else if(value < 1000000)
-        {
-            return GetDecimalPoint((float)value / 1000,1) + "K";
-        }else if(value < 1000000000)
-        {
-            return GetDecimalPoint((float)value / 1000000,1) + "M";
-        }
-
-        return "***";
-    }
-    
-    /// <param name="value">The number you wish to reduce to specific decimal points</param>
-    /// <param name="decimalPoint">The decimal point you want to receive</param>
-    /// <returns>Returns a string float number with the provided decimal points, if any</returns>
-    private string GetDecimalPoint(float value, int decimalPoint)
-    {
-        string temp = ""; temp += value.ToString()[0] + ".";
-        for(int i = 2; i < value.ToString().Length; i ++)
-        {
-            if((i - 2) >= decimalPoint) {break;}
-            temp += value.ToString()[i];
-        }
-        return temp;
     }
 
     /// <summary>

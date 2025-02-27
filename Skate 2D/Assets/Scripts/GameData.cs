@@ -10,6 +10,7 @@ public class GameData : MonoBehaviour
     public float highScore {get; private set;}
     public float longestCombo {get; private set;}
     public float longestDistance {get; private set;}
+    public static event EventHandler dataLoaded;
 
     void Awake()
     {
@@ -28,6 +29,7 @@ public class GameData : MonoBehaviour
         if(!string.IsNullOrEmpty(data) && !string.IsNullOrWhiteSpace(data))
         {
             DeconstructData(data);
+            dataLoaded?.Invoke(this, EventArgs.Empty);
         }
     }
 
