@@ -261,7 +261,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(comboRushActivationCooldown);
         canActivateComboRush = true;
     }
-    
+
     /// <summary>
     /// Displays the current points added to the players score
     /// </summary>
@@ -287,6 +287,8 @@ public class GameManager : MonoBehaviour
     
     public void SessionEnded(int longestCombo, float distanceTravelled)
     {
+        StopCoroutine(ComboRushCooldown());
+        canActivateComboRush = true;
         scoreDisplayFinal.text += score.ToString();
         noOfTricksDisplay.text += noOfTricks.ToString();
         noOfCombosDisplay.text += noOfCombos.ToString();
@@ -302,6 +304,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Reset()
     {
+        StopCoroutine(ComboRushCooldown());
+        canActivateComboRush = true;
         gameHasStarted = false;
         isGamePaused = false;
         distanceTravelledDisplay.text = "0";
