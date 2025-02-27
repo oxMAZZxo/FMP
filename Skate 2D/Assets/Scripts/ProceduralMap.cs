@@ -342,6 +342,8 @@ public class ProceduralMap : MonoBehaviour
     {
         previousGround = startGround;
         DisableObstacles();
+        StopCoroutine(DisableComboRush());
+        comboRush = false;
     }
 
     private void DisableObstacles()
@@ -372,19 +374,40 @@ public class ProceduralMap : MonoBehaviour
         StartCoroutine(DisableComboRush());
     }
 
+    /// <summary>
+    /// Disables Combo Rush after the provided duration from the inspector
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator DisableComboRush()
     {
         yield return new WaitForSeconds(comboRushDuration);
         comboRush = false;
     }
 
+    private void OnGameSpeedChanged(object sender, EventArgs e)
+    {
+        float toAdd = 0;
+        switch(GameManager.Instance.currentGameSpeed)
+        {
+            case GameSpeed.Medium: toAdd = 0.25f; break;
+            case GameSpeed.Fast: toAdd = 0.5f; break;
+            case GameSpeed.SuperFast: toAdd = 1f; break;
+        }
+        foreach(Obstacle obstacle in obstacles.GetObjects())
+        {
+            obstacle.SetFollowUpDistance(obstacle.followUpObjectDistance + toAdd);
+        }
+    }
+
     void OnEnable()
     {
         GameManager.reset += ResetMap;
+        GameManager.gamespeedChanged += OnGameSpeedChanged;
     }
 
     void OnDisable()
     {
         GameManager.reset -= ResetMap;
+        GameManager.gamespeedChanged -= OnGameSpeedChanged;
     }
 }   

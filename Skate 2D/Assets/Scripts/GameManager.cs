@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     private float skateboardOldX;
     public bool gameHasStarted {get; private set;}
     public static event EventHandler<EventArgs> reset;
+    public static event EventHandler gamespeedChanged;
 
     void Awake()
     {
@@ -148,7 +149,6 @@ public class GameManager : MonoBehaviour
         if(currentVelocity >= maxVelocity) {return;}
         if(counter >= incrementationInterval)
         {
-            Debug.Log($"Increasing Velocity by {velocityToAdd}");
             currentVelocity += velocityToAdd;
             skateboardController.SetMinVelocity(currentVelocity);
             CheckGameSpeed();
@@ -225,6 +225,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void CheckGameSpeed()
     {
+        GameSpeed oldGameSpeed = currentGameSpeed;
         if(currentVelocity > 3 && currentVelocity < 4)
         { 
             currentGameSpeed = GameSpeed.Medium;
@@ -242,6 +243,11 @@ public class GameManager : MonoBehaviour
             currentGameSpeed = GameSpeed.SuperFast;
             scoreIncrementValue = 120;
             velocityIncrementPerScoreAdded = 0.05f;
+        }
+        if(oldGameSpeed != currentGameSpeed)
+        {
+            Debug.Log($"Game speed changed {currentGameSpeed.ToString()}");
+            gamespeedChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -313,6 +319,8 @@ public class GameManager : MonoBehaviour
         score = 0;
         noOfTricks = 0;
         noOfCombos = 0;
+        currentVelocity = startVelocity;
+        currentGameSpeed = GameSpeed.Slow;
         Vector3 newPos = new Vector3(0,0.735f,0);
         CinemachineFramingTransposer framingTransposer = virtualCamera.GetComponentInChildren<CinemachineFramingTransposer>();
         framingTransposer.m_TrackedObjectOffset.y = 0;
