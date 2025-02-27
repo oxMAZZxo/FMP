@@ -30,6 +30,7 @@ public class ProceduralMap : MonoBehaviour
     private int lastSlowObstacleIndex;
     private int lastMediumObstacleIndex;
     private int lastFastObstacleIndex;
+    private float distanceToAddToFollowUp;
 
     void Awake()
     {
@@ -301,7 +302,7 @@ public class ProceduralMap : MonoBehaviour
         
         float mainToSecondSideToSideDistance = mainObstacleCollider.bounds.extents.x + secondObstacleCollider.bounds.extents.x;
         
-        Vector2 secondObstaclePos = new Vector2(mainObstacleCollider.transform.position.x + mainToSecondSideToSideDistance + currentObstacleTypeChoice.followUpObjectDistance, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
+        Vector2 secondObstaclePos = new Vector2(mainObstacleCollider.transform.position.x + mainToSecondSideToSideDistance + currentObstacleTypeChoice.followUpObjectDistance + distanceToAddToFollowUp, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
         secondObstacle.transform.position = secondObstaclePos;
         Physics2D.SyncTransforms();
         currentSpawnAction = currentObstacleTypeChoice.followObjectSpawnAction;
@@ -344,6 +345,7 @@ public class ProceduralMap : MonoBehaviour
         DisableObstacles();
         StopCoroutine(DisableComboRush());
         comboRush = false;
+        distanceToAddToFollowUp = 0;
     }
 
     private void DisableObstacles()
@@ -386,16 +388,11 @@ public class ProceduralMap : MonoBehaviour
 
     private void OnGameSpeedChanged(object sender, EventArgs e)
     {
-        float toAdd = 0;
         switch(GameManager.Instance.currentGameSpeed)
         {
-            case GameSpeed.Medium: toAdd = 0.25f; break;
-            case GameSpeed.Fast: toAdd = 0.5f; break;
-            case GameSpeed.SuperFast: toAdd = 1f; break;
-        }
-        foreach(Obstacle obstacle in obstacles.GetObjects())
-        {
-            obstacle.SetFollowUpDistance(obstacle.followUpObjectDistance + toAdd);
+            case GameSpeed.Medium: distanceToAddToFollowUp = 0.25f; break;
+            case GameSpeed.Fast: distanceToAddToFollowUp = 0.5f; break;
+            case GameSpeed.SuperFast: distanceToAddToFollowUp = 1f; break;
         }
     }
 

@@ -12,7 +12,7 @@ public class Obstacle
     public SpawnAction followObjectSpawnAction {get;}
     public int noOfFollowObstacleObjs {get;}
     public int followObjectChance {get;}
-    public float followUpObjectDistance {get; private set;}
+    public float followUpObjectDistance {get;}
     public ObstacleType obstacleType {get;}
     // Holds a pool of instantiated gameobjects from the prefab obstacle
     private Pool<GameObject> mainObstaclePool;
@@ -60,6 +60,4 @@ public class Obstacle
     }
 
     public int GetCountOfFollowUpObstacles() {return followObstaclePools.Count;}
-
-    public void SetFollowUpDistance(float newDistance) {followUpObjectDistance = newDistance;}
 }
