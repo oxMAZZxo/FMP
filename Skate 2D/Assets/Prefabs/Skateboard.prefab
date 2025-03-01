@@ -4971,8 +4971,8 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.29471618
-        value: 0.054097682
+        time: 0
+        value: 0
         inSlope: 0.071380556
         outSlope: 0.071380556
         tangentMode: 0
@@ -4980,8 +4980,8 @@ TrailRenderer:
         inWeight: 0.46035808
         outWeight: 0.19740006
       - serializedVersion: 3
-        time: 0.74871826
-        value: 0.03
+        time: 0.39730835
+        value: 0.047242433
         inSlope: -0.031232247
         outSlope: -0.031232247
         tangentMode: 0
@@ -5127,12 +5127,12 @@ SpriteRenderer:
   m_SortingLayerID: -2128687969
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f8a8b5632bd17204b81c702da24afe88, type: 3}
+  m_Sprite: {fileID: -859734094, guid: f8a8b5632bd17204b81c702da24afe88, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -5239,7 +5239,7 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
-  groundedCheckRadius: 0.06
+  groundedCheckRadius: 0.07
   whatIsGrindable:
     serializedVersion: 2
     m_Bits: 128
@@ -5276,6 +5276,9 @@ MonoBehaviour:
     spatialBlend: 0
     source: {fileID: 0}
     loop: 1
+    isMusic: 0
+    playOnAwake: 0
+    preLoadAudioData: 0
   - name: Tail Snap
     clip: {fileID: 8300000, guid: ac29bdd1154114740b663d15b7526aad, type: 3}
     volume: 0.2
@@ -5283,20 +5286,29 @@ MonoBehaviour:
     spatialBlend: 0
     source: {fileID: 0}
     loop: 0
+    isMusic: 0
+    playOnAwake: 0
+    preLoadAudioData: 0
   - name: Wheel Spinning
     clip: {fileID: 8300000, guid: ff36dac9418c3ec47b4e91095f2334a8, type: 3}
-    volume: 0.015
+    volume: 0.01
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
     loop: 1
+    isMusic: 0
+    playOnAwake: 0
+    preLoadAudioData: 1
   - name: Landed
-    clip: {fileID: 8300000, guid: 4dc970faf790d2e469fefceaad5b7edf, type: 3}
-    volume: 0.1
+    clip: {fileID: 8300000, guid: f5a0a2144aa19db4a897a2721135f1c7, type: 3}
+    volume: 0.15
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
     loop: 0
+    isMusic: 0
+    playOnAwake: 0
+    preLoadAudioData: 0
   - name: Start Grind
     clip: {fileID: 8300000, guid: f69ccc5155cfd304bab6c78369a61cf7, type: 3}
     volume: 0.15
@@ -5304,6 +5316,9 @@ MonoBehaviour:
     spatialBlend: 0
     source: {fileID: 0}
     loop: 0
+    isMusic: 0
+    playOnAwake: 0
+    preLoadAudioData: 1
   - name: Mid Grind
     clip: {fileID: 8300000, guid: 2a8ff0b0d273f45449227aceb5500891, type: 3}
     volume: 0.1
@@ -5311,6 +5326,11 @@ MonoBehaviour:
     spatialBlend: 0
     source: {fileID: 0}
     loop: 1
+    isMusic: 0
+    playOnAwake: 0
+    preLoadAudioData: 1
+  soundEffectMixer: {fileID: -77537064835568211, guid: 5dade5c8bc7d30148bd5e3f218bcced7, type: 2}
+  musicMixer: {fileID: -1343513790223193653, guid: 5dade5c8bc7d30148bd5e3f218bcced7, type: 2}
 --- !u!1 &5135363455696468011
 GameObject:
   m_ObjectHideFlags: 0
@@ -5327,7 +5347,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6379696185914356566
 Transform:
   m_ObjectHideFlags: 0
@@ -6263,7 +6283,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 0
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -6316,7 +6336,7 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 4
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -19934,7 +19954,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7429917883689677829
 Transform:
   m_ObjectHideFlags: 0

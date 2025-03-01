@@ -34,9 +34,6 @@ public class MenuManager : MonoBehaviour
             GameManager.Instance.StartGame();
             mainMenuPanel.SetActive(false);
             gameplayPanel.SetActive(true);
-        }else
-        {
-            Debug.Log($"{objectHit.name}");
         }
     }
 

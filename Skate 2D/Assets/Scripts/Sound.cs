@@ -13,4 +13,5 @@ public class Sound
     public bool loop;
     [Tooltip("If unchecked, it will be assumed this sound is a sound effect.")]public bool isMusic;
     public bool playOnAwake;
+    [Tooltip("Enable this if you are going to be playing this sound in conjuction to other sounds and want to avoid lag spikes!")]public bool preLoadAudioData;
 }

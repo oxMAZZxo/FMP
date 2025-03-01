@@ -233,7 +233,7 @@ public class SkateboardController : MonoBehaviour
         if(isGrounded) {audioManager.Stop("Rolling");}
         rollingSmokeParticles.SetActive(false);
         audioManager.Play("Tail Snap");
-        // audioManager.Play("Wheel Spinning");
+        audioManager.Play("Wheel Spinning");
         rb.AddForce(new Vector2(0f, jumpForce));
     }
 

@@ -40,6 +40,11 @@ public class AudioManager : MonoBehaviour
             sounds[i].source.spatialBlend = sounds[i].spatialBlend;
             sounds[i].source.playOnAwake = sounds[i].playOnAwake;
             sounds[i].source.outputAudioMixerGroup = soundEffectMixer;
+            if(sounds[i].preLoadAudioData)
+            {
+                bool success = sounds[i].clip.LoadAudioData();
+                Debug.Log($"Sound {sounds[i].name} pre-loaded audio data successful? {success}");
+            }
             if(sounds[i].isMusic)
             {
                 sounds[i].source.outputAudioMixerGroup = musicMixer;
