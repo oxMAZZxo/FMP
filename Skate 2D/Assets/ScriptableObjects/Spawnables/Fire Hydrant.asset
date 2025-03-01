@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Fire Hydrant
   m_EditorClassIdentifier: 
   prefab: {fileID: 5007686268176904371, guid: a50f9fd20bd55ef4188b70ab0f368eac, type: 3}
-  checkRadius: 4
+  checkRadius: 6
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 1
   minimumAcceptableGameSpeedForFollowUp: 0

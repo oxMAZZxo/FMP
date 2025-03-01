@@ -1500,7 +1500,7 @@ MonoBehaviour:
   virtualCamera: {fileID: 825628981}
   comboRushGameSpeed: 1
   comboRushActivateChance: 15
-  comboRushActivationCooldown: 30
+  comboRushActivationCooldown: 45
   comboRushDuration: 15
   comboRushDisplay: {fileID: 1349704815}
 --- !u!4 &288360714
