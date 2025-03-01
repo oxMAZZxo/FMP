@@ -17,7 +17,6 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private LayerMask whatIsObstacle;
     [Header("Combo Rush")]
     [SerializeField]private bool comboRush = false;
-    [SerializeField,Range(1f,10f),Tooltip("How long can the comboRushLast")]private float comboRushDuration;
     [Header("Background Environment Generation")]
     [SerializeField]private bool generateEnvironment;
     [SerializeField]private GameObject[] environmentPrefabs;
@@ -319,7 +318,6 @@ public class ProceduralMap : MonoBehaviour
         {
             if(collider != obstacle)
             {
-                Debug.Log($"{obstacle.name} collides with {collider.name}");
                 return true;
             }
         }
@@ -341,10 +339,8 @@ public class ProceduralMap : MonoBehaviour
         {
             mainObstacle.transform.position = Vector3.zero;
             Physics2D.SyncTransforms();
-            Debug.Log($"Removing {mainObstacle.name} obstacle");
             return false;
         }
-        Debug.Log($"Moving {mainObstacle.name} obstacle");
         MoveObstacle(currentObstacle.checkRadius,mainObstacle,ground,obstacleBottomBoundsPosition);
         return true;
     }
@@ -359,7 +355,7 @@ public class ProceduralMap : MonoBehaviour
     {
         previousGround = startGround;
         DisableObstacles();
-        StopCoroutine(DisableComboRush());
+        StopCoroutine(DisableComboRush(0));
         comboRush = false;
         distanceToAddToFollowUp = 0;
     }
@@ -384,19 +380,19 @@ public class ProceduralMap : MonoBehaviour
         }
     }
 
-    public void StartComboRush()
+    public void StartComboRush(float comboRushDuration)
     {
         if(comboRush) {return;}
         Debug.Log("Starting combo rush");
         comboRush = true;
-        StartCoroutine(DisableComboRush());
+        StartCoroutine(DisableComboRush(comboRushDuration));
     }
 
     /// <summary>
     /// Disables Combo Rush after the provided duration from the inspector
     /// </summary>
     /// <returns></returns>
-    private IEnumerator DisableComboRush()
+    private IEnumerator DisableComboRush(float comboRushDuration)
     {
         yield return new WaitForSeconds(comboRushDuration);
         comboRush = false;

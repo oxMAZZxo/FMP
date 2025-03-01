@@ -37,8 +37,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]private CinemachineVirtualCamera virtualCamera;
     [Header("Combo Rush")]
     [SerializeField]private GameSpeed comboRushGameSpeed;
-    [SerializeField,Range(1,100)]private float comboRushActivateChance;
+    [SerializeField,Range(0,100)]private float comboRushActivateChance;
     [SerializeField,Range(10,60)]private float comboRushActivationCooldown;
+    [SerializeField,Range(5f,30f),Tooltip("How long can the combo rush last")]private float comboRushDuration;
     [SerializeField]private GameObject comboRushDisplay;
     private bool canActivateComboRush;
     public GameSpeed currentGameSpeed {get; private set;}
@@ -257,14 +258,16 @@ public class GameManager : MonoBehaviour
         {
             canActivateComboRush = false;
             comboRushDisplay.SetActive(true);
-            ProceduralMap.Instance.StartComboRush();
+            ProceduralMap.Instance.StartComboRush(comboRushDuration);
             StartCoroutine(ComboRushCooldown());
         }
     }
 
     private IEnumerator ComboRushCooldown()
     {
+        Debug.Log("Combo rush cooldown started");
         yield return new WaitForSeconds(comboRushActivationCooldown);
+        Debug.Log("Combo rush cooldown ended");
         canActivateComboRush = true;
     }
 

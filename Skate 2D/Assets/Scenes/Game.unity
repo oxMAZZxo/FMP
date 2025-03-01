@@ -1501,6 +1501,7 @@ MonoBehaviour:
   comboRushGameSpeed: 1
   comboRushActivateChance: 15
   comboRushActivationCooldown: 30
+  comboRushDuration: 15
   comboRushDisplay: {fileID: 1349704815}
 --- !u!4 &288360714
 Transform:
@@ -5154,7 +5155,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   comboRush: 0
-  comboRushDuration: 6
   generateEnvironment: 0
   environmentPrefabs:
   - {fileID: 817552318757949849, guid: 09f5a44a184dd16499f9721996c53cfd, type: 3}
