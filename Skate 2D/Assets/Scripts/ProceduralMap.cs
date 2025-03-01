@@ -274,15 +274,17 @@ public class ProceduralMap : MonoBehaviour
         mainObstacle.transform.position = obstacleSpawnPos;
         Physics2D.SyncTransforms();
         
-        if(CheckForPreviousObjectNear(mainObstacleCollider,currentObstacleTypeChoice.checkRadius))
+        bool obstacleInTheWay = CheckForPreviousObjectNear(mainObstacleCollider,currentObstacleTypeChoice.checkRadius);
+        bool secondObstacleElligible = true;
+        if(obstacleInTheWay)
         {
-            MoveObstacle(currentObstacleTypeChoice,mainObstacle,groundCollider,obstacleBottomBoundsPosition);
+            secondObstacleElligible = HandleObstacle(currentObstacleTypeChoice,mainObstacle,groundCollider,obstacleBottomBoundsPosition);
         }
 
         currentSpawnAction = currentObstacleTypeChoice.spawnAction;
         if(currentObstacleTypeChoice.obstacleType == ObstacleType.Unavoidable && GameManager.Instance.currentGameSpeed == GameSpeed.Slow) {currentSpawnAction = SpawnAction.Spawn;}
         
-        if(currentObstacleTypeChoice.noOfFollowObstacleObjs > 0 && ((GameManager.Instance.currentGameSpeed >= currentObstacleTypeChoice.minimumAcceptableGameSpeedForFollowUp
+        if(currentObstacleTypeChoice.noOfFollowObstacleObjs > 0 && secondObstacleElligible && ((GameManager.Instance.currentGameSpeed >= currentObstacleTypeChoice.minimumAcceptableGameSpeedForFollowUp
         && UnityEngine.Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance) || comboRush))
         {
             CreateSecondObstacle(currentObstacleTypeChoice,mainObstacleCollider,groundCollider);
@@ -317,6 +319,7 @@ public class ProceduralMap : MonoBehaviour
         {
             if(collider != obstacle)
             {
+                Debug.Log($"{obstacle.name} collides with {collider.name}");
                 return true;
             }
         }
@@ -324,19 +327,32 @@ public class ProceduralMap : MonoBehaviour
         return false;
     }  
 
-    private void MoveObstacle(Obstacle currentObstacle, GameObject mainObstacle, Collider2D ground, float obstacleBottomBoundsPosition)
+    /// <summary>
+    /// Function handles obstacle in terms of moving it or removing it.
+    /// </summary>
+    /// <param name="currentObstacle"></param>
+    /// <param name="mainObstacle"></param>
+    /// <param name="ground"></param>
+    /// <param name="obstacleBottomBoundsPosition"></param>
+    /// <returns>Returns true if obstacle moved forward, false if obstacle was reset</returns>
+    private bool HandleObstacle(Obstacle currentObstacle, GameObject mainObstacle, Collider2D ground, float obstacleBottomBoundsPosition)
     {
-        if(currentObstacle.obstacleType == ObstacleType.Unavoidable)
+        if(currentObstacle.obstacleType == ObstacleType.ManualPad || currentObstacle.obstacleType == ObstacleType.Unavoidable)
         {
             mainObstacle.transform.position = Vector3.zero;
             Physics2D.SyncTransforms();
-        }else
-        {
-            
-            mainObstacle.transform.position = new Vector2(ground.gameObject.transform.position.x + currentObstacle.checkRadius -1,ground.bounds.center.y + ground.bounds.extents.y - obstacleBottomBoundsPosition);;
-            Physics2D.SyncTransforms();
-
+            Debug.Log($"Removing {mainObstacle.name} obstacle");
+            return false;
         }
+        Debug.Log($"Moving {mainObstacle.name} obstacle");
+        MoveObstacle(currentObstacle.checkRadius,mainObstacle,ground,obstacleBottomBoundsPosition);
+        return true;
+    }
+
+    private void MoveObstacle(float checkRadius, GameObject mainObstacle, Collider2D ground, float obstacleBottomBoundsPosition)
+    {        
+        mainObstacle.transform.position = new Vector2(ground.gameObject.transform.position.x + checkRadius -1,ground.bounds.center.y + ground.bounds.extents.y - obstacleBottomBoundsPosition);
+        Physics2D.SyncTransforms();
     }
 
     private void ResetMap(object sender, EventArgs e)
