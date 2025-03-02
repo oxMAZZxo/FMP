@@ -209,7 +209,7 @@ public class SkateboardController : MonoBehaviour
             {
                 AudioManager.Global.Play("OnLandComboSFX");
             }
-            AudioManager.Global.ResetPitch("ComboSFX");
+            AudioManager.Global.ResetPitch("ComboGrindSFX");
         }
         isCombo = false;
         GameManager.Instance.AddScore(potentialPoints * comboCounter);
@@ -307,14 +307,15 @@ public class SkateboardController : MonoBehaviour
             isCombo = true;
             comboCounter++;
         }
-        if(isCombo && comboCounter > 1)
-        {
-            AudioManager.Global.Play("ComboSFX", 0.025f);
-        }
+        
         comboCounterDisplay.text = comboCounter.ToString();
         comboDisplay.gameObject.SetActive(true);
         comboCounterDisplay.gameObject.SetActive(true);
-        comboDisplay.text += trickPerformed;  
+        comboDisplay.text += trickPerformed;
+        if(isCombo && comboCounter > 3)
+        {
+            AudioManager.Global.Play("ComboGrindSFX", 0.025f);
+        }
     }
 
     /// <summary>
@@ -552,7 +553,7 @@ public class SkateboardController : MonoBehaviour
         comboCounterDisplay.gameObject.SetActive(false);
         comboDisplay.text = "";
         comboCounterDisplay.text = "";
-        comboCounter = 0;
+        comboCounter = 1;
         longestCombo = 0;
         isStopped = false;
         hasStarted = false;

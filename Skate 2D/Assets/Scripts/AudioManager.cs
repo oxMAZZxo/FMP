@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering.Universal;
 
 public class AudioManager : MonoBehaviour
 {
@@ -43,8 +44,7 @@ public class AudioManager : MonoBehaviour
             sounds[i].source.outputAudioMixerGroup = soundEffectMixer;
             if(sounds[i].preLoadAudioData)
             {
-                bool success = sounds[i].clip.LoadAudioData();
-                Debug.Log($"Sound {sounds[i].name} pre-loaded audio data successful? {success}");
+                sounds[i].clip.LoadAudioData();
             }
             if(sounds[i].isMusic)
             {
@@ -86,6 +86,7 @@ public class AudioManager : MonoBehaviour
     public void ResetPitch(string name)
     {
         Sound sound = FindSound(name);
+        if(sound == null) {return;}
         sound.source.pitch = sound.pitch;
     }
 
@@ -102,9 +103,7 @@ public class AudioManager : MonoBehaviour
     /// <param name="name">The name of the sound to stop playing</param>
     public void Stop(string name)
     {
-        if(!soundIndexes.ContainsKey(name)) {return;}
-        int soundIndex = soundIndexes[name];
-        Sound sound = sounds[soundIndex];
+        Sound sound = FindSound(name);
         if(sound == null) {return;}
         sound.source.Stop();
     }
@@ -129,9 +128,7 @@ public class AudioManager : MonoBehaviour
     /// <returns>True if the sound with the given name is playing</returns>
     public bool IsSoundPlaying(string name)
     {
-        if(!soundIndexes.ContainsKey(name)) {return false;}
-        int soundIndex = soundIndexes[name];
-        Sound sound = sounds[soundIndex];
+        Sound sound = FindSound(name);
         if(sound == null) {return false;}
         if(sound.source.isPlaying && !Global)
         {

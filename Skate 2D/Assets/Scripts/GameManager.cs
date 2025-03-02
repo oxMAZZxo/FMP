@@ -324,6 +324,8 @@ public class GameManager : MonoBehaviour
         noOfCombos = 0;
         currentVelocity = startVelocity;
         currentGameSpeed = GameSpeed.Slow;
+        scoreIncrementValue = 30;
+        velocityIncrementPerScoreAdded = 0.125f;
         Vector3 newPos = new Vector3(0,0.735f,0);
         CinemachineFramingTransposer framingTransposer = virtualCamera.GetComponentInChildren<CinemachineFramingTransposer>();
         framingTransposer.m_TrackedObjectOffset.y = 0;

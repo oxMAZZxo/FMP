@@ -759,9 +759,9 @@ MonoBehaviour:
     isMusic: 0
     playOnAwake: 0
     preLoadAudioData: 0
-  - name: ComboSFX
-    clip: {fileID: 8300000, guid: 2294f5a36043b9140a84ecd811a60e6d, type: 3}
-    volume: 0.15
+  - name: ComboGrindSFX
+    clip: {fileID: 8300000, guid: 3703ded44923bac44862a3020ef6a2c7, type: 3}
+    volume: 0.2
     pitch: 0.7
     spatialBlend: 0
     source: {fileID: 0}
@@ -1520,7 +1520,7 @@ MonoBehaviour:
   skateboardController: {fileID: 3088592964041584743}
   virtualCamera: {fileID: 825628981}
   comboRushGameSpeed: 1
-  comboRushActivateChance: 15
+  comboRushActivateChance: 25
   comboRushActivationCooldown: 45
   comboRushDuration: 15
   comboRushDisplay: {fileID: 1349704815}
@@ -10846,6 +10846,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2211915514947516166, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: sounds.Array.data[2].volume
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 3220706696710446752, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.5
