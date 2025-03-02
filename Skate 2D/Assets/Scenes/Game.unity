@@ -759,6 +759,26 @@ MonoBehaviour:
     isMusic: 0
     playOnAwake: 0
     preLoadAudioData: 0
+  - name: ComboSFX
+    clip: {fileID: 8300000, guid: 2294f5a36043b9140a84ecd811a60e6d, type: 3}
+    volume: 0.15
+    pitch: 0.7
+    spatialBlend: 0
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+    playOnAwake: 0
+    preLoadAudioData: 1
+  - name: OnLandComboSFX
+    clip: {fileID: 8300000, guid: cc7033f43665842489bf6770bd2f2df1, type: 3}
+    volume: 0.15
+    pitch: 1
+    spatialBlend: 0
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+    playOnAwake: 0
+    preLoadAudioData: 1
   soundEffectMixer: {fileID: -77537064835568211, guid: 5dade5c8bc7d30148bd5e3f218bcced7, type: 2}
   musicMixer: {fileID: -1343513790223193653, guid: 5dade5c8bc7d30148bd5e3f218bcced7, type: 2}
 --- !u!4 &93686973

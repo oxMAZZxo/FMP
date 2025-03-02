@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -204,6 +205,11 @@ public class SkateboardController : MonoBehaviour
         performedTrick = false;
         if(isCombo){
             GameManager.Instance.IncrementNumberOfCombos();
+            if(comboCounter > 3)
+            {
+                AudioManager.Global.Play("OnLandComboSFX");
+            }
+            AudioManager.Global.ResetPitch("ComboSFX");
         }
         isCombo = false;
         GameManager.Instance.AddScore(potentialPoints * comboCounter);
@@ -300,6 +306,10 @@ public class SkateboardController : MonoBehaviour
             trickPerformed = " + " + trickPerformed;
             isCombo = true;
             comboCounter++;
+        }
+        if(isCombo && comboCounter > 1)
+        {
+            AudioManager.Global.Play("ComboSFX", 0.025f);
         }
         comboCounterDisplay.text = comboCounter.ToString();
         comboDisplay.gameObject.SetActive(true);

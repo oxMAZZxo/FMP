@@ -5291,7 +5291,7 @@ MonoBehaviour:
     preLoadAudioData: 0
   - name: Wheel Spinning
     clip: {fileID: 8300000, guid: ff36dac9418c3ec47b4e91095f2334a8, type: 3}
-    volume: 0.01
+    volume: 0.015
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
@@ -5301,7 +5301,7 @@ MonoBehaviour:
     preLoadAudioData: 1
   - name: Landed
     clip: {fileID: 8300000, guid: f5a0a2144aa19db4a897a2721135f1c7, type: 3}
-    volume: 0.15
+    volume: 0.2
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
@@ -5311,7 +5311,7 @@ MonoBehaviour:
     preLoadAudioData: 0
   - name: Start Grind
     clip: {fileID: 8300000, guid: f69ccc5155cfd304bab6c78369a61cf7, type: 3}
-    volume: 0.15
+    volume: 0.25
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
@@ -5321,7 +5321,7 @@ MonoBehaviour:
     preLoadAudioData: 1
   - name: Mid Grind
     clip: {fileID: 8300000, guid: 2a8ff0b0d273f45449227aceb5500891, type: 3}
-    volume: 0.1
+    volume: 0.2
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}

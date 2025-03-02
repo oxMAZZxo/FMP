@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -59,9 +60,7 @@ public class AudioManager : MonoBehaviour
     /// <param name="name"></param>
     public void Play(string name)
     {
-        if(!soundIndexes.ContainsKey(name)) {return;}
-        int soundIndex = soundIndexes[name];
-        Sound sound = sounds[soundIndex];
+        Sound sound = FindSound(name);
         if(sound == null) {return;}
         if(sound.source.isPlaying && !Global)
         {
@@ -69,6 +68,32 @@ public class AudioManager : MonoBehaviour
             return;
         }
         sound.source.Play();
+    }
+
+    public void Play(string name, float alterPitch)
+    {
+        Sound sound = FindSound(name);
+        if(sound == null) {return;}
+        if(sound.source.isPlaying && !Global)
+        {
+            Debug.LogWarning("Sound is already playing");
+            return;
+        }
+        sound.source.pitch += alterPitch;
+        sound.source.Play();
+    }
+
+    public void ResetPitch(string name)
+    {
+        Sound sound = FindSound(name);
+        sound.source.pitch = sound.pitch;
+    }
+
+    private Sound FindSound(string name)
+    {
+        if(!soundIndexes.ContainsKey(name)) {return null;}
+        int soundIndex = soundIndexes[name];
+        return sounds[soundIndex];
     }
 
     /// <summary>
