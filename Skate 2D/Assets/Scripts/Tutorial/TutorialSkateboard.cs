@@ -13,7 +13,7 @@ public class TutorialSkateboard : MonoBehaviour
     private AudioManager audioManager;
     [Header("Movement & Tricks")]
     [SerializeField,Range(0.01f,1f)]private float movementSmoothing = 1f;
-    private float minVelocity = 3f;
+    [SerializeField,Range(1f,3f)]private float minVelocity = 2f;
     [SerializeField,Range(0.1f,1f)]private float minimumJumpForce = 1f;
     [SerializeField]private Transform groundCheck;
     [SerializeField]private LayerMask whatIsGround;
@@ -203,8 +203,11 @@ public class TutorialSkateboard : MonoBehaviour
         potentialPoints = 0;
         comboCounter = 1;
         rb.constraints = RigidbodyConstraints2D.None;
-        audioManager.Play("Landed");
-        audioManager.Play("Rolling");
+        if(TutorialManager.Instance.shouldRoll)
+        {
+            audioManager.Play("Landed");
+            audioManager.Play("Rolling");
+        }
         audioManager.Stop("Wheel Spinning");
         if(performedTrick) {TutorialCalculations();}
         performedTrick = false;
@@ -213,17 +216,33 @@ public class TutorialSkateboard : MonoBehaviour
 
     void TutorialCalculations()
     {
+        trickCounter ++;
+        trickCounterDisplay.text = $"{trickCounter}/5";
+        if(trickCounter == 5)
+        {
+            trickCounterDisplay.gameObject.SetActive(false);
+            trickCounterDisplay.text = "0/5";
+            trickCounter = 0;
+            DisableInput();
+            rb.velocity = Vector2.zero;
+        }else
+        {
+            return;
+        }
         if(TutorialManager.Instance.partA)
         {
-            trickCounter ++;
-            trickCounterDisplay.text = $"{trickCounter}/5";
-            if(trickCounter == 5)
-            {
-                trickCounterDisplay.gameObject.SetActive(false);
-                trickCounterDisplay.text = "0/5";
-                trickCounter = 0;
-                TutorialManager.Instance.StartPartB();
-            }
+            TutorialManager.Instance.StartPartB();
+            return;
+        }
+        if(TutorialManager.Instance.partB)
+        {
+            TutorialManager.Instance.StartPartC();
+            return;
+        }
+        if(TutorialManager.Instance.partC)
+        {
+            TutorialManager.Instance.StartPartD();
+            return;
         }
     }
 
@@ -258,8 +277,28 @@ public class TutorialSkateboard : MonoBehaviour
         
         isPerformingTrick = CalculateAction(e.swipeDirection,out trickPerformed);
         if(!isPerformingTrick) {return;}
+        StartCoroutine(DisplayTrick(trickPerformed));
+
+    }
+
+    private IEnumerator DisplayTrick(string trickPerformed)
+    {
+        if(performedTrick) 
+        {
+            isCombo = true;
+            comboCounter++;
+            trickPerformed = " + " + trickPerformed;
+        }
+        yield return new WaitForSeconds(0.12f);
+        if(disablingGrind) {trickPerformed = "";}
         comboDisplay.gameObject.SetActive(true);
         comboDisplay.text += trickPerformed;
+        disablingGrind = false;
+
+        if(isCombo && comboCounter > 3)
+        {
+            AudioManager.Global.Play("ComboGrindSFX", 0.025f);
+        }
     }
 
     /// <summary>
