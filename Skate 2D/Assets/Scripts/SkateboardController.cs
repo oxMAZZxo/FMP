@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -57,6 +59,7 @@ public class SkateboardController : MonoBehaviour
     private int pointsToBeAdded;
     private bool wasPaused;
     private float unPausedCounter;
+    private bool disablingGrind;
 
     void Start()
     {
@@ -257,7 +260,7 @@ public class SkateboardController : MonoBehaviour
         
         isPerformingTrick = CalculateAction(e.swipeDirection,out trickPerformed);
         if(!isPerformingTrick) {return;}
-        DisplayTrick(trickPerformed);
+        StartCoroutine(DisplayTrick(trickPerformed));
     }
 
     /// <summary>
@@ -299,19 +302,22 @@ public class SkateboardController : MonoBehaviour
         return isPerformingTrick;
     }
 
-    private void DisplayTrick(string trickPerformed)
+    private IEnumerator DisplayTrick(string trickPerformed)
     {
         if(performedTrick) 
         {
-            trickPerformed = " + " + trickPerformed;
             isCombo = true;
             comboCounter++;
+            trickPerformed = " + " + trickPerformed;
         }
-        
+        yield return new WaitForSeconds(0.12f);
+        if(disablingGrind) {trickPerformed = "";}
         comboCounterDisplay.text = comboCounter.ToString();
         comboDisplay.gameObject.SetActive(true);
         comboCounterDisplay.gameObject.SetActive(true);
         comboDisplay.text += trickPerformed;
+        disablingGrind = false;
+
         if(isCombo && comboCounter > 3)
         {
             AudioManager.Global.Play("ComboGrindSFX", 0.025f);
@@ -492,8 +498,8 @@ public class SkateboardController : MonoBehaviour
     {
         if(grindingTime < 0.1)
         {
-            Debug.Log($"Grinding time is less than 0.1, so removing addedPoints");
-            potentialPoints -= pointsToBeAdded;
+            disablingGrind = true;
+            RemoveGrind();
         }
         audioManager.Stop("Mid Grind");
         rb.constraints = RigidbodyConstraints2D.None;
@@ -504,6 +510,13 @@ public class SkateboardController : MonoBehaviour
         frontWheelSparks.SetActive(false);
         grindingTime = 0;
         grindingTrail.emitting = false;
+    }
+
+    private void RemoveGrind()
+    {
+        Debug.Log($"Grinding time is less than 0.1, so removing addedPoints");
+        potentialPoints -= pointsToBeAdded;
+        comboCounter -= 1;
     }
 
     private void OnTouchStarted(object sender, EventArgs e)
