@@ -243,7 +243,7 @@ public class SkateboardController : MonoBehaviour
         rb.AddForce(new Vector2(0f, jumpForce));
     }
 
-    private void Action(object sender, TouchEventArgs e)
+    private void OnInputAction(object sender, TouchEventArgs e)
     {
         currentTouchTime = e.touchTime + 1;
         if(currentTouchTime > 2f) {currentTouchTime = 2f;}
@@ -530,7 +530,7 @@ public class SkateboardController : MonoBehaviour
 
     private void EnableInput()
     {
-        TouchControls.touchEvent += Action;
+        TouchControls.touchEvent += OnInputAction;
         TouchControls.touchStarted += OnTouchStarted;
         TouchControls.touchEnded += OnTouchEnded;
     }
@@ -542,7 +542,7 @@ public class SkateboardController : MonoBehaviour
 
     private void DisableInput()
     {
-        TouchControls.touchEvent -= Action;
+        TouchControls.touchEvent -= OnInputAction;
         TouchControls.touchStarted -= OnTouchStarted;
         TouchControls.touchEnded -= OnTouchEnded;
     }
@@ -555,6 +555,7 @@ public class SkateboardController : MonoBehaviour
         comboCounterDisplay.text = "";
         comboCounter = 1;
         longestCombo = 0;
+        performedTrick = false;
         isStopped = false;
         hasStarted = false;
         wasPaused = false;
