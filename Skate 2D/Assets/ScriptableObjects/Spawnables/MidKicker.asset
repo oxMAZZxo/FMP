@@ -23,6 +23,5 @@ MonoBehaviour:
   - {fileID: 92716275532174656, guid: 3f6de5f808079914ea531f296bca70f4, type: 3}
   - {fileID: 1806635548657032485, guid: 24fb1b38565ca244d9dfbe62ef40c15b, type: 3}
   - {fileID: 8824112578606911030, guid: 9c95ad6087aff034287587e3af311a7e, type: 3}
-  - {fileID: 5007686268176904371, guid: a50f9fd20bd55ef4188b70ab0f368eac, type: 3}
   followObjectChance: 100
   followUpObjectDistance: 1.3

@@ -20,6 +20,7 @@ MonoBehaviour:
   followObjectSpawnAction: 1
   followObjs:
   - {fileID: 8824112578606911030, guid: 9c95ad6087aff034287587e3af311a7e, type: 3}
+  - {fileID: 92716275532174656, guid: 3f6de5f808079914ea531f296bca70f4, type: 3}
   - {fileID: 5311905092920326621, guid: 3ac5148dbafa2df42a9348d6a9159893, type: 3}
   - {fileID: 1919092897518032947, guid: 4dc9f7c63a6f2e748aeb48e2ea282904, type: 3}
   followObjectChance: 100
