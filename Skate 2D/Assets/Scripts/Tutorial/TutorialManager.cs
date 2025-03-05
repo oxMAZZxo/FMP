@@ -16,6 +16,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]private GameObject partBPanel;
     [SerializeField]private GameObject partCPanel;
     [SerializeField]private GameObject partDPanel;
+    [SerializeField]private GameObject trickCounterDisplay;
+    [SerializeField]private GameObject wellDoneDisplay;
     
     void Awake()
     {
@@ -38,7 +40,6 @@ public class TutorialManager : MonoBehaviour
 
     public void StartPartB()
     {
-        inOutPanel.SetActive(true);
         partA = false;
         partB = true;
         StartCoroutine(SwitchPanel(partAPanel,partBPanel));
@@ -46,7 +47,6 @@ public class TutorialManager : MonoBehaviour
 
     public void StartPartC()
     {
-        inOutPanel.SetActive(true);
         partB = false;
         partC = true;
         StartCoroutine(SwitchPanel(partBPanel,partCPanel));
@@ -54,7 +54,6 @@ public class TutorialManager : MonoBehaviour
 
     public void StartPartD()
     {
-        inOutPanel.SetActive(true);
         partC = false;
         partD = true;
         StartCoroutine(SwitchPanel(partCPanel,partDPanel));
@@ -62,8 +61,13 @@ public class TutorialManager : MonoBehaviour
 
     private IEnumerator SwitchPanel(GameObject from, GameObject to)
     {
-        yield return new WaitForSeconds(0.2f);
         from.SetActive(false);
+        trickCounterDisplay.SetActive(false);
+        wellDoneDisplay.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        inOutPanel.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        wellDoneDisplay.SetActive(false);
         to.SetActive(true);
     }
 }
