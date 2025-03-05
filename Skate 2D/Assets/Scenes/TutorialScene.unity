@@ -2423,6 +2423,8 @@ MonoBehaviour:
   partDPanel: {fileID: 1231128177}
   trickCounterDisplay: {fileID: 1456921272}
   wellDoneDisplay: {fileID: 319094272}
+  skateboard: {fileID: 3220706696684753917}
+  virtualCamera: {fileID: 85380387}
 --- !u!1 &923918613
 GameObject:
   m_ObjectHideFlags: 0
@@ -4457,7 +4459,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1310009955
 RectTransform:
   m_ObjectHideFlags: 0
