@@ -12,6 +12,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField]private GameObject mainMenuPanel;
     [SerializeField]private GameObject gameplayPanel;
     [SerializeField]private GameObject settingsPanel;
+    [SerializeField]private GameObject tutorialPanel;
     [SerializeField]private TextMeshProUGUI highScoreDisplay;
     private GraphicRaycaster raycaster;
     private PointerEventData pointerEventData;
@@ -27,10 +28,15 @@ public class MenuManager : MonoBehaviour
     {
         if(GameManager.Instance.gameHasStarted || settingsPanel.activeInHierarchy) {return;}
         GameObject objectHit;
-        bool UI = CheckForButton(e.startPosition,out objectHit);
+        bool UI = CheckForUI(e.startPosition,out objectHit);
 
         if(!UI)
         {
+            if(!GameData.Instance.tutorialCompleted)
+            {
+                tutorialPanel.SetActive(true);
+                return;
+            }
             GameManager.Instance.StartGame();
             mainMenuPanel.SetActive(false);
             gameplayPanel.SetActive(true);
@@ -42,7 +48,7 @@ public class MenuManager : MonoBehaviour
     /// </summary>
     /// <param name="mousePos"></param>
     /// <returns>Returns true if an interactable UI element has been clicked</returns>
-    private bool CheckForButton(Vector2 mousePos, out GameObject uiObject)
+    private bool CheckForUI(Vector2 mousePos, out GameObject uiObject)
     {
         uiObject = null;
         pointerEventData = new PointerEventData(eventSystem);

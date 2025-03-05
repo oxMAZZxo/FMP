@@ -10,6 +10,7 @@ public class GameData : MonoBehaviour
     public float highScore {get; private set;}
     public float longestCombo {get; private set;}
     public float longestDistance {get; private set;}
+    public bool tutorialCompleted {get; private set;}
     public static event EventHandler dataLoaded;
 
     void Awake()
@@ -17,6 +18,7 @@ public class GameData : MonoBehaviour
         if(Instance != this && Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(this);
         }else
         {
             Destroy(gameObject);
@@ -40,9 +42,15 @@ public class GameData : MonoBehaviour
         highScore = float.Parse(temp[0]);
         longestCombo = float.Parse(temp[1]);
         longestDistance = float.Parse(temp[2]);
+        try{
+            tutorialCompleted = Convert.ToBoolean(temp[3]);
+        }catch(IndexOutOfRangeException)
+        {
+            tutorialCompleted = false;
+        }
     }
 
-    public void SetValues(float newHighScore, float newLongestCombo, float newLongestDistance)
+    public void SetStats(float newHighScore, float newLongestCombo, float newLongestDistance)
     {
         bool change = false;
         if(newHighScore > highScore) {highScore = newHighScore; change = true;}
@@ -50,8 +58,18 @@ public class GameData : MonoBehaviour
         if(newLongestDistance > longestDistance) {longestDistance = newLongestDistance; change = true;}
         if(change)
         {
-            string message = SaveSystem.SaveData($"{highScore},{longestCombo},{longestDistance}",Application.persistentDataPath + ("/GameData.txt"));
+            string message = SaveSystem.SaveData($"{highScore},{longestCombo},{longestDistance},{tutorialCompleted}",Application.persistentDataPath + ("/GameData.txt"));
             Debug.Log(message);
         }
     }
+
+    public void SetTutorialCompleted(bool newValue)
+    {
+        if(newValue == tutorialCompleted) {return;}
+        tutorialCompleted = true;
+        string message = SaveSystem.SaveData($"{highScore},{longestCombo},{longestDistance},{tutorialCompleted}",Application.persistentDataPath + ("/GameData.txt"));
+        Debug.Log(message);
+    }
+
+
 }

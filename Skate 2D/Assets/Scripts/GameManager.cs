@@ -305,7 +305,7 @@ public class GameManager : MonoBehaviour
         distanceTravelledDisplayFinal.text += distanceTravelled.ToString("F1");
         gameOverPanel.SetActive(true);
         gameHasStarted = false;
-        GameData.Instance.SetValues(score,longestCombo,distanceTravelled);
+        GameData.Instance.SetStats(score,longestCombo,distanceTravelled);
     }
 
     /// <summary>
