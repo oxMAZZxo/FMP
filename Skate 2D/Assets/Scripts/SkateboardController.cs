@@ -320,7 +320,7 @@ public class SkateboardController : MonoBehaviour
         comboDisplay.text += trickPerformed;
         disablingGrind = false;
 
-        if(isCombo && comboCounter > 2)
+        if(isCombo && comboCounter > 1)
         {
             AudioManager.Global.Play("ComboGrindSFX", 0.025f);
         }
