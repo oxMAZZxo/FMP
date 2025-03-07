@@ -55,6 +55,8 @@ public class TutorialSkateboard : MonoBehaviour
     private float unPausedCounter;
     private bool disablingGrind;
     private int trickCounter;
+    private bool grindNeeded;
+    private bool wasGrind;
 
     void Start()
     {
@@ -205,9 +207,9 @@ public class TutorialSkateboard : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.None;
         if(TutorialManager.Instance.shouldRoll)
         {
-            audioManager.Play("Landed");
             audioManager.Play("Rolling");
         }
+        audioManager.Play("Landed");
         audioManager.Stop("Wheel Spinning");
         if(performedTrick) {TutorialCalculations();}
         performedTrick = false;
@@ -215,7 +217,17 @@ public class TutorialSkateboard : MonoBehaviour
     }
 
     void TutorialCalculations()
-    {
+    {   
+        if(grindNeeded)
+        {
+            if(wasGrind)
+            {
+                wasGrind = false;
+            }else
+            {
+                return;
+            }
+        }
         trickCounter ++;
         trickCounterDisplay.text = $"{trickCounter}/5";
         if(trickCounter == 5)
@@ -232,10 +244,12 @@ public class TutorialSkateboard : MonoBehaviour
         if(TutorialManager.Instance.partA)
         {
             TutorialManager.Instance.StartPartB();
+            grindNeeded = true;
             return;
         }
         if(TutorialManager.Instance.partB)
         {
+            audioManager.Stop("Rolling");
             TutorialManager.Instance.StartPartC();
             return;
         }
@@ -417,6 +431,7 @@ public class TutorialSkateboard : MonoBehaviour
     private string ShowGrindAnimation(SwipeDirection swipeDirection)
     {
         string trickOutput = "";
+        wasGrind = true;
         animator.SetBool("reverseOut",false);
         reverseOut = false;
         switch (swipeDirection)
