@@ -222,8 +222,8 @@ public class SkateboardController : MonoBehaviour
         comboCounter = 1;
         comboDisplay.gameObject.SetActive(false);
         comboCounterDisplay.gameObject.SetActive(false);
-        comboDisplay.text = "";
         comboCounterDisplay.text = "";
+        comboDisplay.text = "";
         rb.constraints = RigidbodyConstraints2D.None;
         audioManager.Play("Landed");
         audioManager.Play("Rolling");

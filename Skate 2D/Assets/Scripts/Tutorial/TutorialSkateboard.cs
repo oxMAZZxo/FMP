@@ -33,6 +33,8 @@ public class TutorialSkateboard : MonoBehaviour
     [SerializeField]private Slider jumpForceSlider;
     [SerializeField]private TextMeshProUGUI trickCounterDisplay;
     [SerializeField]private TextMeshProUGUI comboDisplay;
+    [SerializeField]private TextMeshProUGUI comboCounterDisplay;
+    private Animator comboCounterAnimator;
     [Header("Visualisation")]
     public bool drawGizmos;
     private bool isGrounded;
@@ -57,6 +59,7 @@ public class TutorialSkateboard : MonoBehaviour
     private int trickCounter;
     private bool grindNeeded;
     private bool wasGrind;
+    private bool comboNeeded;
 
     void Start()
     {
@@ -65,6 +68,7 @@ public class TutorialSkateboard : MonoBehaviour
         myCollider = GetComponent<Collider2D>();
         audioManager = GetComponent<AudioManager>();
         jumpForceSlider.maxValue = 1f;
+        comboCounterAnimator = comboCounterDisplay.gameObject.GetComponent<Animator>();
     }
 
     void FixedUpdate()
@@ -191,20 +195,13 @@ public class TutorialSkateboard : MonoBehaviour
         frontSmokeParticles.SetActive(true);
         backSmokeParticles.SetActive(true);
         rollingSmokeParticles.SetActive(true);
-        if(isCombo){
-            if(comboCounter > 3)
-            {
-                AudioManager.Global.Play("OnLandComboSFX");
-            }
-            AudioManager.Global.ResetPitch("ComboGrindSFX");
-        }
-        isCombo = false;
         comboDisplay.gameObject.SetActive(false);
         comboDisplay.text = "";
         if(comboCounter > longestCombo) { longestCombo = comboCounter;}
         potentialPoints = 0;
-        comboCounter = 1;
         rb.constraints = RigidbodyConstraints2D.None;
+        comboCounterDisplay.gameObject.SetActive(false);
+        comboCounterDisplay.text = "";
         if(TutorialManager.Instance.shouldRoll)
         {
             audioManager.Play("Rolling");
@@ -213,34 +210,57 @@ public class TutorialSkateboard : MonoBehaviour
         audioManager.Stop("Wheel Spinning");
         if(performedTrick) {TutorialCalculations();}
         performedTrick = false;
-        
+        isCombo = false;
+        comboCounter = 1;
     }
 
     void TutorialCalculations()
     {   
-        if(grindNeeded)
+        if(grindNeeded && !wasGrind)
         {
-            if(wasGrind)
+            return;
+        }else
+        {
+            wasGrind = false;
+        }
+        if(comboNeeded && (!isCombo || comboCounter < 3))
+        {
+            Debug.Log($"Is combo: {isCombo.ToString()} - Trick Counter: {trickCounter}");
+            Debug.Log("Trick counter is less than 3 or is not combo, not counting tricks");
+            return;
+        }
+        
+        trickCounter ++;
+        if(TutorialManager.Instance.partC)
+        {
+            trickCounterDisplay.text = $"{trickCounter}/2";
+            if(trickCounter == 2)
             {
-                wasGrind = false;
+                trickCounterDisplay.gameObject.SetActive(false);
+                trickCounterDisplay.text = "0/2";
+                trickCounter = 0;
+                DisableInput();
+                rb.velocity = Vector2.zero;
             }else
             {
                 return;
-            }
-        }
-        trickCounter ++;
-        trickCounterDisplay.text = $"{trickCounter}/5";
-        if(trickCounter == 5)
+            } 
+        }else
         {
+            trickCounterDisplay.text = $"{trickCounter}/5";
+            if(trickCounter == 5)
+            {
             trickCounterDisplay.gameObject.SetActive(false);
             trickCounterDisplay.text = "0/5";
             trickCounter = 0;
             DisableInput();
             rb.velocity = Vector2.zero;
-        }else
-        {
-            return;
+            }else
+            {
+                return;
+            }   
         }
+        
         if(TutorialManager.Instance.partA)
         {
             TutorialManager.Instance.StartPartB();
@@ -250,11 +270,15 @@ public class TutorialSkateboard : MonoBehaviour
         if(TutorialManager.Instance.partB)
         {
             audioManager.Stop("Rolling");
+            grindNeeded = false;
+            comboNeeded = true;
             TutorialManager.Instance.StartPartC();
             return;
         }
         if(TutorialManager.Instance.partC)
         {
+            audioManager.Stop("Rolling");
+            comboNeeded = false;
             TutorialManager.Instance.StartPartD();
             return;
         }
@@ -302,13 +326,15 @@ public class TutorialSkateboard : MonoBehaviour
             isCombo = true;
             comboCounter++;
             trickPerformed = " + " + trickPerformed;
+            comboCounterAnimator.SetTrigger("comboAdded");
         }
         yield return new WaitForSeconds(0.12f);
         if(disablingGrind) {trickPerformed = "";}
         comboDisplay.gameObject.SetActive(true);
+        comboCounterDisplay.text = comboCounter.ToString();
+        comboCounterDisplay.gameObject.SetActive(true);
         comboDisplay.text += trickPerformed;
         disablingGrind = false;
-
         if(isCombo && comboCounter > 3)
         {
             AudioManager.Global.Play("ComboGrindSFX", 0.025f);

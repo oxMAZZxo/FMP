@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using TMPro;
 using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
@@ -21,6 +22,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]private GameObject wellDoneDisplay;
     [SerializeField]private Transform skateboard;
     [SerializeField]private CinemachineVirtualCamera virtualCamera;
+    private TutorialSkateboard tutorialSkateboard;
 
     
     void Awake()
@@ -36,6 +38,7 @@ public class TutorialManager : MonoBehaviour
 
     void Start()
     {
+        tutorialSkateboard = skateboard.GetComponent<TutorialSkateboard>();
         partA = true;
         partB = false;
         partC = false;
@@ -57,6 +60,8 @@ public class TutorialManager : MonoBehaviour
     {
         partB = false;
         partC = true;        
+        TextMeshProUGUI trickCounter = trickCounterDisplay.GetComponent<TextMeshProUGUI>();
+        trickCounter.text = "0/2";
         StartCoroutine(SwitchPanel(partBPanel,partCPanel));
     }
 
@@ -79,6 +84,7 @@ public class TutorialManager : MonoBehaviour
         virtualCamera.enabled = false;
         wellDoneDisplay.SetActive(false);
         skateboard.position = new Vector2(0,skateboard.position.y + 0.2f);
+        tutorialSkateboard.DisableInput();
         to.SetActive(true);
         virtualCamera.enabled = true;
     }
