@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI longestComboDisplay;
     [SerializeField]private TextMeshProUGUI distanceTravelledDisplayFinal;
     [SerializeField]private TextMeshProUGUI addedScoreDisplay;
+    [SerializeField]private Animator comboCounterDisplayAnimator;
     [Header("Start Game Velocity Fields")]
     [SerializeField,Range(1f,5f)]private float startVelocity = 1f;
     [SerializeField,Range(1f,10f)]private float maxVelocity = 1f;
@@ -284,6 +285,11 @@ public class GameManager : MonoBehaviour
         addedScoreDisplay.gameObject.SetActive(true);
     }
 
+    private void OnSkateboardComboAdded(object sender, EventArgs e)
+    {
+        comboCounterDisplayAnimator.SetTrigger("comboAdded");
+    }
+
     public void IncrementNumberOfTricks()
     {
         noOfTricks ++;
@@ -358,6 +364,16 @@ public class GameManager : MonoBehaviour
     {
         isGamePaused = false;
         skateboardController.Resume();
+    }
+
+    void OnEnable()
+    {
+        SkateboardController.comboIncremented += OnSkateboardComboAdded;
+    }
+
+    void OnDisable()
+    {
+        SkateboardController.comboIncremented -= OnSkateboardComboAdded;
     }
 }
 

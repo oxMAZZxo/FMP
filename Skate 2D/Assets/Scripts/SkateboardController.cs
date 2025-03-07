@@ -40,6 +40,7 @@ public class SkateboardController : MonoBehaviour
     [SerializeField]private TextMeshProUGUI comboCounterDisplay;
     [Header("Visualisation")]
     public bool drawGizmos;
+    public static event EventHandler comboIncremented; 
     private bool isGrounded;
     private float currentTouchTime;
     private bool isGrinding;
@@ -309,6 +310,7 @@ public class SkateboardController : MonoBehaviour
             isCombo = true;
             comboCounter++;
             trickPerformed = " + " + trickPerformed;
+            comboIncremented?.Invoke(this, EventArgs.Empty);
         }
         yield return new WaitForSeconds(0.12f);
         if(disablingGrind) {trickPerformed = "";}
@@ -318,7 +320,7 @@ public class SkateboardController : MonoBehaviour
         comboDisplay.text += trickPerformed;
         disablingGrind = false;
 
-        if(isCombo && comboCounter > 3)
+        if(isCombo && comboCounter > 2)
         {
             AudioManager.Global.Play("ComboGrindSFX", 0.025f);
         }
