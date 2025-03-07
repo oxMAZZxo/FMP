@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class TutorialManager : MonoBehaviour
     public bool partD{get; private set;}
     public bool shouldRoll {get; private set;}
     public bool isPaused {get; private set;}
+    [SerializeField]private GameObject tutorialPanel;
+    [SerializeField]private GameObject tutorialFinishedPanel;
     [SerializeField]private GameObject inOutPanel;
     [SerializeField]private GameObject partAPanel;
     [SerializeField]private GameObject partBPanel;
@@ -20,8 +23,12 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]private GameObject partDPanel;
     [SerializeField]private GameObject trickCounterDisplay;
     [SerializeField]private GameObject wellDoneDisplay;
+    [SerializeField]private GameObject jumpBar;
+    [SerializeField]private GameObject pauseButton;
     [SerializeField]private Transform skateboard;
     [SerializeField]private CinemachineVirtualCamera virtualCamera;
+    [SerializeField]private GameObject[] grindables;
+    [SerializeField]private GameObject[] unavoidables;
     private TutorialSkateboard tutorialSkateboard;
 
     
@@ -49,6 +56,15 @@ public class TutorialManager : MonoBehaviour
         partDPanel.SetActive(false);
     }
 
+    /// <summary>
+    /// If the tutorial has already been completed, allow the player to pause the tutorial.
+    /// </summary>
+    public void CheckToEnablePauseButton()
+    {
+        if(!GameData.Instance.tutorialCompleted){return;}
+        pauseButton.SetActive(true);
+    }
+
     public void StartPartB()
     {
         partA = false;
@@ -69,7 +85,23 @@ public class TutorialManager : MonoBehaviour
     {
         partC = false;
         partD = true;
+        TextMeshProUGUI trickCounter = trickCounterDisplay.GetComponent<TextMeshProUGUI>();
+        trickCounter.text = "0/5";
         StartCoroutine(SwitchPanel(partCPanel,partDPanel));
+        StartCoroutine(ActivePartDObjects());
+    }
+
+    public void TutorialFinished()
+    {
+        GameData.Instance.SetTutorialCompleted(true);
+        StartCoroutine(SwitchPanel(tutorialPanel,tutorialFinishedPanel));    
+    }
+
+    private IEnumerator ActivePartDObjects()
+    {
+        yield return new WaitForSeconds(1.5f);
+        jumpBar.SetActive(true);
+        SwitchObstacles();
     }
 
     private IEnumerator SwitchPanel(GameObject from, GameObject to)
@@ -81,6 +113,7 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         inOutPanel.SetActive(true);
         yield return new WaitForSeconds(0.5f);
+        pauseButton.SetActive(false);
         virtualCamera.enabled = false;
         wellDoneDisplay.SetActive(false);
         skateboard.position = new Vector2(0,skateboard.position.y + 0.2f);
@@ -92,5 +125,34 @@ public class TutorialManager : MonoBehaviour
     public void PlayerRoll(bool value)
     {
         shouldRoll = value;
+    }
+
+    private void SwitchObstacles()
+    {
+        foreach(GameObject current in grindables)
+        {
+            current.SetActive(false);
+        }
+        foreach(GameObject current in unavoidables)
+        {
+            current.SetActive(true);
+        }
+    }
+
+    public void ReturnToMainMenu()
+    {
+        SceneManager.LoadScene("Game");
+    }
+
+    public void Pause()
+    {
+        isPaused = true;
+        tutorialSkateboard.Pause();
+    }
+
+    public void Resume()
+    {
+        isPaused = false;
+        tutorialSkateboard.Resume();
     }
 }

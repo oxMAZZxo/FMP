@@ -206,7 +206,10 @@ public class TutorialSkateboard : MonoBehaviour
         {
             audioManager.Play("Rolling");
         }
-        audioManager.Play("Landed");
+        if(TutorialManager.Instance.shouldRoll || TutorialManager.Instance.partA)
+        {
+            audioManager.Play("Landed");
+        }
         audioManager.Stop("Wheel Spinning");
         if(performedTrick) {TutorialCalculations();}
         performedTrick = false;
@@ -223,21 +226,19 @@ public class TutorialSkateboard : MonoBehaviour
         {
             wasGrind = false;
         }
-        if(comboNeeded && (!isCombo || comboCounter < 3))
+        if(comboNeeded && (!isCombo || comboCounter < 4))
         {
-            Debug.Log($"Is combo: {isCombo.ToString()} - Trick Counter: {trickCounter}");
-            Debug.Log("Trick counter is less than 3 or is not combo, not counting tricks");
             return;
         }
-        
-        trickCounter ++;
+
         if(TutorialManager.Instance.partC)
         {
-            trickCounterDisplay.text = $"{trickCounter}/2";
-            if(trickCounter == 2)
+            IncreaseTrickCounter();
+            trickCounterDisplay.text = $"{trickCounter}/3";
+            if(trickCounter == 3)
             {
                 trickCounterDisplay.gameObject.SetActive(false);
-                trickCounterDisplay.text = "0/2";
+                trickCounterDisplay.text = "0/3";
                 trickCounter = 0;
                 DisableInput();
                 rb.velocity = Vector2.zero;
@@ -247,14 +248,16 @@ public class TutorialSkateboard : MonoBehaviour
             } 
         }else
         {
+            if(!TutorialManager.Instance.partD) {IncreaseTrickCounter();}
             trickCounterDisplay.text = $"{trickCounter}/5";
+
             if(trickCounter == 5)
             {
-            trickCounterDisplay.gameObject.SetActive(false);
-            trickCounterDisplay.text = "0/5";
-            trickCounter = 0;
-            DisableInput();
-            rb.velocity = Vector2.zero;
+                trickCounterDisplay.gameObject.SetActive(false);
+                trickCounterDisplay.text = "0/5";
+                trickCounter = 0;
+                DisableInput();
+                rb.velocity = Vector2.zero;
             }else
             {
                 return;
@@ -282,6 +285,16 @@ public class TutorialSkateboard : MonoBehaviour
             TutorialManager.Instance.StartPartD();
             return;
         }
+        if(TutorialManager.Instance.partD)
+        {
+            TutorialManager.Instance.TutorialFinished();
+            audioManager.Stop("Rolling");
+        }
+    }
+
+    public void IncreaseTrickCounter()
+    {
+        trickCounter++;
     }
 
     public void Jump()
@@ -331,13 +344,12 @@ public class TutorialSkateboard : MonoBehaviour
         yield return new WaitForSeconds(0.12f);
         if(disablingGrind) {trickPerformed = "";}
         comboDisplay.gameObject.SetActive(true);
-        comboCounterDisplay.text = comboCounter.ToString();
-        comboCounterDisplay.gameObject.SetActive(true);
         comboDisplay.text += trickPerformed;
         disablingGrind = false;
-        if(isCombo && comboCounter > 3)
+        if(TutorialManager.Instance.partC)
         {
-            AudioManager.Global.Play("ComboGrindSFX", 0.025f);
+            comboCounterDisplay.text = comboCounter.ToString();
+            comboCounterDisplay.gameObject.SetActive(true);
         }
     }
 
