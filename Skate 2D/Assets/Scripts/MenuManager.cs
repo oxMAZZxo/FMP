@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
@@ -17,11 +19,14 @@ public class MenuManager : MonoBehaviour
     private GraphicRaycaster raycaster;
     private PointerEventData pointerEventData;
     private EventSystem eventSystem;
+    private AsyncOperation asyncLoad;
+    private bool sceneLoadDone;
 
     void Start()
     {
         raycaster = GetComponent<GraphicRaycaster>();
         eventSystem = EventSystem.current;
+        StartCoroutine(LoadTutorialScene());
     }
 
     private void OnTouch(object sender, TouchEventArgs e)
@@ -73,6 +78,34 @@ public class MenuManager : MonoBehaviour
     private void OnMenuShown(object sender, EventArgs e)
     {
         highScoreDisplay.text = Utilities.PrettyNumberString(GameData.Instance.highScore);
+    }
+
+    private IEnumerator LoadTutorialScene()
+    {
+        asyncLoad = SceneManager.LoadSceneAsync("TutorialScene");
+        asyncLoad.allowSceneActivation = false;
+        sceneLoadDone = false;
+        //wait until the asynchronous scene fully loads
+        while (!sceneLoadDone)
+        {
+            //scene has loaded as much as possible,
+            // the last 10% can't be multi-threaded
+            if (asyncLoad.progress >= 0.9f)
+            {
+                sceneLoadDone = true;
+            }
+            yield return null;
+        }
+    }
+
+    public void StartTutorialMap()
+    {
+        asyncLoad.allowSceneActivation = true;
+    }
+
+    public void PlayClickSoundEffect()
+    {
+        AudioManager.Global.Play("ButtonClick");
     }
 
     void OnEnable()

@@ -31,7 +31,9 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]private GameObject[] unavoidables;
     private TutorialSkateboard tutorialSkateboard;
 
-    
+    private AsyncOperation asyncLoad;
+    private bool sceneLoadDone;
+
     void Awake()
     {
         if(Instance == null && Instance != this)
@@ -54,6 +56,7 @@ public class TutorialManager : MonoBehaviour
         partBPanel.SetActive(false);
         partCPanel.SetActive(false);
         partDPanel.SetActive(false);
+        StartCoroutine(LoadGameScene());
     }
 
     /// <summary>
@@ -77,7 +80,7 @@ public class TutorialManager : MonoBehaviour
         partB = false;
         partC = true;        
         TextMeshProUGUI trickCounter = trickCounterDisplay.GetComponent<TextMeshProUGUI>();
-        trickCounter.text = "0/2";
+        trickCounter.text = "0/3";
         StartCoroutine(SwitchPanel(partBPanel,partCPanel));
     }
 
@@ -139,11 +142,6 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    public void ReturnToMainMenu()
-    {
-        SceneManager.LoadScene("Game");
-    }
-
     public void Pause()
     {
         isPaused = true;
@@ -154,5 +152,33 @@ public class TutorialManager : MonoBehaviour
     {
         isPaused = false;
         tutorialSkateboard.Resume();
+    }
+
+    private IEnumerator LoadGameScene()
+    {
+        asyncLoad = SceneManager.LoadSceneAsync("Game");
+        asyncLoad.allowSceneActivation = false;
+        sceneLoadDone = false;
+        //wait until the asynchronous scene fully loads
+        while (!sceneLoadDone)
+        {
+            //scene has loaded as much as possible,
+            // the last 10% can't be multi-threaded
+            if (asyncLoad.progress >= 0.9f)
+            {
+                sceneLoadDone = true;
+            }
+            yield return null;
+        }
+    }
+
+    public void StartGameScene()
+    {
+        asyncLoad.allowSceneActivation = true;
+    }
+
+    public void PlayClickSoundEffect()
+    {
+        AudioManager.Global.Play("ButtonClick");
     }
 }

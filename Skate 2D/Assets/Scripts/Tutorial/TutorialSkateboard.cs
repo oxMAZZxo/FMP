@@ -60,6 +60,7 @@ public class TutorialSkateboard : MonoBehaviour
     private bool grindNeeded;
     private bool wasGrind;
     private bool comboNeeded;
+    private bool canPlaySounds;
 
     void Start()
     {
@@ -206,7 +207,7 @@ public class TutorialSkateboard : MonoBehaviour
         {
             audioManager.Play("Rolling");
         }
-        if(TutorialManager.Instance.shouldRoll || TutorialManager.Instance.partA)
+        if((TutorialManager.Instance.shouldRoll || TutorialManager.Instance.partA) && canPlaySounds)
         {
             audioManager.Play("Landed");
         }
@@ -263,7 +264,7 @@ public class TutorialSkateboard : MonoBehaviour
                 return;
             }   
         }
-        
+        canPlaySounds = false;
         if(TutorialManager.Instance.partA)
         {
             TutorialManager.Instance.StartPartB();
@@ -290,6 +291,11 @@ public class TutorialSkateboard : MonoBehaviour
             TutorialManager.Instance.TutorialFinished();
             audioManager.Stop("Rolling");
         }
+    }
+
+    public void EnableSounds()
+    {
+        canPlaySounds = true;
     }
 
     public void IncreaseTrickCounter()
