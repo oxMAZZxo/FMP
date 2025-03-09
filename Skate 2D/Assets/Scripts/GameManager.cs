@@ -78,14 +78,14 @@ public class GameManager : MonoBehaviour
         screenOrientation = Screen.orientation;
         Application.targetFrameRate = 144;
         
-        if(SystemInfo.deviceType == DeviceType.Desktop) {return;}
-        if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
-        {
-            virtualCamera.m_Lens.OrthographicSize = 1.2f;
-        }else
-        {
-            virtualCamera.m_Lens.OrthographicSize = 5f;
-        }
+        // if(SystemInfo.deviceType == DeviceType.Desktop) {return;}
+        // if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
+        // {
+        //     virtualCamera.m_Lens.OrthographicSize = 1.2f;
+        // }else
+        // {
+        //     virtualCamera.m_Lens.OrthographicSize = 5f;
+        // }
         gameHasStarted = false;
         canActivateComboRush = true;
     }
@@ -111,9 +111,9 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator VM_ZoomOutAnim()
     {
-        while(virtualCamera.m_Lens.OrthographicSize < 2.3f)
+        while(virtualCamera.m_Lens.FieldOfView < 30f)
         {
-            virtualCamera.m_Lens.OrthographicSize += Time.deltaTime;
+            virtualCamera.m_Lens.FieldOfView += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
     }
@@ -171,13 +171,13 @@ public class GameManager : MonoBehaviour
         if(screenOrientationChanged)
         {
             screenOrientationChanged = false;
-            if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
-            {
-                virtualCamera.m_Lens.OrthographicSize = 2.3f;
-            }else
-            {
-                virtualCamera.m_Lens.OrthographicSize = 5f;
-            }
+            // if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
+            // {
+            //     virtualCamera.m_Lens.OrthographicSize = 2.3f;
+            // }else
+            // {
+            //     virtualCamera.m_Lens.OrthographicSize = 5f;
+            // }
         }
 
         if(!gameHasStarted || isGamePaused) {return;}
@@ -335,7 +335,8 @@ public class GameManager : MonoBehaviour
         Vector3 newPos = new Vector3(0,0.735f,0);
         CinemachineFramingTransposer framingTransposer = virtualCamera.GetComponentInChildren<CinemachineFramingTransposer>();
         framingTransposer.m_TrackedObjectOffset.y = 0;
-        virtualCamera.m_Lens.OrthographicSize = 1.2f;
+        // virtualCamera.m_Lens.OrthographicSize = 1.2f;
+        virtualCamera.m_Lens.FieldOfView = 15f;
         skateboardController.transform.position = newPos;
         reset?.Invoke(this, EventArgs.Empty);
         virtualCamera.enabled = false;

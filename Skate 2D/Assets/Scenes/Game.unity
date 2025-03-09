@@ -4060,7 +4060,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 3088592964041584742}
   m_Lens:
-    FieldOfView: 60
+    FieldOfView: 15
     OrthographicSize: 1.3
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -9114,8 +9114,8 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
-  orthographic: 1
+  field of view: 15
+  orthographic: 0
   orthographic size: 1.3
   m_Depth: -1
   m_CullingMask:
