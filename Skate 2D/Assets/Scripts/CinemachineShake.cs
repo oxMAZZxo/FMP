@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class CinemachineShake : MonoBehaviour
 {
-    CinemachineVirtualCamera vm;
-    CinemachineBasicMultiChannelPerlin vmPerlin;
+    [SerializeField,Range(0.05f,5f)]private float defaultCameraShake = 0.5f;
+    private CinemachineVirtualCamera vm;
+    private CinemachineBasicMultiChannelPerlin vmPerlin;
 
     void Start()
     {
@@ -16,7 +17,7 @@ public class CinemachineShake : MonoBehaviour
 
     public void ShakeCamera(float disableTimerInSeconds, float multiplier = 1)
     {
-        vmPerlin.m_AmplitudeGain = 0.5f * multiplier;
+        vmPerlin.m_AmplitudeGain = defaultCameraShake * multiplier;
         StartCoroutine(DisableShake(disableTimerInSeconds));
     }
 

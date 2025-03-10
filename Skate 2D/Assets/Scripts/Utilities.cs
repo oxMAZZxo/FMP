@@ -21,28 +21,50 @@ public class Utilities
         if(value < 1000)
         {
             return value.ToString();
-        }else if(value < 1000000)
+        }else if(value < 100000) //less than 100k
         {
             return GetDecimalPoint((float)value / 1000,1) + "K";
-        }else if(value < 1000000000)
+        }else if(value < 1000000) //less than 1m
+        {
+            return GetDecimalPoint((float)value / 1000,0) + "K";
+        }else if(value < 100000000) //less than 100m
         {
             return GetDecimalPoint((float)value / 1000000,1) + "M";
+        }else if(value < 1000000000) //less than 1b
+        {
+            return GetDecimalPoint((float)value / 1000000,0) + "M";
         }
 
         return "***";
     }
 
-        /// <param name="value">The number you wish to reduce to specific decimal points</param>
-    /// <param name="decimalPoint">The decimal point you want to receive</param>
+    /// <param name="value">The number you wish to reduce to specific decimal points</param>
+    /// <param name="maxDecimalPoint">The decimal point you want to receive</param>
     /// <returns>Returns a string float number with the provided decimal points, if any</returns>
-    private static string GetDecimalPoint(float value, int decimalPoint)
+    public static string GetDecimalPoint(float value, int maxDecimalPoint)
     {
-        string temp = ""; temp += value.ToString()[0] + ".";
-        for(int i = 2; i < value.ToString().Length; i ++)
+        string floatValue = "";
+        int significantFigureCounter;
+        //loop to find all the significant figures, before the decimal
+        for(significantFigureCounter = 0; significantFigureCounter < value.ToString().Length; significantFigureCounter++)
         {
-            if((i - 2) >= decimalPoint) {break;}
-            temp += value.ToString()[i];
+            if(value.ToString()[significantFigureCounter] == '.') {break;}
+            floatValue += value.ToString()[significantFigureCounter];
         }
-        return temp;
+        if(maxDecimalPoint == 0)
+        {
+            return floatValue;
+        }
+        floatValue += '.';
+        //loop to get all the decimal figures
+        for(int j = significantFigureCounter +1; j < value.ToString().Length; j++)
+        {
+            if(j - (significantFigureCounter + 1) == maxDecimalPoint) //if the current counter - the offset we added is equal to the decimal point then we can terminate
+            {
+                break;
+            }
+            floatValue += value.ToString()[j];
+        }
+        return floatValue;
     }
 }
