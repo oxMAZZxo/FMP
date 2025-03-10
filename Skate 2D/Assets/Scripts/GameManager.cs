@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]private SkateboardController skateboardController;
     [SerializeField]private CinemachineVirtualCamera virtualCamera;
     [SerializeField,Range(0.1f,2f)]private float cameraShakeTime;
+    [SerializeField]private TextMeshProUGUI comboDisplay;
+    [SerializeField]private TextMeshProUGUI comboCounterDisplay;
     private CinemachineShake vmShake;
     [Header("Combo Rush")]
     [SerializeField]private GameSpeed comboRushGameSpeed;
@@ -169,7 +171,7 @@ public class GameManager : MonoBehaviour
     /// Adds the provided points to the player's overall score, and may increase the game speed depending on the number of points provided
     /// </summary>
     /// <param name="value"></param>
-    public void AddScore(int value)
+    private void AddScore(int value)
     {
         if(value == 0) {return;}
         DisplayPointsIncrement(value);
@@ -259,23 +261,37 @@ public class GameManager : MonoBehaviour
         addedScoreDisplay.gameObject.SetActive(true);
     }
 
-    private void OnSkateboardComboAdded(object sender, EventArgs e)
+    private void OnSkateboardTrickPerformed(object sender, SkateboardTrickPerformedEventArgs e)
     {
-        comboCounterDisplayAnimator.SetTrigger("comboAdded");
+        if(e.isCombo)
+        {
+            comboCounterDisplayAnimator.SetTrigger("comboAdded");
+            noOfCombos++;
+        }
+        noOfTricks ++;
+        comboCounterDisplay.text = e.comboCount.ToString();;
+        comboDisplay.gameObject.SetActive(true);
+        comboCounterDisplay.gameObject.SetActive(true);
+        comboDisplay.text += e.trickName;
+        if(e.isCombo && e.comboCount > 1)
+        {
+            AudioManager.Global.Play("ComboSFX", 0.025f);
+        }
     }
 
-    public void IncrementNumberOfTricks()
+    public void DecrementNumberOfTricks()
     {
-        noOfTricks ++;
+        noOfTricks --;
     }
     
-    public void IncrementNumberOfCombos()
+    private void OnSkateboardLanded(object sender, SkateboardLandEventArgs e)
     {
-        noOfCombos++;
-    }
-    
-    private void OnSkateboardLanded(object sender, EventArgs e)
-    {
+        AddScore(e.score);
+        comboDisplay.gameObject.SetActive(false);
+        comboCounterDisplay.gameObject.SetActive(false);
+        comboCounterDisplay.text = "";
+        comboDisplay.text = "";
+        AudioManager.Global.ResetPitch("ComboSFX");
         vmShake.ShakeCamera(cameraShakeTime);
     }
 
@@ -319,6 +335,10 @@ public class GameManager : MonoBehaviour
         skateboardController.transform.position = newPos;
         reset?.Invoke(this, EventArgs.Empty);
         virtualCamera.enabled = false;
+        comboDisplay.gameObject.SetActive(false);
+        comboCounterDisplay.gameObject.SetActive(false);
+        comboDisplay.text = "";
+        comboCounterDisplay.text = "";
         Invoke("DisableGameOverPanel",0.3f);
         skateboardController.Reset();
     }
@@ -348,14 +368,14 @@ public class GameManager : MonoBehaviour
 
     void OnEnable()
     {
-        SkateboardController.comboIncremented += OnSkateboardComboAdded;
-        skateboardController.skateboardLanded += OnSkateboardLanded;
+        SkateboardController.trickPerformed += OnSkateboardTrickPerformed;
+        SkateboardController.skateboardLanded += OnSkateboardLanded;
     }
 
     void OnDisable()
     {
-        SkateboardController.comboIncremented -= OnSkateboardComboAdded;
-        skateboardController.skateboardLanded -= OnSkateboardLanded;
+        SkateboardController.trickPerformed -= OnSkateboardTrickPerformed;
+        SkateboardController.skateboardLanded -= OnSkateboardLanded;
     }
 }
 

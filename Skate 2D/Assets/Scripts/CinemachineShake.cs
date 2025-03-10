@@ -16,7 +16,7 @@ public class CinemachineShake : MonoBehaviour
 
     public void ShakeCamera(float disableTimerInSeconds, float multiplier = 1)
     {
-        vmPerlin.m_AmplitudeGain = 1 * multiplier;
+        vmPerlin.m_AmplitudeGain = 0.5f * multiplier;
         StartCoroutine(DisableShake(disableTimerInSeconds));
     }
 

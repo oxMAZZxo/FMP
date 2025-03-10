@@ -702,7 +702,7 @@ MonoBehaviour:
     isMusic: 0
     playOnAwake: 0
     preLoadAudioData: 0
-  - name: ComboGrindSFX
+  - name: ComboSFX
     clip: {fileID: 8300000, guid: 3703ded44923bac44862a3020ef6a2c7, type: 3}
     volume: 0.2
     pitch: 0.7
@@ -1463,7 +1463,9 @@ MonoBehaviour:
   incrementationInterval: 10
   skateboardController: {fileID: 3088592964041584743}
   virtualCamera: {fileID: 825628981}
-  cameraShakeTime: 1
+  cameraShakeTime: 0.2
+  comboDisplay: {fileID: 586017632}
+  comboCounterDisplay: {fileID: 1387938532}
   comboRushGameSpeed: 1
   comboRushActivateChance: 25
   comboRushActivationCooldown: 45
@@ -4041,6 +4043,7 @@ GameObject:
   m_Component:
   - component: {fileID: 825628982}
   - component: {fileID: 825628981}
+  - component: {fileID: 825628983}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -4103,6 +4106,18 @@ Transform:
   - {fileID: 1155369782}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &825628983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825628980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b27dd7b6d5f1bc4b8749f7cdf3200f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &849790004
 GameObject:
   m_ObjectHideFlags: 0

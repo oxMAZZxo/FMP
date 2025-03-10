@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator),typeof(Rigidbody2D),typeof(Collider2D))]
@@ -36,11 +37,8 @@ public class SkateboardController : MonoBehaviour
     [SerializeField]private TrailRenderer grindingTrail;
     [Header("UI")]
     [SerializeField]private Slider jumpForceSlider;
-    [SerializeField]private TextMeshProUGUI comboDisplay;
-    [SerializeField]private TextMeshProUGUI comboCounterDisplay;
     [Header("Visualisation")]
     public bool drawGizmos;
-    public static event EventHandler comboIncremented; 
     private bool isGrounded;
     private float currentTouchTime;
     private bool isGrinding;
@@ -61,7 +59,9 @@ public class SkateboardController : MonoBehaviour
     private bool wasPaused;
     private float unPausedCounter;
     private bool disablingGrind;
-    public event EventHandler skateboardLanded;
+    private float jumpHeight;
+    public static event EventHandler<SkateboardTrickPerformedEventArgs> trickPerformed; 
+    public static event EventHandler<SkateboardLandEventArgs> skateboardLanded;
 
     void Start()
     {
@@ -193,8 +193,8 @@ public class SkateboardController : MonoBehaviour
 				isGrounded = true;
 				if (!wasGrounded) //meaning you just landed
 				{
+                    skateboardLanded?.Invoke(this, new SkateboardLandEventArgs(potentialPoints * comboCounter,comboCounter, jumpHeight));
                     OnLand();
-                    skateboardLanded?.Invoke(this, EventArgs.Empty);
                 }
 			}
 		}
@@ -209,23 +209,13 @@ public class SkateboardController : MonoBehaviour
         backSmokeParticles.SetActive(true);
         rollingSmokeParticles.SetActive(true);
         performedTrick = false;
-        if(isCombo){
-            GameManager.Instance.IncrementNumberOfCombos();
-            if(comboCounter > 3)
-            {
-                AudioManager.Global.Play("OnLandComboSFX");
-            }
-            AudioManager.Global.ResetPitch("ComboGrindSFX");
+        if(isCombo && comboCounter > 3){
+            AudioManager.Global.Play("OnLandComboSFX");
         }
         isCombo = false;
-        GameManager.Instance.AddScore(potentialPoints * comboCounter);
         if(comboCounter > longestCombo) { longestCombo = comboCounter;}
         potentialPoints = 0;
         comboCounter = 1;
-        comboDisplay.gameObject.SetActive(false);
-        comboCounterDisplay.gameObject.SetActive(false);
-        comboCounterDisplay.text = "";
-        comboDisplay.text = "";
         rb.constraints = RigidbodyConstraints2D.None;
         audioManager.Play("Landed");
         audioManager.Play("Rolling");
@@ -305,27 +295,22 @@ public class SkateboardController : MonoBehaviour
         return isPerformingTrick;
     }
 
-    private IEnumerator DisplayTrick(string trickPerformed)
+    private IEnumerator DisplayTrick(string trickPerformedOutput)
     {
         if(performedTrick) 
         {
             isCombo = true;
             comboCounter++;
-            trickPerformed = " + " + trickPerformed;
-            comboIncremented?.Invoke(this, EventArgs.Empty);
+            trickPerformedOutput = " + " + trickPerformedOutput;
         }
         yield return new WaitForSeconds(0.12f);
-        if(disablingGrind) {trickPerformed = "";}
-        comboCounterDisplay.text = comboCounter.ToString();
-        comboDisplay.gameObject.SetActive(true);
-        comboCounterDisplay.gameObject.SetActive(true);
-        comboDisplay.text += trickPerformed;
-        disablingGrind = false;
-
-        if(isCombo && comboCounter > 1)
+        if(disablingGrind) 
         {
-            AudioManager.Global.Play("ComboGrindSFX", 0.025f);
+            disablingGrind = false;
+            Debug.Log("Grind was invalid");
+            yield break;
         }
+        trickPerformed?.Invoke(this, new SkateboardTrickPerformedEventArgs(trickPerformedOutput,comboCounter,isCombo));
     }
 
     /// <summary>
@@ -374,7 +359,6 @@ public class SkateboardController : MonoBehaviour
         {
             trickOutput = "Nollie " + trickOutput;
         }
-        GameManager.Instance.IncrementNumberOfTricks();     
         return trickOutput;
     }
 
@@ -436,7 +420,6 @@ public class SkateboardController : MonoBehaviour
         }
         potentialPoints += pointsToBeAdded;
         animator.SetBool("isGrinding",true);   
-        GameManager.Instance.IncrementNumberOfTricks();
         audioManager.Play("Start Grind");
         audioManager.Play("Mid Grind");
         return trickOutput;
@@ -518,9 +501,9 @@ public class SkateboardController : MonoBehaviour
 
     private void RemoveGrind()
     {
-        Debug.Log($"Grinding time is less than 0.1, so removing addedPoints");
         potentialPoints -= pointsToBeAdded;
         comboCounter -= 1;
+        GameManager.Instance.DecrementNumberOfTricks();
     }
 
     private void OnTouchStarted(object sender, EventArgs e)
@@ -566,10 +549,6 @@ public class SkateboardController : MonoBehaviour
 
     public void Reset()
     {
-        comboDisplay.gameObject.SetActive(false);
-        comboCounterDisplay.gameObject.SetActive(false);
-        comboDisplay.text = "";
-        comboCounterDisplay.text = "";
         comboCounter = 1;
         longestCombo = 0;
         performedTrick = false;
