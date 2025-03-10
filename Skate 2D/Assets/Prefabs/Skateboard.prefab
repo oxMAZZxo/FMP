@@ -5291,7 +5291,7 @@ MonoBehaviour:
     preLoadAudioData: 0
   - name: Wheel Spinning
     clip: {fileID: 8300000, guid: ff36dac9418c3ec47b4e91095f2334a8, type: 3}
-    volume: 0.015
+    volume: 0.01
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}

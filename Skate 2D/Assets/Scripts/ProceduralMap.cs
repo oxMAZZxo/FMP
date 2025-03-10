@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class ProceduralMap : MonoBehaviour
@@ -19,17 +20,21 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private bool comboRush = false;
     [Header("Background Environment Generation")]
     [SerializeField]private bool generateEnvironment;
-    [SerializeField]private GameObject[] environmentPrefabs;
+    [SerializeField]private GameObject backgroundPrefab;
+    [SerializeField]private Collider2D previousBackground;
+    [SerializeField]private int triggerSkipAmount;
+    private int triggerSkipCounter;
+    private Pool<GameObject> backgroundPool;
     private Pool<GameObject> groundObjects;
     private Pool<Obstacle> obstacles;
     private Pool<Obstacle> grindableObstacles;
     private Collider2D previousGround;
-    private Collider2D previousEnvironment;
     private SpawnAction currentSpawnAction = SpawnAction.Spawn;
     private int lastSlowObstacleIndex;
     private int lastMediumObstacleIndex;
     private int lastFastObstacleIndex;
     private float distanceToAddToFollowUp;
+
 
     void Awake()
     {
@@ -46,7 +51,7 @@ public class ProceduralMap : MonoBehaviour
     {
         InitPools();
         InitObstaclePool();
-        // InitGround();
+        InitBackgroundPool();
         if(startGround == null)
         {
             Debug.LogError("The variable Start Ground in the Procedural Map Component is null. Cannot generate ground, obstacles or environment without that");
@@ -94,6 +99,16 @@ public class ProceduralMap : MonoBehaviour
         grindableObstacles = new Pool<Obstacle>(grindableTemp);
     }
 
+    private void InitBackgroundPool()
+    {
+        GameObject[] temp = new GameObject[5];
+        for(int i = 0; i < 5; i++)
+        {
+            temp[i] = Instantiate(backgroundPrefab,new Vector2(0,100),Quaternion.identity);
+        }
+        backgroundPool = new Pool<GameObject>(5,temp);
+    }
+
     private Pool<GameObject> CreateMainObstaclePool(GameObject prefab)
     {
         List<GameObject> tempPrefabPool = new List<GameObject>();
@@ -135,8 +150,7 @@ public class ProceduralMap : MonoBehaviour
         GameObject ground = CreateGround();
         if(generateObstacles) {StartCoroutine(CreateObstacle(ground));}
         
-        if(generateEnvironment) {CreateBuildings(ground.GetComponent<Collider2D>());}
-
+        if(generateEnvironment) {CreateBackgroundEnvironment();}
     }
     
     /// <summary>
@@ -155,25 +169,24 @@ public class ProceduralMap : MonoBehaviour
         return currentGround;
     }
 
-    private void CreateBuildings(Collider2D ground)
+    private void CreateBackgroundEnvironment()
     {
-        Collider2D currentEnvironemnt = Instantiate(environmentPrefabs[UnityEngine.Random.Range(0,environmentPrefabs.Length)],transform.position,Quaternion.identity).GetComponent<Collider2D>();
+        Collider2D currentEnvironemnt = backgroundPool.GetObject().GetComponent<Collider2D>();
+        Renderer currentEnvironmentRenderer = currentEnvironemnt.gameObject.GetComponentInChildren<Renderer>();
+        if(currentEnvironmentRenderer.isVisible) {
+            Debug.Log("The next object to change is still visible by the camera so I am skipping");
+            return;
+        }
         currentEnvironemnt.transform.position = Vector3.zero;
         Physics2D.SyncTransforms();
 
-        float centreToBottomDistance = currentEnvironemnt.bounds.center.y - currentEnvironemnt.bounds.extents.y; 
-        float mainToSecondSideToSideDistance = 0;
-        float currentXPosition = ground.transform.position.x;
-        if(previousEnvironment != null)
-        {
-            mainToSecondSideToSideDistance = previousEnvironment.bounds.extents.x + currentEnvironemnt.bounds.extents.x;
-            currentXPosition = previousEnvironment.transform.position.x;
-        }
+        float mainToSecondSideToSideDistance = previousBackground.bounds.extents.x + currentEnvironemnt.bounds.extents.x;
+        float previousXPosition = previousBackground.transform.position.x;
 
-        Vector2 newPos = new Vector2(currentXPosition + mainToSecondSideToSideDistance,ground.bounds.center.y + ground.bounds.extents.y - centreToBottomDistance + 0.28f);
+        Vector3 newPos = new Vector3(previousXPosition + mainToSecondSideToSideDistance,previousBackground.transform.position.y);
         currentEnvironemnt.transform.position = newPos;
         Physics2D.SyncTransforms();
-        previousEnvironment = currentEnvironemnt;
+        previousBackground = currentEnvironemnt;
     }
 
     /// <summary>
