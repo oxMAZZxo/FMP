@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 9023278437406393362}
   - component: {fileID: 7569402168770912928}
   m_Layer: 0
-  m_Name: CityBackground
+  m_Name: CityDayBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

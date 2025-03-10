@@ -21,8 +21,8 @@ public class ProceduralMap : MonoBehaviour
     [Header("Background Environment Generation")]
     [SerializeField]private bool generateEnvironment;
     [SerializeField]private GameObject backgroundPrefab;
-    [SerializeField]private Collider2D previousBackground;
-    [SerializeField]private int triggerSkipAmount;
+    [SerializeField]private Collider2D startBackground;
+    private Collider2D previousBackground;
     private Pool<GameObject> backgroundPool;
     private Pool<GameObject> groundObjects;
     private Pool<Obstacle> obstacles;
@@ -33,7 +33,6 @@ public class ProceduralMap : MonoBehaviour
     private int lastMediumObstacleIndex;
     private int lastFastObstacleIndex;
     private float distanceToAddToFollowUp;
-
 
     void Awake()
     {
@@ -57,6 +56,13 @@ public class ProceduralMap : MonoBehaviour
         }else
         {
             previousGround = startGround;
+        }
+        if(startBackground == null)
+        {
+            Debug.LogError("The variable Start Background in the Procedural Map Component is null. Cannot generate background environment without that");
+        }else
+        {
+            previousBackground = startBackground;
         }
     }
 
@@ -366,6 +372,7 @@ public class ProceduralMap : MonoBehaviour
     private void ResetMap(object sender, EventArgs e)
     {
         previousGround = startGround;
+        previousBackground = startBackground;
         DisableObstacles();
         StopCoroutine(DisableComboRush(0));
         comboRush = false;

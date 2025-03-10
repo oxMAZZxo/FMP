@@ -2177,17 +2177,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1274731085001629365, guid: f756c731d7f90ed4397240a4b6addf4b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1530930672284292403, guid: f756c731d7f90ed4397240a4b6addf4b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7709630828800334050, guid: f756c731d7f90ed4397240a4b6addf4b, type: 3}
       propertyPath: m_Name
-      value: CityBackground
+      value: DayCityBackground
       objectReference: {fileID: 0}
     - target: {fileID: 9023278437406393362, guid: f756c731d7f90ed4397240a4b6addf4b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5374,8 +5366,7 @@ MonoBehaviour:
   comboRush: 0
   generateEnvironment: 1
   backgroundPrefab: {fileID: 7709630828800334050, guid: f756c731d7f90ed4397240a4b6addf4b, type: 3}
-  previousBackground: {fileID: 406887183}
-  triggerSkipAmount: 1
+  startBackground: {fileID: 406887183}
 --- !u!4 &1022530504
 Transform:
   m_ObjectHideFlags: 0
