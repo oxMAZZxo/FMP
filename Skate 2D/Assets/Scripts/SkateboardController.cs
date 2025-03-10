@@ -61,6 +61,7 @@ public class SkateboardController : MonoBehaviour
     private bool wasPaused;
     private float unPausedCounter;
     private bool disablingGrind;
+    public event EventHandler skateboardLanded;
 
     void Start()
     {
@@ -193,6 +194,7 @@ public class SkateboardController : MonoBehaviour
 				if (!wasGrounded) //meaning you just landed
 				{
                     OnLand();
+                    skateboardLanded?.Invoke(this, EventArgs.Empty);
                 }
 			}
 		}

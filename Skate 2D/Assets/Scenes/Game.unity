@@ -1463,6 +1463,7 @@ MonoBehaviour:
   incrementationInterval: 10
   skateboardController: {fileID: 3088592964041584743}
   virtualCamera: {fileID: 825628981}
+  cameraShakeTime: 1
   comboRushGameSpeed: 1
   comboRushActivateChance: 25
   comboRushActivationCooldown: 45
@@ -2174,6 +2175,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1274731085001629365, guid: f756c731d7f90ed4397240a4b6addf4b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1530930672284292403, guid: f756c731d7f90ed4397240a4b6addf4b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7709630828800334050, guid: f756c731d7f90ed4397240a4b6addf4b, type: 3}
       propertyPath: m_Name
       value: CityBackground
@@ -5336,7 +5345,7 @@ MonoBehaviour:
   player: {fileID: 3088592964041584742}
   groundPrefab: {fileID: 7639857451077588504, guid: f30a0c51a428c464499e48621ba644c5, type: 3}
   startGround: {fileID: 1608932227}
-  generateObstacles: 0
+  generateObstacles: 1
   obstacleTypes:
   - {fileID: 11400000, guid: ea21cd7a15cd99545bf9ac11ed3ee776, type: 2}
   - {fileID: 11400000, guid: ec0b25e71ea869d43942bda469f19365, type: 2}
@@ -6391,6 +6400,7 @@ GameObject:
   - component: {fileID: 1155369782}
   - component: {fileID: 1155369784}
   - component: {fileID: 1155369783}
+  - component: {fileID: 1155369785}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -6436,12 +6446,12 @@ MonoBehaviour:
   m_ScreenX: 0.5
   m_ScreenY: 0.5
   m_CameraDistance: 10
-  m_DeadZoneWidth: 0.1
-  m_DeadZoneHeight: 0
+  m_DeadZoneWidth: 0.15
+  m_DeadZoneHeight: 0.2
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
   m_SoftZoneWidth: 0.8
-  m_SoftZoneHeight: 0.9
+  m_SoftZoneHeight: 0.8
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
@@ -6468,6 +6478,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1155369785
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155369781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: e9ce97b7a206dc64d90931ea044e0c72, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 0
+  m_FrequencyGain: 1
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &1157167689
 GameObject:
   m_ObjectHideFlags: 0

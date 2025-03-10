@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
     [Header("In Game")]
     [SerializeField]private SkateboardController skateboardController;
     [SerializeField]private CinemachineVirtualCamera virtualCamera;
+    [SerializeField,Range(0.1f,2f)]private float cameraShakeTime;
+    private CinemachineShake vmShake;
     [Header("Combo Rush")]
     [SerializeField]private GameSpeed comboRushGameSpeed;
     [SerializeField,Range(0,100)]private float comboRushActivateChance;
@@ -46,8 +48,6 @@ public class GameManager : MonoBehaviour
     public GameSpeed currentGameSpeed {get; private set;}
     private int noOfTricks;
     private int noOfCombos;
-    private ScreenOrientation screenOrientation;
-    private bool screenOrientationChanged;
 
     #region Framerate Variables
     private float timeCounter;
@@ -75,17 +75,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        screenOrientation = Screen.orientation;
+        vmShake = virtualCamera.gameObject.GetComponent<CinemachineShake>();
         Application.targetFrameRate = 144;
-        
-        // if(SystemInfo.deviceType == DeviceType.Desktop) {return;}
-        // if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
-        // {
-        //     virtualCamera.m_Lens.OrthographicSize = 1.2f;
-        // }else
-        // {
-        //     virtualCamera.m_Lens.OrthographicSize = 5f;
-        // }
         gameHasStarted = false;
         canActivateComboRush = true;
     }
@@ -122,6 +113,7 @@ public class GameManager : MonoBehaviour
     {
         CinemachineFramingTransposer framingTransposer = virtualCamera.GetComponentInChildren<CinemachineFramingTransposer>();
         Vector3 newOffset = framingTransposer.m_TrackedObjectOffset;
+        
         while(framingTransposer.m_TrackedObjectOffset.y < 0.22f)
         {
             newOffset.y += Time.deltaTime;
@@ -162,24 +154,6 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(screenOrientation != Screen.orientation)
-        {
-            screenOrientationChanged = true;
-            screenOrientation = Screen.orientation;
-        }
-
-        if(screenOrientationChanged)
-        {
-            screenOrientationChanged = false;
-            // if(screenOrientation == ScreenOrientation.LandscapeLeft || screenOrientation == ScreenOrientation.LandscapeRight)
-            // {
-            //     virtualCamera.m_Lens.OrthographicSize = 2.3f;
-            // }else
-            // {
-            //     virtualCamera.m_Lens.OrthographicSize = 5f;
-            // }
-        }
-
         if(!gameHasStarted || isGamePaused) {return;}
 
         if(skateboardOldX < skateboardController.gameObject.transform.position.x)
@@ -300,6 +274,11 @@ public class GameManager : MonoBehaviour
         noOfCombos++;
     }
     
+    private void OnSkateboardLanded(object sender, EventArgs e)
+    {
+        vmShake.ShakeCamera(cameraShakeTime);
+    }
+
     public void SessionEnded(int longestCombo, float distanceTravelled)
     {
         StopCoroutine(ComboRushCooldown());
@@ -370,11 +349,13 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         SkateboardController.comboIncremented += OnSkateboardComboAdded;
+        skateboardController.skateboardLanded += OnSkateboardLanded;
     }
 
     void OnDisable()
     {
         SkateboardController.comboIncremented -= OnSkateboardComboAdded;
+        skateboardController.skateboardLanded -= OnSkateboardLanded;
     }
 }
 
