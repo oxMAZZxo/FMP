@@ -283,7 +283,12 @@ public class GameManager : MonoBehaviour
     {
         noOfTricks --;
     }
-    
+
+    /// <summary>
+    /// Performs
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnSkateboardLanded(object sender, SkateboardLandEventArgs e)
     {
         AddScore(e.score);
@@ -292,7 +297,10 @@ public class GameManager : MonoBehaviour
         comboCounterDisplay.text = "";
         comboDisplay.text = "";
         AudioManager.Global.ResetPitch("ComboSFX");
-        vmShake.ShakeCamera(cameraShakeTime);
+        if(e.comboCount > 2)
+        {
+            vmShake.ShakeCamera(cameraShakeTime);
+        }
     }
 
     public void SessionEnded(int longestCombo, float distanceTravelled)
