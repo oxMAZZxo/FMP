@@ -23,7 +23,6 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private GameObject backgroundPrefab;
     [SerializeField]private Collider2D previousBackground;
     [SerializeField]private int triggerSkipAmount;
-    private int triggerSkipCounter;
     private Pool<GameObject> backgroundPool;
     private Pool<GameObject> groundObjects;
     private Pool<Obstacle> obstacles;
