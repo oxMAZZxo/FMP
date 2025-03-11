@@ -8997,8 +8997,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Tap To Play!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 257e9a3d3ba145f41bc0d943bdf853f6, type: 2}
-  m_sharedMaterial: {fileID: 807619287589194047, guid: 257e9a3d3ba145f41bc0d943bdf853f6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e9b1a0a4c1a50b345b0a56481b21c6d4, type: 2}
+  m_sharedMaterial: {fileID: 8519584043300163142, guid: e9b1a0a4c1a50b345b0a56481b21c6d4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
