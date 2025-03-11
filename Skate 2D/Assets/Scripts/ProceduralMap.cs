@@ -8,7 +8,7 @@ using UnityEngine;
 public class ProceduralMap : MonoBehaviour
 {
     public static ProceduralMap Instance {get; private set;}
-    const float ySpawnPosition = -0.5f;
+    const float ySpawnPosition = -0.75f;
     [SerializeField]private Transform player;
     [SerializeField]private GameObject groundPrefab;
     [SerializeField]private Collider2D startGround;

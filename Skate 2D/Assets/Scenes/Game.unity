@@ -5711,7 +5711,7 @@ MonoBehaviour:
   player: {fileID: 3088592964041584742}
   groundPrefab: {fileID: 7639857451077588504, guid: f30a0c51a428c464499e48621ba644c5, type: 3}
   startGround: {fileID: 1608932227}
-  generateObstacles: 0
+  generateObstacles: 1
   obstacleTypes:
   - {fileID: 11400000, guid: ea21cd7a15cd99545bf9ac11ed3ee776, type: 2}
   - {fileID: 11400000, guid: ec0b25e71ea869d43942bda469f19365, type: 2}
@@ -6817,7 +6817,7 @@ MonoBehaviour:
   m_ScreenY: 0.5
   m_CameraDistance: 10
   m_DeadZoneWidth: 0.15
-  m_DeadZoneHeight: 0.2
+  m_DeadZoneHeight: 0.8
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
   m_SoftZoneWidth: 0.8
@@ -9581,7 +9581,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2847396179614841599, guid: f30a0c51a428c464499e48621ba644c5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: -0.75
       objectReference: {fileID: 0}
     - target: {fileID: 2847396179614841599, guid: f30a0c51a428c464499e48621ba644c5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10579,7 +10579,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2847396179614841599, guid: f30a0c51a428c464499e48621ba644c5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: -0.75
       objectReference: {fileID: 0}
     - target: {fileID: 2847396179614841599, guid: f30a0c51a428c464499e48621ba644c5, type: 3}
       propertyPath: m_LocalPosition.z
