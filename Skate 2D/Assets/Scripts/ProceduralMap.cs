@@ -20,10 +20,10 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private bool comboRush = false;
     [Header("Background Environment Generation")]
     [SerializeField]private bool generateEnvironment;
-    [SerializeField]private GameObject backgroundPrefab;
+    [SerializeField]private Background[] backgroundPrefabs;
     [SerializeField]private Collider2D startBackground;
     private Collider2D previousBackground;
-    private Pool<GameObject> backgroundPool;
+    private Pool<Background> backgroundPool;
     private Pool<GameObject> groundObjects;
     private Pool<Obstacle> obstacles;
     private Pool<Obstacle> grindableObstacles;
@@ -48,7 +48,7 @@ public class ProceduralMap : MonoBehaviour
     void Start()
     {
         InitPools();
-        InitObstaclePool();
+        if(generateObstacles) {InitObstaclePool();}
         InitBackgroundPool();
         if(startGround == null)
         {
@@ -106,12 +106,12 @@ public class ProceduralMap : MonoBehaviour
 
     private void InitBackgroundPool()
     {
-        GameObject[] temp = new GameObject[5];
-        for(int i = 0; i < 5; i++)
+        Background[] temp = new Background[backgroundPrefabs.Length];
+        for(int i = 0; i < temp.Length; i++)
         {
-            temp[i] = Instantiate(backgroundPrefab,new Vector2(0,100),Quaternion.identity);
+            temp[i] = Instantiate(backgroundPrefabs[i],new Vector2(0,100),Quaternion.identity);
         }
-        backgroundPool = new Pool<GameObject>(5,temp);
+        backgroundPool = new Pool<Background>(temp.Length,temp);
     }
 
     private Pool<GameObject> CreateMainObstaclePool(GameObject prefab)
@@ -176,22 +176,23 @@ public class ProceduralMap : MonoBehaviour
 
     private void CreateBackgroundEnvironment()
     {
-        Collider2D currentEnvironemnt = backgroundPool.GetObject().GetComponent<Collider2D>();
-        Renderer currentEnvironmentRenderer = currentEnvironemnt.gameObject.GetComponentInChildren<Renderer>();
-        if(currentEnvironmentRenderer.isVisible) {
+        Background currentBackground = backgroundPool.GetObject();
+        if(currentBackground.isBeingRendered) {
+            backgroundPool.RollBack();
             Debug.Log("The next object to change is still visible by the camera so I am skipping");
             return;
         }
-        currentEnvironemnt.transform.position = Vector3.zero;
+        Collider2D currentEnvironementCollider = currentBackground.GetComponent<Collider2D>();
+        currentEnvironementCollider.transform.position = Vector3.zero;
         Physics2D.SyncTransforms();
 
-        float mainToSecondSideToSideDistance = previousBackground.bounds.extents.x + currentEnvironemnt.bounds.extents.x;
+        float mainToSecondSideToSideDistance = previousBackground.bounds.extents.x + currentEnvironementCollider.bounds.extents.x;
         float previousXPosition = previousBackground.transform.position.x;
 
         Vector3 newPos = new Vector3(previousXPosition + mainToSecondSideToSideDistance,previousBackground.transform.position.y);
-        currentEnvironemnt.transform.position = newPos;
+        currentEnvironementCollider.transform.position = newPos;
         Physics2D.SyncTransforms();
-        previousBackground = currentEnvironemnt;
+        previousBackground = currentEnvironementCollider;
     }
 
     /// <summary>

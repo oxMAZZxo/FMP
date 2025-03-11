@@ -78,4 +78,10 @@ public class Pool<T>
     }
     
     public T[] GetObjects() {return objects;}
+
+    public void RollBack()
+    {
+        index --;
+        if(index < 0) {index = length -1;}
+    }
 }
