@@ -179,7 +179,6 @@ public class ProceduralMap : MonoBehaviour
         Background currentBackground = backgroundPool.GetObject();
         if(currentBackground.isBeingRendered) {
             backgroundPool.RollBack();
-            Debug.Log("The next object to change is still visible by the camera so I am skipping");
             return;
         }
         Collider2D currentEnvironementCollider = currentBackground.GetComponent<Collider2D>();
