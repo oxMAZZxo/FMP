@@ -3,6 +3,7 @@ using System.Collections;
 using System.Reflection;
 using Cinemachine;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
     private float currentVelocity;
     [Header("In Game")]
     [SerializeField]private SkateboardController skateboardController;
+    [SerializeField]private Transform skateboardFollowTarget;
     [SerializeField]private CinemachineVirtualCamera virtualCamera;
     [SerializeField,Range(0.1f,2f)]private float cameraShakeTime;
     [SerializeField]private TextMeshProUGUI comboDisplay;
@@ -99,7 +101,7 @@ public class GameManager : MonoBehaviour
     private void StartCameraAnimations()
     {
         StartCoroutine(VM_ZoomOutAnim());
-        StartCoroutine(VM_TrackedObjectOffsetAnim());
+        // StartCoroutine(VM_TrackedObjectOffsetAnim());
     }
 
     private IEnumerator VM_ZoomOutAnim()
@@ -113,13 +115,13 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator VM_TrackedObjectOffsetAnim()
     {
-        CinemachineFramingTransposer framingTransposer = virtualCamera.GetComponentInChildren<CinemachineFramingTransposer>();
-        Vector3 newOffset = framingTransposer.m_TrackedObjectOffset;
-        
-        while(framingTransposer.m_TrackedObjectOffset.y < 0.22f)
+        Vector3 newOffset = skateboardFollowTarget.localPosition;
+        Debug.Log("Starting Tracked Object Offset Animation");
+        while(skateboardFollowTarget.localPosition.y < 0.22f)
         {
             newOffset.y += Time.deltaTime;
-            framingTransposer.m_TrackedObjectOffset = newOffset;
+            Debug.Log($"Y Offset: {newOffset.y}");
+            skateboardFollowTarget.transform.localPosition = newOffset;
             yield return new WaitForEndOfFrame();
         }
     }
@@ -322,7 +324,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Reset()
     {
-        StopCoroutine(ComboRushCooldown());
+        StopAllCoroutines();
+        
         canActivateComboRush = true;
         gameHasStarted = false;
         isGamePaused = false;
@@ -338,7 +341,6 @@ public class GameManager : MonoBehaviour
         Vector3 newPos = new Vector3(0,0.735f,0);
         CinemachineFramingTransposer framingTransposer = virtualCamera.GetComponentInChildren<CinemachineFramingTransposer>();
         framingTransposer.m_TrackedObjectOffset.y = 0;
-        // virtualCamera.m_Lens.OrthographicSize = 1.2f;
         virtualCamera.m_Lens.FieldOfView = 15f;
         skateboardController.transform.position = newPos;
         reset?.Invoke(this, EventArgs.Empty);

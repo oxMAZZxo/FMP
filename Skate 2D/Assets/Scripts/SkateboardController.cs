@@ -79,6 +79,7 @@ public class SkateboardController : MonoBehaviour
         if(!hasStarted && transform.position.x > 0.01f) 
         { 
             hasStarted = true;
+            EnableInput();
             audioManager.Play("Rolling");
         }
 
@@ -523,21 +524,11 @@ public class SkateboardController : MonoBehaviour
         minVelocity = value;
     }
 
-    void OnEnable()
-    {
-        EnableInput();
-    }
-
     private void EnableInput()
     {
         TouchControls.touchEvent += OnInputAction;
         TouchControls.touchStarted += OnTouchStarted;
         TouchControls.touchEnded += OnTouchEnded;
-    }
-
-    void OnDisable()
-    {
-        DisableInput();
     }
 
     private void DisableInput()
@@ -557,7 +548,7 @@ public class SkateboardController : MonoBehaviour
         wasPaused = false;
         rb.simulated = true;
         rb.velocity = Vector2.zero;
-        EnableInput();
+        DisableInput();
     }
 
     void OnDrawGizmos()
