@@ -108,6 +108,11 @@ public class MenuManager : MonoBehaviour
         AudioManager.Global.Play("ButtonClick");
     }
 
+    public void OpenFeedbackForm()
+    {
+        Application.OpenURL("https://docs.google.com/forms/d/e/1FAIpQLSesf3_tj-VFm9NB9r-sp-mOsspjIUWGWuJmikyLnJtfRunyWw/viewform?usp=dialog");
+    }
+
     void OnEnable()
     {
         TouchControls.touchEvent += OnTouch; 
