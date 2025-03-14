@@ -1344,7 +1344,7 @@ MonoBehaviour:
   comboCounterDisplay: {fileID: 1387938532}
   comboRushGameSpeed: 1
   comboRushActivateChance: 15
-  comboRushActivationCooldown: 45
+  comboRushActivationCooldown: 60
   comboRushDuration: 15
   comboRushDisplay: {fileID: 1349704815}
 --- !u!4 &288360714
