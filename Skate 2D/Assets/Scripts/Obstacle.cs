@@ -41,6 +41,16 @@ public class Obstacle
         return mainObstaclePool.GetObject();
     }
 
+    public void RollBackMainObstacle()
+    {
+        mainObstaclePool.RollBack();
+    }
+
+    public void RollBackSecondObstacle(int index)
+    {
+        followObstaclePools[index].RollBack();
+    }
+
     public GameObject GetFollowUpObstacle(int index)
     {
         return followObstaclePools[index].GetObject();

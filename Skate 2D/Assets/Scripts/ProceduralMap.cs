@@ -275,7 +275,12 @@ public class ProceduralMap : MonoBehaviour
 
         Obstacle currentObstacleTypeChoice = obstaclePoolToChooseFrom.GetRandomObject(maxIndex + 1);
         GameObject mainObstacle = currentObstacleTypeChoice.GetMainObstacle();
-        
+        if(ObstacleInSight(mainObstacle))
+        {
+            currentObstacleTypeChoice.RollBackMainObstacle();
+            Debug.Log($"Main Obstacle {mainObstacle.name} is in sight, therefore I cannot use it. Returning function");
+            yield break;
+        }
         Collider2D mainObstacleCollider = mainObstacle.GetComponent<Collider2D>();
         mainObstacle.transform.position = Vector3.zero;
         Physics2D.SyncTransforms();
@@ -310,9 +315,15 @@ public class ProceduralMap : MonoBehaviour
 
     private void CreateSecondObstacle(Obstacle currentObstacleTypeChoice,Collider2D mainObstacleCollider, Collider2D groundCollider)
     {
-        GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(UnityEngine.Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs));
+        int choice = UnityEngine.Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs);
+        GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(choice);
+        if(ObstacleInSight(secondObstacle))
+        {
+            Debug.Log($"Second obstacle {secondObstacle.name} of main obstacle {mainObstacleCollider.name} is visible, therefore cannot use it.");
+            currentObstacleTypeChoice.RollBackSecondObstacle(choice);
+            return;
+        }
         Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
-
         secondObstacle.transform.position = Vector3.zero;
         Physics2D.SyncTransforms();
         if(!secondObstacle.activeInHierarchy) {secondObstacle.SetActive(true);}
@@ -367,6 +378,14 @@ public class ProceduralMap : MonoBehaviour
     {        
         mainObstacle.transform.position = new Vector2(ground.gameObject.transform.position.x + checkRadius -1,ground.bounds.center.y + ground.bounds.extents.y - obstacleBottomBoundsPosition);
         Physics2D.SyncTransforms();
+    }
+
+    private bool ObstacleInSight(GameObject obstacle)
+    {
+        Renderer renderer = obstacle.GetComponent<Renderer>();
+        if(renderer == null) {renderer = GetComponentInChildren<Renderer>();}
+        if(renderer == null) {return false;}
+        return renderer.isVisible;
     }
 
     private void ResetMap(object sender, EventArgs e)

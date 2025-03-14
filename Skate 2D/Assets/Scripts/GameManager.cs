@@ -244,9 +244,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ComboRushCooldown()
     {
-        Debug.Log("Combo rush cooldown started");
         yield return new WaitForSeconds(comboRushActivationCooldown);
-        Debug.Log("Combo rush cooldown ended");
         canActivateComboRush = true;
     }
 
