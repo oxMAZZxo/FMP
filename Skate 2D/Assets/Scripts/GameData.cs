@@ -35,6 +35,10 @@ public class GameData : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Takes the given loaded data and decontructs it do store in the variables that are appropriate.
+    /// </summary>
+    /// <param name="data"></param>
     private void DeconstructData(string data)
     {
         string[] temp = data.Split(',');
@@ -50,6 +54,12 @@ public class GameData : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets player stats and if there is a change, it will be saved.
+    /// </summary>
+    /// <param name="newHighScore"></param>
+    /// <param name="newLongestCombo"></param>
+    /// <param name="newLongestDistance"></param>
     public void SetStats(float newHighScore, float newLongestCombo, float newLongestDistance)
     {
         bool change = false;

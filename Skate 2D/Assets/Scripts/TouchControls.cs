@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// The Touch Controls class is a singleton, scene persistent object, which detects user input on a touchscreen, calculates the diferent swipe directions and invokes touch input events.
+/// </summary>
 public class TouchControls : MonoBehaviour
 {
     public int id {get;}

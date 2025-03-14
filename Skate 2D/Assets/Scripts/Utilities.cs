@@ -2,6 +2,9 @@ using System;
 using System.Reflection;
 using UnityEngine;
 
+/// <summary>
+/// The Utilities class contains static functions which perform logic that can be used throughout a system.
+/// </summary>
 public class Utilities
 {
     /// <summary>

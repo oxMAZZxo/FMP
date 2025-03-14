@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering.Universal;
 
+/// <summary>
+/// The Audio Manager class is an object which can be used on an instance based, for different objects in to play their own sound effects and music.
+/// It can also be assigned as a Global Audio Manager giving it singleton capabilities, which any object in a scene can reference to play different SFX or Music. 
+/// </summary>
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Global {get; private set;}

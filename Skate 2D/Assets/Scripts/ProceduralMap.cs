@@ -320,7 +320,7 @@ public class ProceduralMap : MonoBehaviour
         if(ObstacleInSight(secondObstacle))
         {
             Debug.Log($"Second obstacle {secondObstacle.name} of main obstacle {mainObstacleCollider.name} is visible, therefore cannot use it.");
-            currentObstacleTypeChoice.RollBackSecondObstacle(choice);
+            currentObstacleTypeChoice.RollBackFollowUpObstacle(choice);
             return;
         }
         Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();

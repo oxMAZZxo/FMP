@@ -52,14 +52,6 @@ public class GameManager : MonoBehaviour
     public GameSpeed currentGameSpeed {get; private set;}
     private int noOfTricks;
     private int noOfCombos;
-
-    #region Framerate Variables
-    private float timeCounter;
-    private float refreshTime = 0.5f;
-    private float frameCounter;
-    private float lastFramerate;
-    #endregion
-
     private float skateboardStartX;
     private float skateboardOldX;
     public bool gameHasStarted {get; private set;}
@@ -85,6 +77,9 @@ public class GameManager : MonoBehaviour
         canActivateComboRush = true;
     }
 
+    /// <summary>
+    /// Starts the game.
+    /// </summary>
     public void StartGame()
     {
         if(gameHasStarted) {return;}
@@ -101,9 +96,12 @@ public class GameManager : MonoBehaviour
     private void StartCameraAnimations()
     {
         StartCoroutine(VM_ZoomOutAnim());
-        // StartCoroutine(VM_TrackedObjectOffsetAnim());
     }
 
+    /// <summary>
+    /// Slowly zooms out the camera.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator VM_ZoomOutAnim()
     {
         while(virtualCamera.m_Lens.FieldOfView < 30f)
@@ -113,36 +111,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator VM_TrackedObjectOffsetAnim()
-    {
-        Vector3 newOffset = skateboardFollowTarget.localPosition;
-        Debug.Log("Starting Tracked Object Offset Animation");
-        while(skateboardFollowTarget.localPosition.y < 0.22f)
-        {
-            newOffset.y += Time.deltaTime;
-            Debug.Log($"Y Offset: {newOffset.y}");
-            skateboardFollowTarget.transform.localPosition = newOffset;
-            yield return new WaitForEndOfFrame();
-        }
-    }
-
     void Update()
     {
-        #region FrameRateCounter
-        if( timeCounter < refreshTime )
-        {
-            timeCounter += Time.deltaTime;
-            frameCounter++;
-        }
-        else
-        {
-            //This code will break if you set your m_refreshTime to 0, which makes no sense.
-            lastFramerate = (float)frameCounter/timeCounter;
-            framerateDisplay.text = lastFramerate.ToString("F0");
-            frameCounter = 0;
-            timeCounter = 0.0f;
-        }
-        #endregion
         if(!gameHasStarted || isGamePaused) {return;}
         if(currentVelocity >= maxVelocity) {return;}
         if(counter >= incrementationInterval)
@@ -231,6 +201,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Calculates whether a combo rush should be activated.
+    /// </summary>
     public void CalculateComboRush()
     {
         if(canActivateComboRush && currentGameSpeed >= comboRushGameSpeed && UnityEngine.Random.Range(0,100) <= comboRushActivateChance)
@@ -261,6 +234,11 @@ public class GameManager : MonoBehaviour
         addedScoreDisplay.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Function that gets executed through an event when the skateboard controller performs a trick.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnSkateboardTrickPerformed(object sender, SkateboardTrickPerformedEventArgs e)
     {
         if(e.isCombo)
@@ -285,7 +263,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Performs
+    /// Function executed through an event when skateboard controller lands on the ground.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -303,6 +281,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Ends the session.
+    /// </summary>
+    /// <param name="longestCombo">This sessions longest combo</param>
+    /// <param name="distanceTravelled">This sessions distance travelled</param>
     public void SessionEnded(int longestCombo, float distanceTravelled)
     {
         StopCoroutine(ComboRushCooldown());

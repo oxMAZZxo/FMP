@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The obstacle class is a runtime instantiated object, which the Procedural Map uses to generate obstacles dynamicly.
+/// This class holds information which is vital to this process, such as the speed an instance of an obstacle can be spawned at, or the distance between the main obstacle and the follow up obstacles.
+/// </summary>
 public class Obstacle
 {
     public GameObject prefab {get;}
@@ -19,6 +23,13 @@ public class Obstacle
     // Holds Pools of each follow up object instantiated from the prefab follow objects
     private List<Pool<GameObject>> followObstaclePools;
 
+    /// <summary>
+    /// Instantiate a runtime Obstacle, which holds pools of its main obstacle, and a secondary follow up obstacle/obstacles.
+    /// </summary>
+    /// <param name="newObstacleType"></param>
+    /// <param name="spawnable"></param>
+    /// <param name="newMainObstaclePool"></param>
+    /// <param name="newFollowObstaclePools"></param>
     public Obstacle(ObstacleType newObstacleType,Spawnable spawnable, Pool<GameObject> newMainObstaclePool, List<Pool<GameObject>> newFollowObstaclePools)
     {
         prefab = spawnable.prefab;
@@ -41,12 +52,19 @@ public class Obstacle
         return mainObstaclePool.GetObject();
     }
 
+    /// <summary>
+    /// Roll back main obstacle pool to previous object
+    /// </summary>
     public void RollBackMainObstacle()
     {
         mainObstaclePool.RollBack();
     }
 
-    public void RollBackSecondObstacle(int index)
+    /// <summary>
+    /// Roll back second obstacle pool to previous object
+    /// </summary>
+    /// <param name="index">The index of the second obstacle pool</param>
+    public void RollBackFollowUpObstacle(int index)
     {
         followObstaclePools[index].RollBack();
     }

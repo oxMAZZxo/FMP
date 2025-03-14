@@ -29,6 +29,12 @@ public class MenuManager : MonoBehaviour
         StartCoroutine(LoadTutorialScene());
     }
 
+
+    /// <summary>
+    /// Function executed through an event when the user touches the screen.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnTouch(object sender, TouchEventArgs e)
     {
         if(GameManager.Instance.gameHasStarted || settingsPanel.activeInHierarchy) {return;}
@@ -68,6 +74,11 @@ public class MenuManager : MonoBehaviour
         return true;
 	}
 
+    /// <summary>
+    /// Resets the Menu to the Main Menu Panel.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ResetMenu(object sender, EventArgs e)
     {
         mainMenuPanel.SetActive(true);
@@ -80,6 +91,10 @@ public class MenuManager : MonoBehaviour
         highScoreDisplay.text = Utilities.PrettyNumberString(GameData.Instance.highScore);
     }
 
+    /// <summary>
+    /// Load the Tutorial Scene Asyncronously, for it to be ready in case the user wants to start it.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator LoadTutorialScene()
     {
         asyncLoad = SceneManager.LoadSceneAsync("TutorialScene");

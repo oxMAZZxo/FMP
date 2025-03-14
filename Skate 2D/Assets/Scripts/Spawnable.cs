@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The spawnable scriptable object is what is used to define the different obstacles that can be spawned as primary obstacles.
+/// This is what is used in the Obstacles Scriptable object to define all the types.
+/// </summary>
 [CreateAssetMenu(fileName = "Spawnable", menuName = "ScriptableObjects/Spawnable", order = 1)]
 public class Spawnable : ScriptableObject
 {
