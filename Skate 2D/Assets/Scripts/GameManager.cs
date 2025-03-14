@@ -6,10 +6,19 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// The Game Manager is a singleton that holds information and performs logic based on the current events that take place in the game.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance {get; private set;}
+    /// <summary>
+    /// The players current score
+    /// </summary>
     public int score {get; private set;}
+    /// <summary>
+    /// Is the current game session running paused.
+    /// </summary>
     public bool isGamePaused {get; private set;}
     public TextMeshProUGUI framerateDisplay;
     [Header("UI Elements")]
@@ -49,11 +58,17 @@ public class GameManager : MonoBehaviour
     [SerializeField,Range(5f,30f),Tooltip("How long can the combo rush last")]private float comboRushDuration;
     [SerializeField]private GameObject comboRushDisplay;
     private bool canActivateComboRush;
+    /// <summary>
+    /// The speed that current session is at.
+    /// </summary>
     public GameSpeed currentGameSpeed {get; private set;}
     private int noOfTricks;
     private int noOfCombos;
     private float skateboardStartX;
     private float skateboardOldX;
+    /// <summary>
+    /// Has the a game session started
+    /// </summary>
     public bool gameHasStarted {get; private set;}
     public static event EventHandler<EventArgs> reset;
     public static event EventHandler gamespeedChanged;

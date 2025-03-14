@@ -5,9 +5,21 @@ using UnityEngine;
 
 public class TouchEventArgs : EventArgs
 {
+    /// <summary>
+    /// How long has the user been touching the screen
+    /// </summary>
     public float touchTime {get;}
+    /// <summary>
+    /// The direction of the current swipe. A value of SwipeDirection.NONE indicates that no swipe could be calculated
+    /// </summary>
     public SwipeDirection swipeDirection {get;}
+    /// <summary>
+    /// The start position of the swipe.
+    /// </summary>
     public Vector2 startPosition {get;}
+    /// <summary>
+    /// The end position of the swipe.
+    /// </summary>
     public Vector2 endPosition {get;}
     
     /// <summary>

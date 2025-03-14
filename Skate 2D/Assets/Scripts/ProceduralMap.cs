@@ -5,6 +5,10 @@ using System.Linq;
 using UnityEditor.Rendering;
 using UnityEngine;
 
+/// <summary>
+/// The Procedural Map class is a singleton object which will generate the endless map that the player will play on.
+/// It will perform logic such as spawning the ground, the obstacles, the background and other scene environment.
+/// </summary>
 public class ProceduralMap : MonoBehaviour
 {
     public static ProceduralMap Instance {get; private set;}
@@ -313,6 +317,12 @@ public class ProceduralMap : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Created a Second Obstacle (Follow Up obstacle) based on the main obstacle spawned.
+    /// </summary>
+    /// <param name="currentObstacleTypeChoice">The current obstacle choice in terms of type</param>
+    /// <param name="mainObstacleCollider">The main obstacles collider</param>
+    /// <param name="groundCollider">The current grounds collider</param>
     private void CreateSecondObstacle(Obstacle currentObstacleTypeChoice,Collider2D mainObstacleCollider, Collider2D groundCollider)
     {
         int choice = UnityEngine.Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs);

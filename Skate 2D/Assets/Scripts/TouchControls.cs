@@ -13,8 +13,18 @@ public class TouchControls : MonoBehaviour
     [SerializeField,Range(1f,1000f)]private float deadzone = 10f;
     [SerializeField,Range(0.01f,1f)]private float minDiagonalThreshold = 0.4f;
     [SerializeField]private InputActionReference touchInput;
+    /// <summary>
+    /// The Touch Event will invoke when a touch input has been calculated. 
+    /// It will return TouchEventArgs which hold information about how long the touch was, and its direction.
+    /// </summary>
     public static event EventHandler<TouchEventArgs> touchEvent;
+    /// <summary>
+    /// The Touch Started event will invoke when any touch input has been detected.
+    /// </summary>
     public static event EventHandler<EventArgs> touchStarted;
+    /// <summary>
+    /// The Touch Ended event will invoke when the touch that has started, has stopped.
+    /// </summary>
     public static event EventHandler<EventArgs> touchEnded;
     private Vector2 touchStart;
     private Vector2 touchEnd;
