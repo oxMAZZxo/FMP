@@ -290,10 +290,14 @@ public class SkateboardController : MonoBehaviour
         else //else if one of those conditions is true
         {
             //player performs a trick
+            trickPerformed = ShowTrickAnimation(swipeDirection);//perfrom a trick
+            if(trickPerformed == "")
+            {
+                return false;
+            }
             isPerformingTrick = true;
             backWheelSparks.SetActive(false);
             frontWheelSparks.SetActive(false);
-            trickPerformed = ShowTrickAnimation(swipeDirection);//perfrom a trick
             if (isGrinding) // if they are grinding before the trick
             {
                 animator.SetBool("isGrinding", false); //disable the grind animations
@@ -364,7 +368,7 @@ public class SkateboardController : MonoBehaviour
 
         }
         
-        if(animator.GetBool("reverseOut"))
+        if(trickOutput != "" && animator.GetBool("reverseOut"))
         {
             trickOutput = "Nollie " + trickOutput;
         }
