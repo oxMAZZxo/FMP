@@ -13,7 +13,6 @@ public class TouchControls : MonoBehaviour
     [SerializeField,Range(1f,1000f)]private float deadzone = 10f;
     [SerializeField,Range(0.01f,1f)]private float minDiagonalThreshold = 0.4f;
     [SerializeField]private InputActionReference touchInput;
-    [SerializeField]private InputActionReference swipeInput;
     /// <summary>
     /// The Touch Event will invoke when a touch input has been calculated. 
     /// It will return TouchEventArgs which hold information about how long the touch was, and its direction.
