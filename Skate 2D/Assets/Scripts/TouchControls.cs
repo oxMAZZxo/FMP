@@ -30,7 +30,7 @@ public class TouchControls : MonoBehaviour
     /// <summary>
     /// This event will invoke as a swipe is happening. Giving the user the new position of the current touch.
     /// </summary>
-    public static event EventHandler<Vector2> swipeInProgress;
+    // public static event EventHandler<Vector2> swipeInProgress;
     private Vector2 touchStart;
     private Vector2 touchEnd;
     private float worldRadius;
@@ -44,14 +44,12 @@ public class TouchControls : MonoBehaviour
             DontDestroyOnLoad(this);
         }else
         {
-            // Debug.Log("An Instance of TouchControls already exists, destroying extra ones");
             Destroy(gameObject);
         }
     }
 
     void Start()
     {
-        swipeInput.action.Enable();
         touchInput.action.Enable();
         touchTime = 0;
     }
@@ -165,7 +163,6 @@ public class TouchControls : MonoBehaviour
         // Debug.Log($"Enabling touch functionality on TouchControls {this.GetInstanceID()}");
         touchInput.action.started += OnTouchInputBegan;
         touchInput.action.canceled += OnTouchInputEnded;
-        // swipeInput.action.performed += OnTouchInputInProgress;
     }
 
     void OnDisable()
@@ -173,7 +170,6 @@ public class TouchControls : MonoBehaviour
         // Debug.Log($"Disabling touch functionality on TouchControls {this.GetInstanceID()}");
         touchInput.action.started -= OnTouchInputBegan;
         touchInput.action.canceled -= OnTouchInputEnded;
-        // swipeInput.action.performed -= OnTouchInputInProgress;
     }
 
     /// <summary>
