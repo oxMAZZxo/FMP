@@ -9,6 +9,9 @@ public class Pool<T>
 {
     private T[] objects;
     private int index;
+    /// <summary>
+    /// The number of objects the pool holds.
+    /// </summary>
     public int length { get; }
 
     /// <summary>

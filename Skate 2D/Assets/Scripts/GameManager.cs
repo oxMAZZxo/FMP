@@ -11,6 +11,9 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    /// <summary>
+    /// The Game Manager Instance.
+    /// </summary>
     public static GameManager Instance {get; private set;}
     /// <summary>
     /// The players current score
