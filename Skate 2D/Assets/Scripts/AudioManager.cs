@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// The Audio Manager class is an object which can be used on an instance based, for different objects in to play their own sound effects and music.

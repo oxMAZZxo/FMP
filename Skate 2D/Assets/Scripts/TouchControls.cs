@@ -13,19 +13,24 @@ public class TouchControls : MonoBehaviour
     [SerializeField,Range(1f,1000f)]private float deadzone = 10f;
     [SerializeField,Range(0.01f,1f)]private float minDiagonalThreshold = 0.4f;
     [SerializeField]private InputActionReference touchInput;
+    [SerializeField]private InputActionReference swipeInput;
     /// <summary>
     /// The Touch Event will invoke when a touch input has been calculated. 
     /// It will return TouchEventArgs which hold information about how long the touch was, and its direction.
     /// </summary>
     public static event EventHandler<TouchEventArgs> touchEvent;
     /// <summary>
-    /// The Touch Started event will invoke when any touch input has been detected.
+    /// The Touch Started event will invoke when any touch input has been detected and send the start touch position as Vector2.
     /// </summary>
-    public static event EventHandler<EventArgs> touchStarted;
+    public static event EventHandler<Vector2> touchStarted;
     /// <summary>
-    /// The Touch Ended event will invoke when the touch that has started, has stopped.
+    /// The Touch Ended event will invoke when an existing touch has stopped, it will send a Vector2 respresenting the final position.
     /// </summary>
-    public static event EventHandler<EventArgs> touchEnded;
+    public static event EventHandler<Vector2> touchEnded;
+    /// <summary>
+    /// This event will invoke as a swipe is happening. Giving the user the new position of the current touch.
+    /// </summary>
+    public static event EventHandler<Vector2> swipeInProgress;
     private Vector2 touchStart;
     private Vector2 touchEnd;
     private float worldRadius;
@@ -46,6 +51,7 @@ public class TouchControls : MonoBehaviour
 
     void Start()
     {
+        swipeInput.action.Enable();
         touchInput.action.Enable();
         touchTime = 0;
     }
@@ -123,7 +129,8 @@ public class TouchControls : MonoBehaviour
         {
             touchStart = Touchscreen.current.primaryTouch.position.ReadValue();
         }
-        touchStarted?.Invoke(this, EventArgs.Empty);
+
+        touchStarted?.Invoke(this, touchStart);
     }
 
     /// <summary>
@@ -138,10 +145,19 @@ public class TouchControls : MonoBehaviour
         {
             touchEnd = Touchscreen.current.primaryTouch.position.ReadValue();
         }
-        touchEnded?.Invoke(this, EventArgs.Empty);
+        touchEnded?.Invoke(this, touchEnd);
         DetectSwipe();
         touchStart = Vector2.zero;
         touchTime = 0;
+    }
+
+    private void OnTouchInputInProgress(InputAction.CallbackContext context)
+    {
+        if(touchStart == Vector2.zero)
+        {
+            return;
+        }
+        Debug.Log(context.action.ReadValue<Vector2>());
     }
 
     void OnEnable()
@@ -149,6 +165,7 @@ public class TouchControls : MonoBehaviour
         // Debug.Log($"Enabling touch functionality on TouchControls {this.GetInstanceID()}");
         touchInput.action.started += OnTouchInputBegan;
         touchInput.action.canceled += OnTouchInputEnded;
+        // swipeInput.action.performed += OnTouchInputInProgress;
     }
 
     void OnDisable()
@@ -156,6 +173,7 @@ public class TouchControls : MonoBehaviour
         // Debug.Log($"Disabling touch functionality on TouchControls {this.GetInstanceID()}");
         touchInput.action.started -= OnTouchInputBegan;
         touchInput.action.canceled -= OnTouchInputEnded;
+        // swipeInput.action.performed -= OnTouchInputInProgress;
     }
 
     /// <summary>

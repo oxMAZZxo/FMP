@@ -161,6 +161,10 @@ public class SkateboardController : MonoBehaviour
         {
             audioManager.Stop("Mid Grind");
         }
+        if(!isGrinding && !isGrounded)
+        {
+            audioManager.Stop("Wheel Spinning");
+        }
     }
 
     public void Resume()
@@ -175,6 +179,10 @@ public class SkateboardController : MonoBehaviour
         if(isGrinding)
         {
             audioManager.Play("Mid Grind");
+        }
+        if(!isGrinding && !isGrounded)
+        {
+            audioManager.Play("Wheel Spinning");
         }
     }
 
@@ -507,13 +515,13 @@ public class SkateboardController : MonoBehaviour
         GameManager.Instance.DecrementNumberOfTricks();
     }
 
-    private void OnTouchStarted(object sender, EventArgs e)
+    private void OnTouchStarted(object sender, Vector2 start)
     {
         // Debug.Log("Touch Started");
         isCharging = true;
     }
 
-    private void OnTouchEnded(object sender, EventArgs e)
+    private void OnTouchEnded(object sender, Vector2 end)
     {
         // Debug.Log("Touch Ended");
         isCharging = false;

@@ -7,6 +7,7 @@ using System;
 
 public class TutorialSkateboard : MonoBehaviour
 {
+    public static event EventHandler<EventArgs> onLanded;
     private Animator animator;
     private Rigidbody2D rb;
     private Collider2D myCollider;
@@ -37,7 +38,7 @@ public class TutorialSkateboard : MonoBehaviour
     private Animator comboCounterAnimator;
     [Header("Visualisation")]
     public bool drawGizmos;
-    private bool isGrounded;
+    public bool isGrounded {get; private set;}
     private float currentTouchTime;
     private bool isGrinding;
     private int potentialPoints; //this are points that will be awarded if a trick is landed
@@ -61,6 +62,7 @@ public class TutorialSkateboard : MonoBehaviour
     private bool wasGrind;
     private bool comboNeeded;
     private bool canPlaySounds;
+    private bool isInputDisabled;
 
     void Start()
     {
@@ -136,10 +138,13 @@ public class TutorialSkateboard : MonoBehaviour
         }
     }
 
-    public void Pause()
+    /// <summary>
+    /// Freezes the skateboards physics and sound.
+    /// </summary>
+    /// <param name="disableInput">If true, the skateboards response to input will be disabled too.</param>
+    public void Pause(bool disableInput)
     {
         rb.simulated = false;
-        DisableInput();
         wasPaused = true;
 
         if(isGrounded)
@@ -150,12 +155,23 @@ public class TutorialSkateboard : MonoBehaviour
         {
             audioManager.Stop("Mid Grind");
         }
+        if(!isGrinding && !isGrounded)
+        {
+            audioManager.Stop("Wheel Spinning");
+        }
+        if(disableInput && !isInputDisabled)
+        {
+            DisableInput();
+        }
     }
 
-    public void Resume()
+    /// <summary>
+    /// Unfreezes skateboard's physics and sound.
+    /// </summary>
+    /// <param name="enableInput">If true, the skateboards response to input will be enabled.</param>
+    public void Resume(bool enableInput)
     {
         rb.simulated = true;
-        EnableInput();
 
         if(isGrounded)
         {
@@ -164,6 +180,15 @@ public class TutorialSkateboard : MonoBehaviour
         if(isGrinding)
         {
             audioManager.Play("Mid Grind");
+        }
+        if(!isGrinding && !isGrounded)
+        {
+            audioManager.Play("Wheel Spinning");
+        }
+
+        if(enableInput && isInputDisabled)
+        {
+            EnableInput();
         }
     }
 
@@ -183,6 +208,7 @@ public class TutorialSkateboard : MonoBehaviour
 				isGrounded = true;
 				if (!wasGrounded) //meaning you just landed
 				{
+                    onLanded?.Invoke(this,EventArgs.Empty);
                     OnLand();
                 }
 			}
@@ -375,6 +401,7 @@ public class TutorialSkateboard : MonoBehaviour
             Collider2D other;
             bool grindable = CheckGrindable(out other, GetGrindCheckPosition(swipeDirection)); //check if player is above a grindable obstacle
             if (!grindable || swipeDirection != SwipeDirection.DOWN && swipeDirection != SwipeDirection.LEFT && swipeDirection != SwipeDirection.RIGHT) { return false; }
+            Resume(true);
             trickPerformed = PerformGrind(swipeDirection, other);
             isPerformingTrick = true;
             grindingTrail.transform.position = backWheelSparks.transform.position;
@@ -592,13 +619,13 @@ public class TutorialSkateboard : MonoBehaviour
         comboCounter -= 1;
     }
 
-    private void OnTouchStarted(object sender, EventArgs e)
+    private void OnTouchStarted(object sender, Vector2 start)
     {
         // Debug.Log("Touch Started");
         isCharging = true;
     }
 
-    private void OnTouchEnded(object sender, EventArgs e)
+    private void OnTouchEnded(object sender, Vector2 end)
     {
         // Debug.Log("Touch Ended");
         isCharging = false;
@@ -611,6 +638,7 @@ public class TutorialSkateboard : MonoBehaviour
 
     public void EnableInput()
     {
+        isInputDisabled = false;
         TouchControls.touchEvent += OnInputAction;
         TouchControls.touchStarted += OnTouchStarted;
         TouchControls.touchEnded += OnTouchEnded;
@@ -618,6 +646,7 @@ public class TutorialSkateboard : MonoBehaviour
 
     public void DisableInput()
     {
+        isInputDisabled = true;
         TouchControls.touchEvent -= OnInputAction;
         TouchControls.touchStarted -= OnTouchStarted;
         TouchControls.touchEnded -= OnTouchEnded;

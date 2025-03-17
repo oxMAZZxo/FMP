@@ -100,6 +100,7 @@ public class ProceduralMap : MonoBehaviour
                 }
             }
         }
+
         temp = temp.OrderBy(o => o.minimumAcceptableSpeedForObstacle).ToList();
         lastSlowObstacleIndex = temp.FindLastIndex(o => o.minimumAcceptableSpeedForObstacle == GameSpeed.Slow);
         lastMediumObstacleIndex = temp.FindLastIndex(o => o.minimumAcceptableSpeedForObstacle == GameSpeed.Medium);
@@ -274,12 +275,17 @@ public class ProceduralMap : MonoBehaviour
             case GameSpeed.Fast: maxIndex = lastFastObstacleIndex; break;
             default: maxIndex = obstacles.length - 1; break;
         }
+        
         Pool<Obstacle> obstaclePoolToChooseFrom = obstacles;
-        if(comboRush) {obstaclePoolToChooseFrom = grindableObstacles; maxIndex = grindableObstacles.length - 1;}
+        if(comboRush) 
+        {
+            obstaclePoolToChooseFrom = grindableObstacles; 
+            maxIndex = grindableObstacles.length - 1;
+        }
 
         Obstacle currentObstacleTypeChoice = obstaclePoolToChooseFrom.GetRandomObject(maxIndex + 1);
         GameObject mainObstacle = currentObstacleTypeChoice.GetMainObstacle();
-        if(ObstacleInSight(mainObstacle))
+        if(GameobjectInSight(mainObstacle))
         {
             currentObstacleTypeChoice.RollBackMainObstacle();
             Debug.Log($"Main Obstacle {mainObstacle.name} is in sight, therefore I cannot use it. Returning function");
@@ -327,7 +333,7 @@ public class ProceduralMap : MonoBehaviour
     {
         int choice = UnityEngine.Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs);
         GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(choice);
-        if(ObstacleInSight(secondObstacle))
+        if(GameobjectInSight(secondObstacle))
         {
             Debug.Log($"Second obstacle {secondObstacle.name} of main obstacle {mainObstacleCollider.name} is visible, therefore cannot use it.");
             currentObstacleTypeChoice.RollBackFollowUpObstacle(choice);
@@ -390,9 +396,9 @@ public class ProceduralMap : MonoBehaviour
         Physics2D.SyncTransforms();
     }
 
-    private bool ObstacleInSight(GameObject obstacle)
+    private bool GameobjectInSight(GameObject current)
     {
-        Renderer renderer = obstacle.GetComponent<Renderer>();
+        Renderer renderer = current.GetComponent<Renderer>();
         if(renderer == null) {renderer = GetComponentInChildren<Renderer>();}
         if(renderer == null) {return false;}
         return renderer.isVisible;

@@ -29,8 +29,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]private CinemachineVirtualCamera virtualCamera;
     [SerializeField]private GameObject[] grindables;
     [SerializeField]private GameObject[] unavoidables;
+    [SerializeField]private TutorialSwipeVisualiser tutorialSwipeVisualiser;
     private TutorialSkateboard tutorialSkateboard;
-
     private AsyncOperation asyncLoad;
     private bool sceneLoadDone;
 
@@ -48,6 +48,7 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         tutorialSkateboard = skateboard.GetComponent<TutorialSkateboard>();
+        tutorialSwipeVisualiser.enabled = false;
         partA = true;
         partB = false;
         partC = false;
@@ -145,13 +146,13 @@ public class TutorialManager : MonoBehaviour
     public void Pause()
     {
         isPaused = true;
-        tutorialSkateboard.Pause();
+        tutorialSkateboard.Pause(true);
     }
 
     public void Resume()
     {
         isPaused = false;
-        tutorialSkateboard.Resume();
+        tutorialSkateboard.Resume(true);
     }
 
     private IEnumerator LoadGameScene()
