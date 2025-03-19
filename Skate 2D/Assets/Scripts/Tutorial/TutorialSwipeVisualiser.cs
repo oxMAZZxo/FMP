@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TutorialSwipeVisualiser : MonoBehaviour
 {
@@ -8,23 +9,33 @@ public class TutorialSwipeVisualiser : MonoBehaviour
     private int[] grindDirections = {90,180,270};
     private int index = 0;
 
-    private void OnTouchStarted(object sender, Vector2 touchStart)
+    public void ShowArrow()
     {
-        if(TutorialManager.Instance.partB && skateboard.isGrounded)
-        {
-            return;
-        }
-        Debug.Log($"Visualising swipe at position {touchStart}");
-        arrowVisualiser.transform.position = touchStart;
-        arrowVisualiser.transform.rotation = TutorialManager.Instance.partB ? GetGrindRotations() : GetTrickRotations();
         arrowVisualiser.SetActive(true);
+        arrowVisualiser.transform.rotation = TutorialManager.Instance.partB ? GetGrindRotations() : GetTrickRotations();
+        
+    }
+
+    private void OnSwipeInput(object sender, TouchEventArgs e)
+    {
+        index++;
+        if(TutorialManager.Instance.partB && index > 3)
+        {
+            index = 0;
+        }
+        if(index > 5) {index = 0;}
+        arrowVisualiser.SetActive(false);
+    }
+
+    private void UpdateCounter()
+    {
+        
     }
 
     private Quaternion GetGrindRotations()
     {
         if(index > grindDirections.Length - 1) {index = 0;}
         Quaternion rotation = Quaternion.Euler(0,0,grindDirections[index]);
-        index++;
 
         return rotation;
     }
@@ -33,25 +44,18 @@ public class TutorialSwipeVisualiser : MonoBehaviour
     {
         if(index > trickDirections.Length - 1) {index = 0;}
         Quaternion rotation = Quaternion.Euler(0,0,trickDirections[index]);
-        index++;
 
         return rotation;
     }
     
-    private void OnTouchEnded(object sender, Vector2 e)
-    {
-        arrowVisualiser.SetActive(false);
-    }
 
     void OnEnable()
     {
-        TouchControls.touchStarted += OnTouchStarted;
-        TouchControls.touchEnded += OnTouchEnded;
+        TouchControls.touchEvent += OnSwipeInput;
     }
 
     void OnDisable()
     {
-        TouchControls.touchStarted -= OnTouchStarted;
-        TouchControls.touchEnded -= OnTouchEnded;
+        TouchControls.touchEvent -= OnSwipeInput;
     }
 }
