@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEngine.Events;
 
 public class TutorialSkateboard : MonoBehaviour
 {
-    public static event EventHandler<EventArgs> onLanded;
+    public static event EventHandler<EventArgs> landed;
     private Animator animator;
     private Rigidbody2D rb;
     private Collider2D myCollider;
@@ -208,7 +209,7 @@ public class TutorialSkateboard : MonoBehaviour
 				isGrounded = true;
 				if (!wasGrounded) //meaning you just landed
 				{
-                    onLanded?.Invoke(this,EventArgs.Empty);
+                    landed?.Invoke(this,EventArgs.Empty);
                     OnLand();
                 }
 			}

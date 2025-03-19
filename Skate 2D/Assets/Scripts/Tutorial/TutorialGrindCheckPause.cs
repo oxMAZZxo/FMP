@@ -34,6 +34,7 @@ public class TutorialGrindCheckPause : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         skateboard.Pause(false);
         SwipeNowDisplay.SetActive(true);
+        swipeVisualiser.ShowArrow();
     }
 
     private void OnSkateboardLanded(object sender, EventArgs e)
@@ -43,7 +44,7 @@ public class TutorialGrindCheckPause : MonoBehaviour
             canTrigger = true;
         }else
         {
-            TutorialSkateboard.onLanded -= OnSkateboardLanded;
+            TutorialSkateboard.landed -= OnSkateboardLanded;
             Destroy(swipeVisualiser.gameObject);
         }
         SwipeNowDisplay.SetActive(false);
@@ -51,11 +52,11 @@ public class TutorialGrindCheckPause : MonoBehaviour
 
     void OnEnable()
     {
-        TutorialSkateboard.onLanded += OnSkateboardLanded;
+        TutorialSkateboard.landed += OnSkateboardLanded;
     }
 
     void OnDisable()
     {
-        TutorialSkateboard.onLanded -= OnSkateboardLanded;
+        TutorialSkateboard.landed -= OnSkateboardLanded;
     }
 }
