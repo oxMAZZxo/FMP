@@ -5,69 +5,108 @@ using UnityEngine;
 
 public class TutorialSwipeVisualiser : MonoBehaviour
 {
+    /// <summary>
+    /// Reference of the tutorial skateboard
+    /// </summary>
     [SerializeField]private TutorialSkateboard skateboard;
-    [SerializeField]private GameObject arrowVisualiser;
-    private int[] trickDirections = {0,90,180,225,270};
-    private int[] grindDirections = {90,180,270};
+    /// <summary>
+    /// Reference of the visualiser arrow
+    /// </summary>
+    [SerializeField]private GameObject arrow;
+    /// <summary>
+    /// The Z Rotations that the arrow needs to be in representing the available swipe directions for tricks.
+    /// </summary>
+    private int[] trickSwipeDirections = {0,90,180,225,270};
+    /// <summary>
+    /// The Z Rotations that the arrow needs to be in representing the available swipe directions for grinds.
+    /// </summary>
+    private int[] grindSwipeDirections = {90,180,270};
+    /// <summary>
+    /// The current index to use to take a Z rotation, on the trickDirections or GrindDirections;
+    /// </summary>
     private int index = 0;
+    public static event EventHandler swipeValid;
 
     void Start()
     {
-        arrowVisualiser.SetActive(true);
+        arrow.SetActive(true);
     }
 
-    public void ShowArrow()
+    /// <summary>
+    /// Activates the Visualiser on the canvas
+    /// </summary>
+    public void ShowVisualiser()
     {
-        arrowVisualiser.SetActive(true);
+        arrow.SetActive(true);
     }
 
+    // When any input is made, we want to check whether that input was valid, for that current stage of the tutorial (part A or part B).
     private void OnSwipeInput(object sender, TouchEventArgs e)
     {
+        if(e.swipeDirection == SwipeDirection.NONE) {return;}
         bool swipeValid;
-        if(TutorialManager.Instance.partB && !skateboard.isGrounded)
+        if(TutorialManager.Instance.partB && !skateboard.isGrounded) //If we are in part be and not on the ground (in the air when we tell the player to swipe)
         {
+            // Check if the swipe made was valid
             swipeValid = CheckGrind(e.swipeDirection);
-        }else
+        }else // Else if not in Part B (meaning in Part A) 
         {
+            // Check if the swipe made was valid
             swipeValid = CheckTrick(e.swipeDirection);
         }
+        // If the swipe wasn't valid, stop
         if(!swipeValid) {return;}
+        //increase index if valid
         index++;
+        //if we are in part B, we only have 3 available directions
         if(TutorialManager.Instance.partB && index > 2)
         {
+            //if the index is higher than 2, then reset to 0 to point at the first swipe direction for a grind
             index = 0;
         }
+        //if index is bigger than 5, aka being in part A, then set it to 0. This code will never run in part B, because the grind directions are less than trick directions.
         if(index > 5) {index = 0;}
-        arrowVisualiser.SetActive(false);
+        //disable the arrow
+        arrow.SetActive(false);
     }
 
     private IEnumerator UpdateArrow()
     {
         yield return new WaitForSeconds(0.2f);
-        arrowVisualiser.transform.rotation = TutorialManager.Instance.partB ? GetGrindRotations() : GetTrickRotations();  
+        //Update the arrows Z rotation based on the whether this is part B is true. if true, get grind rotations, if false, get trick rotations
+        arrow.transform.rotation = TutorialManager.Instance.partB ? GetGrindRotations() : GetTrickRotations();  
     }
 
     private void OnSkateboardLanded(object sender, EventArgs e)
     {
+        //when skateboard lands, update the arrow rotation
         StartCoroutine(UpdateArrow());
+        //and show or hide arrow depending on tutorial stage
         StartCoroutine(ShowOrHideArrowWithDelay());
     }
 
     private IEnumerator ShowOrHideArrowWithDelay()
     {
         yield return new WaitForSeconds(0.2f);
+        //if part A, show arrow when player lands.
         if(TutorialManager.Instance.partA)
         {
-            arrowVisualiser.SetActive(true);
+            arrow.SetActive(true);
         }
+        //if part B, disable it if not disabled.
         if(TutorialManager.Instance.partB)
         {
-            arrowVisualiser.SetActive(false);
+            arrow.SetActive(false);
         }
     }
 
     private bool CheckTrick(SwipeDirection swipeDirection)
     {
+        //if the current index is 0, then it means that player needs to swipe up.
+        //Therefore if both these conditions are valid, when this function is called,
+        //And the current index is 0, and player swiped UP, it means the player made a valid swipe.
+        //The Index represents the current direction displayed on the screen (that the player should perform)
+        //The Swipe Direction is the current swipe direction the player performed.
         if(index == 0 && swipeDirection == SwipeDirection.UP)
         {
             return true;
@@ -98,7 +137,7 @@ public class TutorialSwipeVisualiser : MonoBehaviour
 
     private bool CheckGrind(SwipeDirection swipeDirection)
     {
-        Debug.Log($"Checking Grind... {Environment.NewLine} Current index: {index} Swipe Direction: {swipeDirection.ToString()}");
+        //Same as Checking Tricks
         if(index == 0 && swipeDirection == SwipeDirection.LEFT)
         {
             return true;
@@ -116,21 +155,24 @@ public class TutorialSwipeVisualiser : MonoBehaviour
         return false;
     }
 
-
+    /// <returns>Returns a quaternion representing the rotation the arrow needs to be in depending on the current index for Grinds</returns>
     private Quaternion GetGrindRotations()
     {
-        if(index > grindDirections.Length - 1) {index = 0;}
+        //Ensuring the index is not bigger than the amount of grind directions available
+        if(index > grindSwipeDirections.Length - 1) {index = 0;}
         Debug.Log($"Getting next grind arrow rotation on index {index}");
-        Quaternion rotation = Quaternion.Euler(0,0,grindDirections[index]);
+        Quaternion rotation = Quaternion.Euler(0,0,grindSwipeDirections[index]);
 
         return rotation;
     }
 
+    /// <returns>Returns a quaternion representing the rotation the arrow needs to be in depending on the current index for Tricks</returns>
     private Quaternion GetTrickRotations()
     {
-        if(index > trickDirections.Length - 1) {index = 0;}
+        //same as as above
+        if(index > trickSwipeDirections.Length - 1) {index = 0;}
         Debug.Log($"Getting next trick arrow rotation on index {index}");
-        Quaternion rotation = Quaternion.Euler(0,0,trickDirections[index]);
+        Quaternion rotation = Quaternion.Euler(0,0,trickSwipeDirections[index]);
 
         return rotation;
     }
