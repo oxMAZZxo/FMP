@@ -77,12 +77,12 @@ public class TutorialGrindCheckPause : MonoBehaviour
     void OnEnable()
     {
         TutorialSkateboard.landed += OnSkateboardLanded;
-        TutorialSwipeVisualiser.swipeValid += OnValidSwipeMade;
+        TutorialSwipeVisualiser.validSwipe += OnValidSwipeMade;
     }
 
     void OnDisable()
     {
         TutorialSkateboard.landed -= OnSkateboardLanded;
-        TutorialSwipeVisualiser.swipeValid -= OnValidSwipeMade;
+        TutorialSwipeVisualiser.validSwipe -= OnValidSwipeMade;
     }
 }

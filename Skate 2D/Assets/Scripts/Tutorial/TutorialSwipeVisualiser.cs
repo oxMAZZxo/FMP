@@ -25,7 +25,7 @@ public class TutorialSwipeVisualiser : MonoBehaviour
     /// The current index to use to take a Z rotation, on the trickDirections or GrindDirections;
     /// </summary>
     private int index = 0;
-    public static event EventHandler swipeValid;
+    public static event EventHandler validSwipe;
 
     void Start()
     {
@@ -44,18 +44,18 @@ public class TutorialSwipeVisualiser : MonoBehaviour
     private void OnSwipeInput(object sender, TouchEventArgs e)
     {
         if(e.swipeDirection == SwipeDirection.NONE) {return;}
-        bool swipeValid;
+        bool isValid;
         if(TutorialManager.Instance.partB && !skateboard.isGrounded) //If we are in part be and not on the ground (in the air when we tell the player to swipe)
         {
             // Check if the swipe made was valid
-            swipeValid = CheckGrind(e.swipeDirection);
+            isValid = CheckGrind(e.swipeDirection);
         }else // Else if not in Part B (meaning in Part A) 
         {
             // Check if the swipe made was valid
-            swipeValid = CheckTrick(e.swipeDirection);
+            isValid = CheckTrick(e.swipeDirection);
         }
         // If the swipe wasn't valid, stop
-        if(!swipeValid) {return;}
+        if(!isValid) {return;}
         //increase index if valid
         index++;
         //if we are in part B, we only have 3 available directions
