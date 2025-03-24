@@ -7,6 +7,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// This class handles logic for transitioning between menu, gameplay, and tutorial.
+/// </summary>
 public class MenuManager : MonoBehaviour
 {
     [SerializeField]private Camera cam;

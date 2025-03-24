@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class TouchControls : MonoBehaviour
 {
-    public int id {get;}
+    //For debugging purposes
     public Camera cam;
     public static TouchControls Instance;
     [SerializeField,Range(1f,1000f)]private float deadzone = 10f;

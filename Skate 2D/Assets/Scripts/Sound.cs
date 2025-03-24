@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
+/// <summary>
+/// Represents a sound effect that can be played.
+/// </summary>
 [System.Serializable]
 public class Sound
 {

@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
+/// <summary>
+/// A class which handles logic to adjust volume based on user input.
+/// </summary>
 public class Settings : MonoBehaviour
 {
     [SerializeField]private AudioMixer mainMixer;

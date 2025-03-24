@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// The GameData class holds the important game data that is saved from the players session.
+/// This is only a temporary class as things are saved locally. However, once moved to GPGS, this will be switched with a GPGS Manager.
+/// </summary>
 public class GameData : MonoBehaviour
 {
     public static GameData Instance {get; private set;}
