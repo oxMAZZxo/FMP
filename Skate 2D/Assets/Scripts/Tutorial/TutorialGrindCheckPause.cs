@@ -46,6 +46,7 @@ public class TutorialGrindCheckPause : MonoBehaviour
     IEnumerator PauseSkateboard()
     {
         yield return new WaitForSeconds(0.3f);
+        if(skateboard.isGrounded) {yield break;}
         //Pause the skateboard, but keep input enabled
         skateboard.Pause(false);
         //Show Swipe Now Display
