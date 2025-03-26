@@ -295,7 +295,7 @@ public class GameManager : MonoBehaviour
         AudioManager.Global.ResetPitch("ComboSFX");
         if(e.comboCount > 2)
         {
-            float cameraShakeMultiplier = ((e.comboCount -1) / 10f) + 1;
+            float cameraShakeMultiplier = ((e.comboCount -3) / 10f) + 1;
             vmShake.ShakeCamera(cameraShakeTime, cameraShakeMultiplier);
         }
     }
