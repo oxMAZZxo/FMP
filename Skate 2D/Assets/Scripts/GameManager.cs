@@ -293,11 +293,15 @@ public class GameManager : MonoBehaviour
         comboCounterDisplay.text = "";
         comboDisplay.text = "";
         AudioManager.Global.ResetPitch("ComboSFX");
-        if(e.comboCount > 2)
+        if(e.jumpHeight > 1)
+        {
+            vmShake.ShakeCamera(cameraShakeTime, e.jumpHeight);    
+        }else if(e.comboCount > 2)
         {
             float cameraShakeMultiplier = ((e.comboCount -3) / 10f) + 1;
             vmShake.ShakeCamera(cameraShakeTime, cameraShakeMultiplier);
         }
+
     }
 
     /// <summary>

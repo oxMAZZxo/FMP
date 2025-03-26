@@ -62,7 +62,7 @@ public class SkateboardController : MonoBehaviour
     private float jumpHeight;
     public static event EventHandler<SkateboardTrickPerformedEventArgs> trickPerformed; 
     public static event EventHandler<SkateboardLandEventArgs> skateboardLanded;
-
+    private float preJumpYPosition;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -122,8 +122,10 @@ public class SkateboardController : MonoBehaviour
             euler.z = Mathf.Clamp(euler.z, -10f, 10f); // Adjust limits as needed
 
             transform.rotation = Quaternion.Euler(euler);
+            float currentHeight = transform.position.y - preJumpYPosition;
+            if(currentHeight > jumpHeight) {jumpHeight = currentHeight;}
         }
-        oldPosX = transform.position.x;   
+        oldPosX = transform.position.x;  
     }
 
     void LateUpdate()
@@ -225,6 +227,7 @@ public class SkateboardController : MonoBehaviour
         if(comboCounter > longestCombo) { longestCombo = comboCounter;}
         potentialPoints = 0;
         comboCounter = 1;
+        jumpHeight = 0;
         rb.constraints = RigidbodyConstraints2D.None;
         audioManager.Play("Landed");
         audioManager.Play("Rolling");
@@ -245,6 +248,7 @@ public class SkateboardController : MonoBehaviour
         rollingSmokeParticles.SetActive(false);
         audioManager.Play("Tail Snap");
         audioManager.Play("Wheel Spinning");
+        preJumpYPosition = transform.position.y;
         rb.AddForce(new Vector2(0f, jumpForce));
     }
 
