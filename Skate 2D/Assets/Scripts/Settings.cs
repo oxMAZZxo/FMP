@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -8,9 +9,10 @@ using UnityEngine.UI;
 public class Settings : MonoBehaviour
 {
     [SerializeField]private AudioMixer mainMixer;
-    [SerializeField]private Slider masterSlider;
-    [SerializeField]private Slider musicSlider;
-    [SerializeField]private Slider sfxSlider;
+    [SerializeField]private Toggle sfxToggle;
+    [SerializeField]private Toggle musicToggle;
+    private bool sfxOn;
+    private bool musicOn;
 
     void Start()
     {
@@ -18,6 +20,7 @@ public class Settings : MonoBehaviour
         if(!string.IsNullOrEmpty(data) && !string.IsNullOrWhiteSpace(data))
         {
             DeconstructData(data);
+            SetSettings();
         }
     }
 
@@ -25,28 +28,50 @@ public class Settings : MonoBehaviour
     {
         string[] temp = data.Split(',');
 
-        masterSlider.value = float.Parse(temp[0]);
-        musicSlider.value = float.Parse(temp[1]);
-        sfxSlider.value = float.Parse(temp[2]);
+        musicOn = Convert.ToBoolean(temp[0]);
+        sfxOn = Convert.ToBoolean(temp[1]);
     }
 
-    public void AdjustVolume(string parameter)
+    private void SetSettings()
     {
-        float volume = 0;
-        switch (parameter)
+        sfxToggle.SetIsOnWithoutNotify(sfxOn);
+        musicToggle.SetIsOnWithoutNotify(musicOn);
+        SetSFX();
+        SetMusic();
+    }
+
+    public void SetSFX() 
+    {
+        if(!sfxToggle.isOn)
         {
-            case "MasterVolume":
-                volume = masterSlider.value;
-                break;
-            case "MusicVolume":
-                volume = musicSlider.value;
-                break;
-            case "SFXVolume":
-                volume = sfxSlider.value;
-                break;
+            mainMixer.SetFloat("SFXVolume",-80f);
+        }else
+        {
+            mainMixer.SetFloat("SFXVolume",0f);
         }
-        if(volume < -10f) {volume = -80f;}
-        mainMixer.SetFloat(parameter,volume);
-        SaveSystem.SaveData($"{masterSlider.value},{musicSlider.value},{sfxSlider.value}",Application.persistentDataPath + ("/SettingsData.txt"));
+        if(sfxOn != sfxToggle.isOn)
+        {
+            sfxOn = sfxToggle.isOn;
+            SaveSystem.SaveData($"{musicOn},{sfxOn}",Application.persistentDataPath + ("/SettingsData.txt"));
+            Debug.Log($"There was a change in sfx sound, saving......");
+        }
+
+    }
+
+    public void SetMusic() 
+    {
+        if(!musicToggle.isOn)
+        {
+            mainMixer.SetFloat("MusicVolume",-80f);
+        }else
+        {
+            mainMixer.SetFloat("MusicVolume",0f);
+        }
+        if(musicOn != musicToggle.isOn)
+        {
+            musicOn = musicToggle.isOn;
+            SaveSystem.SaveData($"{musicOn},{sfxOn}",Application.persistentDataPath + ("/SettingsData.txt"));
+            Debug.Log($"There was a change in music sound, saving....");
+        }
     }
 }
