@@ -38,12 +38,6 @@ Players control a skater via intuitive swipe controls to perform tricks and grin
 
 ---
 
-## Screenshots
-![Screenshot_20250314_140209_Gallery](https://github.com/user-attachments/assets/75a9129a-6d75-4e53-9411-63aadb96ff1b)
-![Screenshot_20250314_140223_Gallery](https://github.com/user-attachments/assets/1b0bfe1c-fbb0-4fab-b49f-80b3c98ca661)
-![Screenshot_20250314_140249_Gallery](https://github.com/user-attachments/assets/27e6da78-b2bc-403a-99d4-f4c03a88ea6b)
-![Screenshot_20250314_140338_Gallery](https://github.com/user-attachments/assets/bb7ac283-4b50-4ff0-8632-ad80f341a8da)
-
 ## Technologies Used
 
 | Technology | Description |
@@ -81,3 +75,10 @@ This repository represents not only the culmination of my degree, but a showcase
 ---
 
 > Created with ❤️ by Marios Gkiokrousis
+
+---
+## Screenshots
+![Screenshot_20250314_140209_Gallery](https://github.com/user-attachments/assets/75a9129a-6d75-4e53-9411-63aadb96ff1b)
+![Screenshot_20250314_140223_Gallery](https://github.com/user-attachments/assets/1b0bfe1c-fbb0-4fab-b49f-80b3c98ca661)
+![Screenshot_20250314_140249_Gallery](https://github.com/user-attachments/assets/27e6da78-b2bc-403a-99d4-f4c03a88ea6b)
+![Screenshot_20250314_140338_Gallery](https://github.com/user-attachments/assets/bb7ac283-4b50-4ff0-8632-ad80f341a8da)
