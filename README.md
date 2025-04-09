@@ -7,10 +7,10 @@
 ## Table of Contents
 - [📖 Project Description](#project-description)
 - [🎮 Features](#features)
-- [📸 Screenshots](#screenshots)
 - [🛠 Technologies Used](#technologies-used)
 - [📱 Platform & Deployment](#platform--deployment)
 - [📋 Developer Notes](#developer-notes)
+- [📸 Screenshots](#screenshots)
 
 ---
 
