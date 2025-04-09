@@ -69,7 +69,10 @@ This project was developed using agile methodologies, with continuous playtestin
 - Performance optimisation using object pooling and profiler tools
 - Clean, scalable architecture using design patterns (Singleton, Observer, Mediator)
 - Readability and maintainability of code
-- Collaborated with Amber Bowen. Her concepts and work on the character is invaluable, and made this game feel more complete.
+Collaborated with Amber Bowen. Her concepts and work on the character is invaluable, and made this game feel more complete.
+Huge thanks to the playtesters:
+- Daniel Osei-Nimo
+- Nikola Milosev
 
 This repository represents not only the culmination of my degree, but a showcase of my technical, creative, collaboration and project management skills as a developer.
 
