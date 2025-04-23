@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI longestComboDisplay;
     [SerializeField]private TextMeshProUGUI distanceTravelledDisplayFinal;
     [SerializeField]private TextMeshProUGUI addedScoreDisplay;
-    [SerializeField]private Animator comboCounterDisplayAnimator;
     [Header("Start Game Velocity Fields")]
     [SerializeField,Range(1f,5f)]private float startVelocity = 1f;
     [SerializeField,Range(1f,10f)]private float maxVelocity = 1f;
@@ -54,6 +53,9 @@ public class GameManager : MonoBehaviour
     [SerializeField,Range(0.1f,2f)]private float cameraShakeTime;
     [SerializeField]private TextMeshProUGUI comboDisplay;
     [SerializeField]private TextMeshProUGUI comboCounterDisplay;
+    private Animator comboCounterDisplayAnimator;
+    // [SerializeField]private TextMeshProUGUI multiplierDisplay;
+    // [SerializeField]private TextMeshProUGUI potentialPointsDisplay;
     private CinemachineShake vmShake;
     [Header("Combo Rush")]
     [SerializeField]private GameSpeed comboRushGameSpeed;
@@ -94,6 +96,7 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 144;
         gameHasStarted = false;
         canActivateComboRush = true;
+        comboCounterDisplayAnimator = comboCounterDisplay.gameObject.GetComponent<Animator>();
     }
 
     /// <summary>
@@ -165,7 +168,7 @@ public class GameManager : MonoBehaviour
     private void AddScore(int value)
     {
         if(value == 0) {return;}
-        StartCoroutine(AddScoreAnimation(value));
+        StartCoroutine(IncrementScoreAnimation(value));
         DisplayPointsIncrement(value);
         if(currentVelocity < maxVelocity)
         {
@@ -174,7 +177,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private IEnumerator AddScoreAnimation(int value)
+    private IEnumerator IncrementScoreAnimation(int value)
     {
         Debug.Log($"Value: {value}");
         int finalValue = score + value;
@@ -290,10 +293,11 @@ public class GameManager : MonoBehaviour
             noOfCombos++;
         }
         noOfTricks ++;
-        comboCounterDisplay.text = e.comboCount.ToString();;
-        comboDisplay.gameObject.SetActive(true);
+        comboCounterDisplay.text = e.comboCount.ToString();
+        // potentialPointsDisplay.text = e.potentialPoints.ToString();
+        // comboDisplay.text += e.trickName;
+        // comboDisplay.gameObject.SetActive(true);
         comboCounterDisplay.gameObject.SetActive(true);
-        comboDisplay.text += e.trickName;
         if(e.isCombo && e.comboCount > 1)
         {
             AudioManager.Global.Play("ComboSFX", 0.025f);
@@ -313,10 +317,11 @@ public class GameManager : MonoBehaviour
     private void OnSkateboardLanded(object sender, SkateboardLandEventArgs e)
     {
         AddScore(e.score);
-        comboDisplay.gameObject.SetActive(false);
+        // comboDisplay.gameObject.SetActive(false);
         comboCounterDisplay.gameObject.SetActive(false);
         comboCounterDisplay.text = "";
-        comboDisplay.text = "";
+        // potentialPointsDisplay.text = "";
+        // comboDisplay.text = "";
         AudioManager.Global.ResetPitch("ComboSFX");
         if(e.jumpHeight > 1)
         {
@@ -374,10 +379,11 @@ public class GameManager : MonoBehaviour
         skateboardController.transform.position = newPos;
         reset?.Invoke(this, EventArgs.Empty);
         virtualCamera.enabled = false;
-        comboDisplay.gameObject.SetActive(false);
+        // comboDisplay.gameObject.SetActive(false);
         comboCounterDisplay.gameObject.SetActive(false);
-        comboDisplay.text = "";
+        // comboDisplay.text = "";
         comboCounterDisplay.text = "";
+        // potentialPointsDisplay.text = "";
         Invoke("DisableGameOverPanel",0.3f);
         skateboardController.Reset();
     }

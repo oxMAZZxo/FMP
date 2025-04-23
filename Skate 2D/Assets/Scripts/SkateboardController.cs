@@ -327,7 +327,7 @@ public class SkateboardController : MonoBehaviour
             Debug.Log("Grind was invalid");
             yield break;
         }
-        trickPerformed?.Invoke(this, new SkateboardTrickPerformedEventArgs(trickPerformedOutput,comboCounter,isCombo));
+        trickPerformed?.Invoke(this, new SkateboardTrickPerformedEventArgs(trickPerformedOutput,comboCounter,isCombo,potentialPoints));
     }
 
     /// <summary>

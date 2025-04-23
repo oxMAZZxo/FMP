@@ -17,11 +17,13 @@ public class SkateboardTrickPerformedEventArgs : EventArgs
     /// The number of tricks performed in this combo.
     /// </summary>
     public int comboCount {get;}
+    public int potentialPoints {get;}
 
-    public SkateboardTrickPerformedEventArgs(string newTrickName, int newComboCount,bool newCombo)
+    public SkateboardTrickPerformedEventArgs(string newTrickName, int newComboCount,bool newCombo, int newPotentialPoints)
     {
         trickName = newTrickName;
         isCombo = newCombo;
         comboCount = newComboCount;
+        potentialPoints = newPotentialPoints;
     }
 }
