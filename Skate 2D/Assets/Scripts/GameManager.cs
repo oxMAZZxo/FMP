@@ -181,11 +181,11 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Final Value: {finalValue}");
         int addition = 1;
         if(value > 100) {addition = 10;}
-        if(value > 1000) {addition = 100;}
-        if(value > 10000) {addition = 500;}
+        if(value > 1000) {addition = 50;}
+        if(value > 10000) {addition = 100;}
         for(int i = score; i <= finalValue; i+= addition)
         {
-            yield return new WaitForSeconds(0.000001f);
+            yield return new WaitForSeconds(0.0001f);
             score = i;
             if(score > finalValue)
             {
