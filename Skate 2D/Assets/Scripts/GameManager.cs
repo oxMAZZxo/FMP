@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Reflection;
 using Cinemachine;
 using TMPro;
@@ -164,13 +165,37 @@ public class GameManager : MonoBehaviour
     private void AddScore(int value)
     {
         if(value == 0) {return;}
+        StartCoroutine(AddScoreAnimation(value));
         DisplayPointsIncrement(value);
         if(currentVelocity < maxVelocity)
         {
             IncreaseSpeed(value);
         }
-        score +=value;
-        scoreDisplay.text = Utilities.PrettyNumberString(score);
+
+    }
+
+    private IEnumerator AddScoreAnimation(int value)
+    {
+        Debug.Log($"Value: {value}");
+        int finalValue = score + value;
+        Debug.Log($"Final Value: {finalValue}");
+        int addition = 1;
+        if(value > 100) {addition = 10;}
+        if(value > 1000) {addition = 100;}
+        if(value > 10000) {addition = 500;}
+        for(int i = score; i <= finalValue; i+= addition)
+        {
+            yield return new WaitForSeconds(0.000001f);
+            score = i;
+            if(score > finalValue)
+            {
+                score = finalValue;
+                scoreDisplay.text = score.ToString();
+                break;
+            }
+            scoreDisplay.text = score.ToString();
+        }
+        // scoreDisplay.text = Utilities.PrettyNumberString(score);
     }
 
     /// <summary>
