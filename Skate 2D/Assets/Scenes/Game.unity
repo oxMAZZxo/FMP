@@ -267,8 +267,10 @@ GameObject:
   - component: {fileID: 21715825}
   - component: {fileID: 21715827}
   - component: {fileID: 21715826}
+  - component: {fileID: 21715828}
+  - component: {fileID: 21715829}
   m_Layer: 5
-  m_Name: GameOverPanel
+  m_Name: GameOverDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -308,7 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 7d7ccc8bc40d1df4e850a5e7888f977d, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -333,6 +335,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 21715824}
   m_CullTransparentMesh: 1
+--- !u!114 &21715828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21715824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 273ff1f06fc0a964d9c9ff0be8ef984a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreDisplayFinal: {fileID: 96423208}
+  noOfTricksDisplay: {fileID: 824977384}
+  noOfCombosDisplay: {fileID: 184468119}
+  longestComboDisplay: {fileID: 1830285386}
+  distanceTravelledDisplay: {fileID: 1092970402}
+  testScore: 17123
+  testTricks: 352
+  testCombos: 110
+  testCombo: 18
+  testDistance: 632
+--- !u!95 &21715829
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21715824}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 649a7be0da112764f87cbeb20e896d0e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &33378289
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,8 +768,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -70.78125}
-  m_SizeDelta: {x: 0, y: 140}
+  m_AnchoredPosition: {x: -1500, y: -70.78125}
+  m_SizeDelta: {x: 3000, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &96423208
 MonoBehaviour:
@@ -755,8 +800,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 0
+  m_fontColor: {r: 0, g: 0, b: 0, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1153,8 +1198,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.100097656, y: -350.78003}
-  m_SizeDelta: {x: 0.19995117, y: 140}
+  m_AnchoredPosition: {x: -1500, y: -350.78003}
+  m_SizeDelta: {x: 3000, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &184468119
 MonoBehaviour:
@@ -1185,8 +1230,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 0
+  m_fontColor: {r: 0, g: 0, b: 0, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1282,16 +1327,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7389b69a9f77d3c4b8901f62c82ea26b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  framerateDisplay: {fileID: 1125636738}
   scoreDisplay: {fileID: 151249280}
   distanceTravelledDisplay: {fileID: 871449881}
-  gameOverPanel: {fileID: 21715824}
-  scoreDisplayFinal: {fileID: 96423208}
-  noOfTricksDisplay: {fileID: 824977384}
-  noOfCombosDisplay: {fileID: 184468119}
-  longestComboDisplay: {fileID: 1830285386}
-  distanceTravelledDisplayFinal: {fileID: 1092970402}
-  addedScoreDisplay: {fileID: 930265750}
+  gameOverDisplay: {fileID: 21715828}
   startVelocity: 2.2
   maxVelocity: 5.5
   velocityIncrementPerScoreAdded: 0.125
@@ -1305,6 +1343,7 @@ MonoBehaviour:
   cameraShakeTime: 0.2
   comboDisplay: {fileID: 586017632}
   comboCounterDisplay: {fileID: 1437382175}
+  addedScoreDisplay: {fileID: 930265750}
   comboRushGameSpeed: 1
   comboRushActivateChance: 15
   comboRushActivationCooldown: 60
@@ -3810,8 +3849,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -210.78}
-  m_SizeDelta: {x: 0, y: 140}
+  m_AnchoredPosition: {x: -1500, y: -210.78}
+  m_SizeDelta: {x: 3000, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &824977384
 MonoBehaviour:
@@ -3842,8 +3881,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 0
+  m_fontColor: {r: 0, g: 0, b: 0, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5230,8 +5269,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.49951172, y: -630.78}
-  m_SizeDelta: {x: 0.19995, y: 140}
+  m_AnchoredPosition: {x: -1500, y: -630.78}
+  m_SizeDelta: {x: 3000, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1092970402
 MonoBehaviour:
@@ -5262,8 +5301,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 0
+  m_fontColor: {r: 0, g: 0, b: 0, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5972,7 +6011,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 7fc308b524a003e4b8c821ee2424672c, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8200,8 +8239,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.39990234, y: -490.78}
-  m_SizeDelta: {x: 0, y: 140}
+  m_AnchoredPosition: {x: -1500, y: -490.78}
+  m_SizeDelta: {x: 3000, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1830285386
 MonoBehaviour:
@@ -8232,8 +8271,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 0
+  m_fontColor: {r: 0, g: 0, b: 0, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -9000,8 +9039,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 3289650
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

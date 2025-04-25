@@ -24,17 +24,10 @@ public class GameManager : MonoBehaviour
     /// Is the current game session running paused.
     /// </summary>
     public bool isGamePaused {get; private set;}
-    public TextMeshProUGUI framerateDisplay;
     [Header("UI Elements")]
     [SerializeField]private TextMeshProUGUI scoreDisplay;
     [SerializeField]private TextMeshProUGUI distanceTravelledDisplay;
-    [SerializeField]private GameObject gameOverPanel;
-    [SerializeField]private TextMeshProUGUI scoreDisplayFinal;
-    [SerializeField]private TextMeshProUGUI noOfTricksDisplay;
-    [SerializeField]private TextMeshProUGUI noOfCombosDisplay;
-    [SerializeField]private TextMeshProUGUI longestComboDisplay;
-    [SerializeField]private TextMeshProUGUI distanceTravelledDisplayFinal;
-    [SerializeField]private TextMeshProUGUI addedScoreDisplay;
+    [SerializeField]private GameOverDisplay gameOverDisplay;
     [Header("Start Game Velocity Fields")]
     [SerializeField,Range(1f,5f)]private float startVelocity = 1f;
     [SerializeField,Range(1f,10f)]private float maxVelocity = 1f;
@@ -53,6 +46,7 @@ public class GameManager : MonoBehaviour
     [SerializeField,Range(0.1f,2f)]private float cameraShakeTime;
     [SerializeField]private TextMeshProUGUI comboDisplay;
     [SerializeField]private TextMeshProUGUI comboCounterDisplay;
+    [SerializeField]private TextMeshProUGUI addedScoreDisplay;
     private Animator comboCounterDisplayAnimator;
     // [SerializeField]private TextMeshProUGUI multiplierDisplay;
     // [SerializeField]private TextMeshProUGUI potentialPointsDisplay;
@@ -331,7 +325,6 @@ public class GameManager : MonoBehaviour
             float cameraShakeMultiplier = ((e.comboCount -3) / 10f) + 1;
             vmShake.ShakeCamera(cameraShakeTime, cameraShakeMultiplier);
         }
-
     }
 
     /// <summary>
@@ -343,12 +336,8 @@ public class GameManager : MonoBehaviour
     {
         StopCoroutine(ComboRushCooldown());
         canActivateComboRush = true;
-        scoreDisplayFinal.text += score.ToString();
-        noOfTricksDisplay.text += noOfTricks.ToString();
-        noOfCombosDisplay.text += noOfCombos.ToString();
-        longestComboDisplay.text += longestCombo.ToString();
-        distanceTravelledDisplayFinal.text += distanceTravelled.ToString("F1");
-        gameOverPanel.SetActive(true);
+        gameOverDisplay.SetValues(score,noOfTricks,noOfCombos,longestCombo,distanceTravelled);
+        gameOverDisplay.gameObject.SetActive(true);
         gameHasStarted = false;
         GameData.Instance.SetStats(score,longestCombo,distanceTravelled);
     }
@@ -391,12 +380,7 @@ public class GameManager : MonoBehaviour
     private void DisableGameOverPanel()
     {
         virtualCamera.enabled = true;
-        gameOverPanel.SetActive(false);
-        distanceTravelledDisplayFinal.text = "Distance: ";
-        scoreDisplayFinal.text = "Score: ";
-        noOfTricksDisplay.text = "Tricks: ";
-        noOfCombosDisplay.text = "Combos: ";
-        longestComboDisplay.text = "Longest: ";
+        gameOverDisplay.gameObject.SetActive(false);
     }
 
     public void PauseGame()
