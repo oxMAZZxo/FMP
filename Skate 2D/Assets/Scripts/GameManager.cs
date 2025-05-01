@@ -174,9 +174,9 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator IncrementScoreAnimation(int value)
     {
-        Debug.Log($"Value: {value}");
+        // Debug.Log($"Value: {value}");
         int finalValue = score + value;
-        Debug.Log($"Final Value: {finalValue}");
+        // Debug.Log($"Final Value: {finalValue}");
         int addition = 1;
         if(value > 100) {addition = 10;}
         if(value > 1000) {addition = 50;}
