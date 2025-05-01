@@ -15,6 +15,7 @@ public class GameData : MonoBehaviour
     public float longestCombo {get; private set;}
     public float longestDistance {get; private set;}
     public bool tutorialCompleted {get; private set;}
+    public ComboAnnouncement[] comboAnnouncements {get; private set;}
     public static event EventHandler dataLoaded;
 
     void Awake()
@@ -36,6 +37,31 @@ public class GameData : MonoBehaviour
         {
             DeconstructData(data);
             dataLoaded?.Invoke(this, EventArgs.Empty);
+        }
+        LoadComboAnnouncements();
+    }
+
+    private void LoadComboAnnouncements()
+    {
+        TextAsset comboTaglinesFile = Resources.Load<TextAsset>("Combo Taglines");
+        if (comboTaglinesFile != null)
+        {
+            string[] lines = comboTaglinesFile.text.Split('\n');
+            comboAnnouncements = new ComboAnnouncement[lines.Length];
+            for(int i = 0; i < lines.Length; i++)
+            {
+                string[] data = lines[i].Split(',');
+                comboAnnouncements[i] = new ComboAnnouncement(Convert.ToInt16(data[0]), data[1], data[2], data[3], data[4], data[5], data[6]);
+            }
+            Debug.Log($"Combo Announcements Loaded Successfully!");
+            // foreach(ComboAnnouncement current in comboAnnouncements)
+            // {
+            //     Debug.Log($"Combo Count: {current.comboCount}. Taglines: {current.taglines[0]}, {current.taglines[1]}, {current.taglines[2]}, {current.taglines[3]}, {current.taglines[4]}, {current.taglines[5]}");
+            // }
+        }
+        else
+        {
+            Debug.LogError("Could not load combo taglines from resources.");
         }
     }
 

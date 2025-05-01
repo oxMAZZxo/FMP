@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI comboDisplay;
     [SerializeField]private TextMeshProUGUI comboCounterDisplay;
     [SerializeField]private TextMeshProUGUI addedScoreDisplay;
+    [SerializeField]private TextMeshProUGUI comboAnnouncementDisplay;
     private Animator comboCounterDisplayAnimator;
     // [SerializeField]private TextMeshProUGUI multiplierDisplay;
     // [SerializeField]private TextMeshProUGUI potentialPointsDisplay;
@@ -325,6 +326,20 @@ public class GameManager : MonoBehaviour
             float cameraShakeMultiplier = ((e.comboCount -3) / 10f) + 1;
             vmShake.ShakeCamera(cameraShakeTime, cameraShakeMultiplier);
         }
+
+        if(e.comboCount > 1)
+        {
+            ShowComboAnnouncement(e.comboCount);
+        }
+    }
+
+    private void ShowComboAnnouncement(int comboCount)
+    {
+        int index = comboCount - 2;
+        if(comboCount > (GameData.Instance.comboAnnouncements.Length - 1)) {index = GameData.Instance.comboAnnouncements.Length -1;}
+        ComboAnnouncement current = GameData.Instance.comboAnnouncements[index];
+        comboAnnouncementDisplay.text = current.taglines[UnityEngine.Random.Range(0,current.taglines.Length)];
+        comboAnnouncementDisplay.gameObject.SetActive(true);
     }
 
     /// <summary>
