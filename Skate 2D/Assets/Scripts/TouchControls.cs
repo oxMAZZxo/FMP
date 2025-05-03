@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Composites;
 
 /// <summary>
 /// The Touch Controls class is a singleton, scene persistent object, which detects user input on a touchscreen, calculates the diferent swipe directions and invokes touch input events.
@@ -8,7 +9,7 @@ using UnityEngine.InputSystem;
 public class TouchControls : MonoBehaviour
 {
     //For debugging purposes
-    public Camera cam;
+    [SerializeField]private Camera cam;
     public static TouchControls Instance;
     [SerializeField,Range(1f,1000f)]private float deadzone = 10f;
     [SerializeField,Range(0.01f,1f)]private float minDiagonalThreshold = 0.4f;
@@ -32,6 +33,7 @@ public class TouchControls : MonoBehaviour
     // public static event EventHandler<Vector2> swipeInProgress;
     private Vector2 touchStart;
     private Vector2 touchEnd;
+    public Vector2 currentTouchPosition {get; private set;}
     private float worldRadius;
     private float touchTime;
 
@@ -58,6 +60,11 @@ public class TouchControls : MonoBehaviour
         if(touchStart != Vector2.zero)
         {
             touchTime += Time.deltaTime;
+            currentTouchPosition = Mouse.current.position.ReadValue();
+            if(Touchscreen.current != null)
+            {
+                currentTouchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
+            }
         }
     }
 
@@ -145,16 +152,14 @@ public class TouchControls : MonoBehaviour
         touchEnded?.Invoke(this, touchEnd);
         DetectSwipe();
         touchStart = Vector2.zero;
+        currentTouchPosition = Vector2.zero;
         touchTime = 0;
     }
 
-    private void OnTouchInputInProgress(InputAction.CallbackContext context)
+    public Vector2 GetTouchToWorldPoint()
     {
-        if(touchStart == Vector2.zero)
-        {
-            return;
-        }
-        Debug.Log(context.action.ReadValue<Vector2>());
+        Vector3 pos = new Vector3(currentTouchPosition.x,currentTouchPosition.y, 10f);
+        return cam.ScreenToWorldPoint(pos);
     }
 
     void OnEnable()

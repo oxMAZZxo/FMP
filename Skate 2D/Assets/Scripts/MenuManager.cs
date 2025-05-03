@@ -12,7 +12,6 @@ using UnityEngine.UI;
 /// </summary>
 public class MenuManager : MonoBehaviour
 {
-    [SerializeField]private Camera cam;
     [Header("UI Elements")]
     [SerializeField]private GameObject mainMenuPanel;
     [SerializeField]private GameObject gameplayPanel;
@@ -24,6 +23,7 @@ public class MenuManager : MonoBehaviour
     private EventSystem eventSystem;
     private AsyncOperation asyncLoad;
     private bool sceneLoadDone;
+    public bool canGameStart = true;
 
     void Start()
     {
@@ -40,6 +40,7 @@ public class MenuManager : MonoBehaviour
     /// <param name="e"></param>
     private void OnTouch(object sender, TouchEventArgs e)
     {
+        if(!canGameStart) {return;}
         if(GameManager.Instance.gameHasStarted || settingsPanel.activeInHierarchy) {return;}
         GameObject objectHit;
         bool UI = CheckForUI(e.startPosition,out objectHit);
