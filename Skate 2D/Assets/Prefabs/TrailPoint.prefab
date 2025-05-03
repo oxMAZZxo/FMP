@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5601336654975586604}
   - component: {fileID: -6446222544641712929}
   m_Layer: 5
-  m_Name: TrailImage
+  m_Name: TrailPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -88,3 +88,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a899755e5f9f6534d8782c09f3b3aaef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  widthOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.00093889516
+      value: 0.8964876
+      inSlope: 1.5
+      outSlope: 1.5
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.9780884
+      value: 0.035240173
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxWidth: 100

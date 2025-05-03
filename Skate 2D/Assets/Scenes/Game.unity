@@ -3452,6 +3452,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 666698180}
+  - component: {fileID: 666698182}
   - component: {fileID: 666698181}
   m_Layer: 5
   m_Name: TouchVisualiser
@@ -3492,10 +3493,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 498575529}
-  imagePrefab: {fileID: 5485403726434789599, guid: d9a4a89f5253f864a88b94991e32e61e, type: 3}
-  trailPoolSize: 50
-  trailTime: 0.1
-  minDistance: 8.1
+  TrailPoint: {fileID: -6446222544641712929, guid: d9a4a89f5253f864a88b94991e32e61e, type: 3}
+  trailPoolSize: 200
+  trailTime: 0.3
+  minDistance: 5
+--- !u!222 &666698182
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 666698179}
+  m_CullTransparentMesh: 1
 --- !u!1 &697194432
 GameObject:
   m_ObjectHideFlags: 0

@@ -35,7 +35,6 @@ public class UITrailRenderer : MonoBehaviour
         {
             tempObj[i] = Instantiate(TrailPoint,transform);
             tempObj[i].Init(trailTime);
-            tempObj[i].gameObject.SetActive(false);
         }
 
         trailObjects = new Pool<UITrailPoint>(trailPoolSize,tempObj);
@@ -50,7 +49,7 @@ public class UITrailRenderer : MonoBehaviour
             return;
         }
         Vector2 currentPos = TouchControls.Instance.currentTouchPosition;
-        if(currentPos == Vector2.zero) {return;}
+        if(currentPos == Vector2.zero || currentPos == lastPosition) {return;}
         // If this is the first point, spawn it immediately
         if(lastPosition == null)
         {
@@ -84,8 +83,8 @@ public class UITrailRenderer : MonoBehaviour
     private void SpawnTrail(Vector2 position)
     {
         UITrailPoint current = trailObjects.GetObject();
-        current.gameObject.SetActive(true);
         current.transform.position = position;
+        current.Render();
     }
 
     void OnTouchStarted(object sender, Vector2 position) {
