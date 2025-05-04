@@ -108,6 +108,7 @@ public class SkateboardController : MonoBehaviour
             transform.rotation = Quaternion.Euler(euler);
             float currentHeight = transform.position.y - preJumpYPosition;
             if(currentHeight > jumpHeight) {jumpHeight = currentHeight;}
+            audioManager.Stop("Rolling");
         }
         oldPosX = transform.position.x;  
     }
