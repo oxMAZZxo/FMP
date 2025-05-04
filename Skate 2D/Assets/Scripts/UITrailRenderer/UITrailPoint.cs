@@ -6,8 +6,9 @@ public class UITrailPoint : MonoBehaviour
 {
     private float lifetime;
     private Image myImage;
-    [SerializeField] private AnimationCurve widthOverTime = AnimationCurve.Linear(0, 1, 1, 0); // Controls width scaling
-    [SerializeField] private float maxWidth = 100f; // Max width in pixels
+    [SerializeField]private AnimationCurve widthOverTime = AnimationCurve.Linear(0, 1, 1, 0); // Controls width scaling
+    [SerializeField]private float maxWidth = 100f; // Max width in pixels
+    [SerializeField]private bool colourFade;
     private float currentTime;   // Time passed since this point was rendered
     private RectTransform rectTransform;
 
@@ -36,7 +37,7 @@ public class UITrailPoint : MonoBehaviour
         size.y = width;
         rectTransform.sizeDelta = size;
 
-        // OPTIONAL: Also fade out
+        if(!colourFade) {return;}
         Color c = myImage.color;
         c.a = 1f - t; // Linear fade (you could use another curve)
         myImage.color = c;

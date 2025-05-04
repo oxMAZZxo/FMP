@@ -1,12 +1,6 @@
 using System;
 using System.Collections;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator),typeof(Rigidbody2D),typeof(Collider2D))]
@@ -63,6 +57,7 @@ public class SkateboardController : MonoBehaviour
     public static event EventHandler<SkateboardTrickPerformedEventArgs> trickPerformed; 
     public static event EventHandler<SkateboardLandEventArgs> skateboardLanded;
     private float preJumpYPosition;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -527,12 +522,14 @@ public class SkateboardController : MonoBehaviour
     {
         // Debug.Log("Touch Started");
         isCharging = true;
+        animator.SetBool("isHoldingTouch",true);
     }
 
     private void OnTouchEnded(object sender, Vector2 end)
     {
         // Debug.Log("Touch Ended");
         isCharging = false;
+        animator.SetBool("isHoldingTouch",false);
     }
 
     public void SetMinVelocity(float value)

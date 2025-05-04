@@ -112,4 +112,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxWidth: 100
+  maxWidth: 64
+  colourFade: 1

@@ -1,24 +1,21 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using Unity.VisualScripting;
-using UnityEditor.EditorTools;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
+/// <summary>
+/// The UI Trail Renderer component allows developers to create their own custom trails for the Canvas, as the Unity Engine does not have a built-in Trail Renderer for UI.
+/// This version of the class is designed specifically for City Skaters.
+/// </summary>
 public class UITrailRenderer : MonoBehaviour
 {
     [Header("UI Element")]
-    [SerializeField]private RectTransform canvas;
-    [SerializeField]private UITrailPoint TrailPoint;
+    [SerializeField]private UITrailPoint trailPoint;
     [Header("Trail Settings")]
     [SerializeField,Range(10,500),Tooltip("The amount of trail points this renderer should create. This number depends on the type of trail you want to create; For example: if you want a long trail, with long trail times, this should be a number closer to the max.")]
     private int trailPoolSize = 5;
     [SerializeField,Range(0.1f,10f),Tooltip("How long each trail point is visible")]private float trailTime = 1f;
     [SerializeField,Range(0.1f,100f),Tooltip("The distance between each trail point. This depends on the type of sprite you use for the trail.")]
     private float minDistance = 0.5f;
-    private bool emitting;
+    [SerializeField]private bool emitting;
     private Pool<UITrailPoint> trailObjects;
     private Vector2? lastPosition;
 
@@ -33,7 +30,7 @@ public class UITrailRenderer : MonoBehaviour
 
         for(int i = 0; i < trailPoolSize; i++)
         {
-            tempObj[i] = Instantiate(TrailPoint,transform);
+            tempObj[i] = Instantiate(trailPoint,transform);
             tempObj[i].Init(trailTime);
         }
 
@@ -80,10 +77,14 @@ public class UITrailRenderer : MonoBehaviour
         lastPosition = currentPos;
     }
 
+
     private void SpawnTrail(Vector2 position)
     {
+        //Get trail from the pool
         UITrailPoint current = trailObjects.GetObject();
+        //Change its position to given position
         current.transform.position = position;
+        //Render it
         current.Render();
     }
 
