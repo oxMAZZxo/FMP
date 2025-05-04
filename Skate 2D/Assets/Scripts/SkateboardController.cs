@@ -29,8 +29,6 @@ public class SkateboardController : MonoBehaviour
     [SerializeField]private GameObject backSmokeParticles;
     [SerializeField]private GameObject rollingSmokeParticles;
     [SerializeField]private TrailRenderer grindingTrail;
-    [Header("UI")]
-    [SerializeField]private Slider jumpForceSlider;
     [Header("Visualisation")]
     public bool drawGizmos;
     private bool isGrounded;
@@ -64,7 +62,6 @@ public class SkateboardController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<Collider2D>();
         audioManager = GetComponent<AudioManager>();
-        jumpForceSlider.maxValue = 1f;
     }
 
     void FixedUpdate()
@@ -97,14 +94,6 @@ public class SkateboardController : MonoBehaviour
             grindingTime += Time.fixedDeltaTime;
         }
         CheckGrounded();
-        
-
-        if(isCharging){
-            jumpForceSlider.value += Time.fixedDeltaTime;
-        }else
-        {
-            jumpForceSlider.value = 0;
-        }
 
         if(!isGrounded && !isGrinding)
         {
