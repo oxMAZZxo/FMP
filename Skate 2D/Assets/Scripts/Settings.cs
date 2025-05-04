@@ -8,14 +8,20 @@ using UnityEngine.UI;
 /// </summary>
 public class Settings : MonoBehaviour
 {
+    [SerializeField]private GameObject swipeVisualiser;
     [SerializeField]private AudioMixer mainMixer;
     [SerializeField]private Toggle sfxToggle;
     [SerializeField]private Toggle musicToggle;
+    [SerializeField]private Toggle swipeVisualiserToggle;
     private bool sfxOn;
     private bool musicOn;
+    private bool swipeVisualiserOn;
 
     void Start()
     {
+        swipeVisualiserOn = true;
+        musicOn = true;
+        sfxOn = true;
         string data = SaveSystem.LoadData(Application.persistentDataPath + ("/SettingsData.txt"));
         if(!string.IsNullOrEmpty(data) && !string.IsNullOrWhiteSpace(data))
         {
@@ -30,14 +36,17 @@ public class Settings : MonoBehaviour
 
         musicOn = Convert.ToBoolean(temp[0]);
         sfxOn = Convert.ToBoolean(temp[1]);
+        swipeVisualiserOn = Convert.ToBoolean(temp[2]);
     }
 
     private void SetSettings()
     {
         sfxToggle.SetIsOnWithoutNotify(sfxOn);
         musicToggle.SetIsOnWithoutNotify(musicOn);
+        swipeVisualiserToggle.SetIsOnWithoutNotify(swipeVisualiserOn);
         SetSFX();
         SetMusic();
+        SetSwipeVisualiser();
     }
 
     public void SetSFX() 
@@ -52,10 +61,9 @@ public class Settings : MonoBehaviour
         if(sfxOn != sfxToggle.isOn)
         {
             sfxOn = sfxToggle.isOn;
-            SaveSystem.SaveData($"{musicOn},{sfxOn}",Application.persistentDataPath + ("/SettingsData.txt"));
+            SaveSystem.SaveData($"{musicOn},{sfxOn},{swipeVisualiserOn}",Application.persistentDataPath + ("/SettingsData.txt"));
             Debug.Log($"There was a change in sfx sound, saving......");
         }
-
     }
 
     public void SetMusic() 
@@ -70,8 +78,26 @@ public class Settings : MonoBehaviour
         if(musicOn != musicToggle.isOn)
         {
             musicOn = musicToggle.isOn;
-            SaveSystem.SaveData($"{musicOn},{sfxOn}",Application.persistentDataPath + ("/SettingsData.txt"));
+            SaveSystem.SaveData($"{musicOn},{sfxOn},{swipeVisualiserOn}",Application.persistentDataPath + ("/SettingsData.txt"));
             Debug.Log($"There was a change in music sound, saving....");
+        }
+    }
+
+    public void SetSwipeVisualiser()
+    {
+        if(swipeVisualiserToggle.isOn)
+        {
+            swipeVisualiser.SetActive(true);
+        }else
+        {
+            swipeVisualiser.SetActive(false);
+        }
+
+        if(swipeVisualiserOn != swipeVisualiserToggle.isOn)
+        {
+            swipeVisualiserOn = swipeVisualiserToggle.isOn;
+            SaveSystem.SaveData($"{musicOn},{sfxOn},{swipeVisualiserOn}",Application.persistentDataPath + ("/SettingsData.txt"));
+            Debug.Log($"There was a change in swipe visualiser settings, saving....");
         }
     }
 }
