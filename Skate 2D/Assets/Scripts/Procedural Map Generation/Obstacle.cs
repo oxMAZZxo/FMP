@@ -22,6 +22,7 @@ public class Obstacle
     private Pool<GameObject> mainObstaclePool;
     // Holds Pools of each follow up object instantiated from the prefab follow objects
     private List<Pool<GameObject>> followObstaclePools;
+    private List<Pool<PickUp>> pickUpPools;
 
     /// <summary>
     /// Instantiate a runtime Obstacle, which holds pools of its main obstacle, and a secondary follow up obstacle/obstacles.
@@ -30,7 +31,8 @@ public class Obstacle
     /// <param name="spawnable"></param>
     /// <param name="newMainObstaclePool"></param>
     /// <param name="newFollowObstaclePools"></param>
-    public Obstacle(ObstacleType newObstacleType,Spawnable spawnable, Pool<GameObject> newMainObstaclePool, List<Pool<GameObject>> newFollowObstaclePools)
+    public Obstacle(ObstacleType newObstacleType,Spawnable spawnable, Pool<GameObject> newMainObstaclePool, 
+    List<Pool<GameObject>> newFollowObstaclePools, List<Pool<PickUp>> newPickUpPools)
     {
         prefab = spawnable.prefab;
         minimumAcceptableSpeedForObstacle = spawnable.minimumAcceptableSpeedForObstacle;
@@ -44,6 +46,7 @@ public class Obstacle
         followObstaclePools = newFollowObstaclePools;
         checkRadius = spawnable.checkRadius;
         followObjectSpawnAction = spawnable.followObjectSpawnAction;
+        pickUpPools = newPickUpPools;
     }
 
     /// <returns>Returns an obstacle instantiated from the prefab</returns>

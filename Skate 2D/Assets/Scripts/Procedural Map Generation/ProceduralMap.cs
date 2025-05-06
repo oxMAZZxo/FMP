@@ -92,7 +92,7 @@ public class ProceduralMap : MonoBehaviour
         {
             foreach(Spawnable spawnable in obstacles.spawnables)
             {
-                Obstacle current = new Obstacle(obstacles.type,spawnable,CreateMainObstaclePool(spawnable.prefab),CreateFollowUpObjectPool(spawnable.followObjs));
+                Obstacle current = new Obstacle(obstacles.type,spawnable,CreateMainObstaclePool(spawnable.prefab),CreateFollowUpObjectPool(spawnable.followObjs),null);
                 temp.Add(current);
                 if(current.obstacleType == ObstacleType.Bench || current.obstacleType == ObstacleType.Rail)
                 {
