@@ -35,7 +35,6 @@ public class SkateboardController : MonoBehaviour
     private float currentTouchTime;
     private bool isGrinding;
     private int potentialPoints; //this are points that will be awarded if a trick is landed
-    private bool isCharging;
     private bool isStopped;
     private bool hasStarted;
     private bool performedTrick;
@@ -511,14 +510,12 @@ public class SkateboardController : MonoBehaviour
     private void OnTouchStarted(object sender, Vector2 start)
     {
         // Debug.Log("Touch Started");
-        isCharging = true;
         animator.SetBool("isHoldingTouch",true);
     }
 
     private void OnTouchEnded(object sender, Vector2 end)
     {
         // Debug.Log("Touch Ended");
-        isCharging = false;
         animator.SetBool("isHoldingTouch",false);
     }
 
