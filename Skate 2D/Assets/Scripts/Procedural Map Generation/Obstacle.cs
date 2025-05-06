@@ -23,6 +23,8 @@ public class Obstacle
     // Holds Pools of each follow up object instantiated from the prefab follow objects
     private List<Pool<GameObject>> followObstaclePools;
     private List<Pool<PickUp>> pickUpPools;
+    private int pickUpSpawnChances = 20;
+    private Vector3 pickUpSpawnOffset;
 
     /// <summary>
     /// Instantiate a runtime Obstacle, which holds pools of its main obstacle, and a secondary follow up obstacle/obstacles.
@@ -32,7 +34,7 @@ public class Obstacle
     /// <param name="newMainObstaclePool"></param>
     /// <param name="newFollowObstaclePools"></param>
     public Obstacle(ObstacleType newObstacleType,Spawnable spawnable, Pool<GameObject> newMainObstaclePool, 
-    List<Pool<GameObject>> newFollowObstaclePools, List<Pool<PickUp>> newPickUpPools)
+    List<Pool<GameObject>> newFollowObstaclePools, List<Pool<PickUp>> newPickUpPools, int newPickUpChances, Vector2 newPickUpSpawnOffset)
     {
         prefab = spawnable.prefab;
         minimumAcceptableSpeedForObstacle = spawnable.minimumAcceptableSpeedForObstacle;
@@ -91,4 +93,12 @@ public class Obstacle
     }
 
     public int GetCountOfFollowUpObstacles() {return followObstaclePools.Count;}
+
+    public void SpawnPickUp(GameObject obstacle)
+    {
+        if(Random.Range(0,100) > pickUpSpawnChances) {return;}
+        int pickUpChoice = Random.Range(0,pickUpPools.Count);
+        PickUp current = pickUpPools[pickUpChoice].GetObject();
+        current.transform.position = obstacle.transform.position + pickUpSpawnOffset;
+    }
 }
