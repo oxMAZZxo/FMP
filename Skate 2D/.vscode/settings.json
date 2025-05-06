@@ -56,5 +56,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Skate 2D.sln"
+    "dotnet.defaultSolution": "Skate 2D.sln",
+    "discord.lowerDetailsDebugging": "",
+    "discord.lowerDetailsNoWorkspaceFound": "{workspace}",
+    "discord.removeLowerDetails": true
 }

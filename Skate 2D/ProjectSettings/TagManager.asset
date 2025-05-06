@@ -54,6 +54,9 @@ TagManager:
   - name: Obstacle
     uniqueID: 1848980735
     locked: 0
+  - name: Pick-up
+    uniqueID: 3898119365
+    locked: 0
   - name: Player
     uniqueID: 2166279327
     locked: 0
