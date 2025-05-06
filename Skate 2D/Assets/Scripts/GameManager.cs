@@ -159,15 +159,15 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Adds the provided points to the player's overall score, and may increase the game speed depending on the number of points provided
     /// </summary>
-    /// <param name="value"></param>
-    private void AddScore(int value)
+    /// <param name="trickPoints"></param>
+    private void AddScore(int trickPoints,int comboCount)
     {
-        if(value == 0) {return;}
-        StartCoroutine(IncrementScoreAnimation(value));
-        DisplayPointsIncrement(value);
+        if(trickPoints == 0) {return;}
+        StartCoroutine(IncrementScoreAnimation(trickPoints * comboCount));
+        DisplayPointsIncrement(trickPoints,comboCount);
         if(currentVelocity < maxVelocity)
         {
-            IncreaseSpeed(value);
+            IncreaseSpeed(trickPoints * comboCount);
         }
 
     }
@@ -265,12 +265,19 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Displays the current points added to the players score
     /// </summary>
-    /// <param name="value"></param>
-    private void DisplayPointsIncrement(int value)
+    /// <param name="trickPoints"></param>
+    private void DisplayPointsIncrement(int trickPoints, int comboCount)
     {
         int x = UnityEngine.Random.Range(0 + 200, Screen.width - 200);
         int y = UnityEngine.Random.Range(0 + 400,Screen.height - 100);
-        addedScoreDisplay.text = "+" + Utilities.PrettyNumberString(value);
+        if(comboCount < 2)
+        {
+            addedScoreDisplay.text = $"{trickPoints}";
+        }else
+        {
+            addedScoreDisplay.text = $"{trickPoints} x {comboCount}";
+        }
+
         addedScoreDisplay.gameObject.transform.position = new Vector3(x,y);
         addedScoreDisplay.gameObject.SetActive(true);
     }
@@ -311,7 +318,7 @@ public class GameManager : MonoBehaviour
     /// <param name="e"></param>
     private void OnSkateboardLanded(object sender, SkateboardLandEventArgs e)
     {
-        AddScore(e.score);
+        AddScore(e.trickPoints,e.comboCount);
         // comboDisplay.gameObject.SetActive(false);
         comboCounterDisplay.gameObject.SetActive(false);
         comboCounterDisplay.text = "";

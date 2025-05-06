@@ -17,11 +17,16 @@ public class SkateboardLandEventArgs : EventArgs
     /// The score to be rewarded to the player.
     /// </summary>
     public int score {get;}
+    /// <summary>
+    /// All the trick points added together
+    /// </summary>
+    public int trickPoints {get;}
 
-    public SkateboardLandEventArgs(int newScore, int newComboCount, float newJumpHeight)
+    public SkateboardLandEventArgs(int newTrickPoints, int newComboCount, float newJumpHeight)
     {
-        score = newScore;
         comboCount = newComboCount;
+        trickPoints = newTrickPoints; 
+        score = trickPoints * comboCount;
         jumpHeight = newJumpHeight;
     }
 }

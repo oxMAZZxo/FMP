@@ -188,7 +188,7 @@ public class SkateboardController : MonoBehaviour
 				isGrounded = true;
 				if (!wasGrounded) //meaning you just landed
 				{
-                    skateboardLanded?.Invoke(this, new SkateboardLandEventArgs(potentialPoints * comboCounter,comboCounter, jumpHeight));
+                    skateboardLanded?.Invoke(this, new SkateboardLandEventArgs(potentialPoints,comboCounter, jumpHeight));
                     OnLand();
                 }
 			}
