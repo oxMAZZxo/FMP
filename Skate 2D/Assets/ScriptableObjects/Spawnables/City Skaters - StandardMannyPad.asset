@@ -10,19 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
-  m_Name: LowMannyPad
+  m_Name: City Skaters - StandardMannyPad
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8770690727045251444, guid: 0e81f11c791f8a649b4122e917d0a733, type: 3}
+  prefab: {fileID: 1328606776245582764, guid: 1cf8180ef88259b4a9b20c5f330e27ca, type: 3}
   checkRadius: 5
-  minimumAcceptableSpeedForObstacle: 0
+  minimumAcceptableSpeedForObstacle: 1
   spawnAction: 0
-  minimumAcceptableGameSpeedForFollowUp: 0
+  minimumAcceptableGameSpeedForFollowUp: 1
   followObjectSpawnAction: 0
   followObjs:
-  - {fileID: 9009299061145675200, guid: 4f142de76c1eb024d9287d331dd5e833, type: 3}
   - {fileID: 7272597278706627772, guid: 90e7058d27946a8499c33b070198b054, type: 3}
-  - {fileID: 3921992949018577769, guid: fe989d88da9eb054ca304060018d2e15, type: 3}
-  - {fileID: 5007686268176904371, guid: a50f9fd20bd55ef4188b70ab0f368eac, type: 3}
+  - {fileID: 8119541840057713278, guid: 1f5a9f0b91274f243b952d2f4b9a98de, type: 3}
+  - {fileID: 158139782263735027, guid: 4998f6a13a0e05f4ca47e1744d72b739, type: 3}
   followObjectChance: 100
   followUpObjectDistance: 1
   pickUps: []
