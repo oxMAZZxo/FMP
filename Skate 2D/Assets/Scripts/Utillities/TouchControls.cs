@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Composites;
 
 /// <summary>
 /// The Touch Controls class is a singleton, scene persistent object, which detects user input on a touchscreen, calculates the diferent swipe directions and invokes touch input events.
@@ -60,7 +59,7 @@ public class TouchControls : MonoBehaviour
         if(touchStart != Vector2.zero)
         {
             touchTime += Time.deltaTime;
-            currentTouchPosition = Mouse.current.position.ReadValue();
+            currentTouchPosition = Mouse.current.position.ReadValue(); //For testing purposes
             if(Touchscreen.current != null)
             {
                 currentTouchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
@@ -128,7 +127,7 @@ public class TouchControls : MonoBehaviour
     private void OnTouchInputBegan(InputAction.CallbackContext context)
     {
         // Debug.Log("Touch Began");
-        touchStart = Mouse.current.position.ReadValue();
+        touchStart = Mouse.current.position.ReadValue(); //For testing purposes
         if(Touchscreen.current != null)
         {
             touchStart = Touchscreen.current.primaryTouch.position.ReadValue();
@@ -144,7 +143,7 @@ public class TouchControls : MonoBehaviour
     private void OnTouchInputEnded(InputAction.CallbackContext context)
     {
         // Debug.Log("Touch Ended");
-        touchEnd = Mouse.current.position.ReadValue();
+        touchEnd = Mouse.current.position.ReadValue(); // For testing Purposes
         if(Touchscreen.current != null)
         {
             touchEnd = Touchscreen.current.primaryTouch.position.ReadValue();

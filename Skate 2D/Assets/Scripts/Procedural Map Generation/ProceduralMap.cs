@@ -291,6 +291,11 @@ public class ProceduralMap : MonoBehaviour
             Debug.Log($"Main Obstacle {mainObstacle.name} is in sight, therefore I cannot use it. Returning function");
             yield break;
         }
+        PositionObstacle(ground, mainObstacle,currentObstacleTypeChoice);
+    }
+
+    private void PositionObstacle(GameObject ground, GameObject mainObstacle, Obstacle currentObstacleType)
+    {
         Collider2D mainObstacleCollider = mainObstacle.GetComponent<Collider2D>();
         mainObstacle.transform.position = Vector3.zero;
         Physics2D.SyncTransforms();
@@ -306,20 +311,20 @@ public class ProceduralMap : MonoBehaviour
         mainObstacle.transform.position = obstacleSpawnPos;
         Physics2D.SyncTransforms();
         
-        bool obstacleInTheWay = CheckForPreviousObjectNear(mainObstacleCollider,currentObstacleTypeChoice.checkRadius);
+        bool obstacleInTheWay = CheckForPreviousObjectNear(mainObstacleCollider,currentObstacleType.checkRadius);
         bool secondObstacleElligible = true;
         if(obstacleInTheWay)
         {
-            secondObstacleElligible = HandleObstacle(currentObstacleTypeChoice,mainObstacle,groundCollider,obstacleBottomBoundsPosition);
+            secondObstacleElligible = HandleObstacle(currentObstacleType,mainObstacle,groundCollider,obstacleBottomBoundsPosition);
         }
 
-        currentSpawnAction = currentObstacleTypeChoice.spawnAction;
-        if(currentObstacleTypeChoice.obstacleType == ObstacleType.Unavoidable && GameManager.Instance.currentGameSpeed == GameSpeed.Slow) {currentSpawnAction = SpawnAction.Spawn;}
+        currentSpawnAction = currentObstacleType.spawnAction;
+        if(currentObstacleType.obstacleType == ObstacleType.Unavoidable && GameManager.Instance.currentGameSpeed == GameSpeed.Slow) {currentSpawnAction = SpawnAction.Spawn;}
         
-        if(currentObstacleTypeChoice.noOfFollowObstacleObjs > 0 && secondObstacleElligible && ((GameManager.Instance.currentGameSpeed >= currentObstacleTypeChoice.minimumAcceptableGameSpeedForFollowUp
-        && UnityEngine.Random.Range(0,100) <= currentObstacleTypeChoice.followObjectChance) || comboRush))
+        if(currentObstacleType.noOfFollowObstacleObjs > 0 && secondObstacleElligible && ((GameManager.Instance.currentGameSpeed >= currentObstacleType.minimumAcceptableGameSpeedForFollowUp
+        && UnityEngine.Random.Range(0,100) <= currentObstacleType.followObjectChance) || comboRush))
         {
-            CreateSecondObstacle(currentObstacleTypeChoice,mainObstacleCollider,groundCollider);
+            CreateSecondObstacle(currentObstacleType,mainObstacleCollider,groundCollider);
         }
     }
 

@@ -79,6 +79,7 @@ public class AudioManager : MonoBehaviour
         if(sound == null) {return;}
         if(sound.source.isPlaying && !Global)
         {
+            //If this is an instance based-audio manager, I don't want the same sound to be played multiple times.
             Debug.LogWarning("Sound is already playing");
             return;
         }
@@ -125,7 +126,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Check if a sound is currently playing.
     /// </summary>
     /// <param name="name">The name of the sound to check</param>
     /// <returns>True if the sound with the given name is playing</returns>
