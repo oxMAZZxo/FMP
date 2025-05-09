@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6434764bc6198db48ad9769a7159ab5f, type: 3}
-  m_Name: Bench1
+  m_Name: Flat Bench
   m_EditorClassIdentifier: 
-  prefab: {fileID: 3921992949018577769, guid: fe989d88da9eb054ca304060018d2e15, type: 3}
+  prefab: {fileID: 558601362516956773, guid: 8a93b6089126c994380feb21f5926417, type: 3}
   alternativeSkins: []
   checkRadius: 1
   minimumAcceptableSpeedForObstacle: 0
@@ -21,7 +21,7 @@ MonoBehaviour:
   followObjectSpawnAction: 0
   followObjs:
   - {fileID: 586377814081109084, guid: d922febcf0e2d464bb19959cedf36474, type: 3}
-  - {fileID: 558601362516956773, guid: 8a93b6089126c994380feb21f5926417, type: 3}
+  - {fileID: 3921992949018577769, guid: fe989d88da9eb054ca304060018d2e15, type: 3}
   - {fileID: 1217389600804615233, guid: c0d1d20031b6a0e4da887c5be5df678f, type: 3}
   followObjectChance: 80
   followUpObjectDistance: 2

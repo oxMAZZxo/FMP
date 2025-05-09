@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1d8699820b2d46d4a9bc87e86308059b
+guid: cd3674c42113e064e89b59d8a08547a4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,64 +123,64 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ramp_Right
+      name: Graf - Paramid_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 101
-        height: 47
+        width: 102
+        height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f830c3d0be618f14f8fdd8d5c0acfd7e
-      internalID: 2129958487
+      spriteID: b53dd27f11d6b584eaae3a955b7912ca
+      internalID: 679899789
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Box
-      rect:
-        serializedVersion: 2
-        x: 101
-        y: 0
-        width: 53
-        height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 87996be07c6b48343ba9b48a56bea545
-      internalID: 1182757765
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ramp_Left
+      name: Graf - Paramid_1
       rect:
         serializedVersion: 2
         x: 154
         y: 0
         width: 102
-        height: 47
+        height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 618d21ad7a735fd40b9f6b5e97299010
-      internalID: 1463458728
+      spriteID: 5aa1b26cae3af464a9aa4da47d1b74f6
+      internalID: -265087546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graf - Paramid_2
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 0
+        width: 52
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a157e7bd37245de4e84e5c863d46532d
+      internalID: -1379541484
       vertices: []
       indices: 
       edges: []
@@ -196,9 +196,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Box: 1182757765
-      Ramp_Left: 1463458728
-      Ramp_Right: 2129958487
+      Graf - Paramid_0: 679899789
+      Graf - Paramid_1: -265087546
+      Graf - Paramid_2: -1379541484
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

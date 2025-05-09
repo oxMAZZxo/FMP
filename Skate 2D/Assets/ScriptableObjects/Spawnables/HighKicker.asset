@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: HighKicker
   m_EditorClassIdentifier: 
   prefab: {fileID: 6464161430064065539, guid: bf0792f1e926fda48995dbea83ad6ede, type: 3}
+  alternativeSkins:
+  - {fileID: 679899789, guid: cd3674c42113e064e89b59d8a08547a4, type: 3}
   checkRadius: 4
   minimumAcceptableSpeedForObstacle: 2
   spawnAction: 1
@@ -25,3 +27,6 @@ MonoBehaviour:
   - {fileID: 1919092897518032947, guid: 4dc9f7c63a6f2e748aeb48e2ea282904, type: 3}
   followObjectChance: 100
   followUpObjectDistance: 2
+  pickUps: []
+  pickUpSpawnChances: 20
+  spawnOffset: {x: 0, y: 0}
