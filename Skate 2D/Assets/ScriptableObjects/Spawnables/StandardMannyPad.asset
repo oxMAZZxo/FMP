@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: StandardMannyPad
   m_EditorClassIdentifier: 
   prefab: {fileID: 6196515861311528971, guid: bde3ba0018a8aaf4e8566a13862f73f0, type: 3}
+  alternativeSkins:
+  - {fileID: 21300000, guid: 6b00519e9fe4075469c020b4c9e852bf, type: 3}
+  - {fileID: 21300000, guid: 15ef6eae4d8e8de49b843efd83b01320, type: 3}
   checkRadius: 5
   minimumAcceptableSpeedForObstacle: 1
   spawnAction: 0
@@ -24,3 +27,6 @@ MonoBehaviour:
   - {fileID: 158139782263735027, guid: 4998f6a13a0e05f4ca47e1744d72b739, type: 3}
   followObjectChance: 100
   followUpObjectDistance: 1
+  pickUps: []
+  pickUpSpawnChances: 20
+  spawnOffset: {x: 0, y: 0}

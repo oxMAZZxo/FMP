@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: TallMannyPad
   m_EditorClassIdentifier: 
   prefab: {fileID: 5347375017383630457, guid: 42a901ce37334c845aa57007aa44efd3, type: 3}
+  alternativeSkins:
+  - {fileID: 21300000, guid: 42b07cda0a2410f44bd7a07a257a1d97, type: 3}
+  - {fileID: 21300000, guid: 0ca899c63f17af148881e24ef2851f0f, type: 3}
   checkRadius: 4
   minimumAcceptableSpeedForObstacle: 1
   spawnAction: 1
@@ -24,3 +27,6 @@ MonoBehaviour:
   - {fileID: 6196515861311528971, guid: bde3ba0018a8aaf4e8566a13862f73f0, type: 3}
   followObjectChance: 100
   followUpObjectDistance: 2
+  pickUps: []
+  pickUpSpawnChances: 20
+  spawnOffset: {x: 0, y: 0}

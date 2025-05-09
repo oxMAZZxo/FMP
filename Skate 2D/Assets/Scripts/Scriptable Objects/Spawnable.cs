@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -11,6 +9,7 @@ public class Spawnable : ScriptableObject
 {
     [Header("Obstacle")]
     public GameObject prefab;
+    public Sprite[] alternativeSkins;
     [Range(0.1f,8f),Tooltip("If an obstacle is within this radius, it will be moved forward on the x this amount as well.")]public float checkRadius = 1f;
     public GameSpeed minimumAcceptableSpeedForObstacle = GameSpeed.Slow;
     public SpawnAction spawnAction;

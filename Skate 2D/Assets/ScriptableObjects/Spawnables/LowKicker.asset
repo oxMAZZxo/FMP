@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: LowKicker
   m_EditorClassIdentifier: 
   prefab: {fileID: 6147742679119598267, guid: 821dc3f04fae9e8459cb1e2bc8c75fd0, type: 3}
+  alternativeSkins:
+  - {fileID: 21300000, guid: b0d5be17fb56da344b61903d6284c271, type: 3}
   checkRadius: 4
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0
@@ -26,3 +28,6 @@ MonoBehaviour:
   - {fileID: 8119541840057713278, guid: 1f5a9f0b91274f243b952d2f4b9a98de, type: 3}
   followObjectChance: 100
   followUpObjectDistance: 1
+  pickUps: []
+  pickUpSpawnChances: 20
+  spawnOffset: {x: 0, y: 0}

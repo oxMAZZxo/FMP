@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class Obstacle
 {
-    public GameObject prefab {get;}
+    private Sprite[] skins;
     public float checkRadius {get;}
     public GameSpeed minimumAcceptableSpeedForObstacle {get;}
     public SpawnAction spawnAction {get;}
@@ -34,9 +34,8 @@ public class Obstacle
     /// <param name="newMainObstaclePool"></param>
     /// <param name="newFollowObstaclePools"></param>
     public Obstacle(ObstacleType newObstacleType,Spawnable spawnable, Pool<GameObject> newMainObstaclePool, 
-    List<Pool<GameObject>> newFollowObstaclePools, List<Pool<PickUp>> newPickUpPools, int newPickUpChances, Vector2 newPickUpSpawnOffset)
+    List<Pool<GameObject>> newFollowObstaclePools, List<Pool<PickUp>> newPickUpPools)
     {
-        prefab = spawnable.prefab;
         minimumAcceptableSpeedForObstacle = spawnable.minimumAcceptableSpeedForObstacle;
         minimumAcceptableGameSpeedForFollowUp = spawnable.minimumAcceptableGameSpeedForFollowUp;
         spawnAction = spawnable.spawnAction;
@@ -48,13 +47,34 @@ public class Obstacle
         followObstaclePools = newFollowObstaclePools;
         checkRadius = spawnable.checkRadius;
         followObjectSpawnAction = spawnable.followObjectSpawnAction;
-        pickUpPools = newPickUpPools;
+
+        if(spawnable.alternativeSkins.Length > 0)
+        {
+            skins = new Sprite[spawnable.alternativeSkins.Length + 1];
+            for(int i = 0; i < spawnable.alternativeSkins.Length; i++)
+            {
+                skins[i] = spawnable.alternativeSkins[i];
+            }
+            skins[skins.Length -1] = spawnable.prefab.GetComponent<SpriteRenderer>().sprite;
+            // Debug.Log($"Skins available for {obstacleType.ToString()} are {skins.Length}");
+            // for(int i = 0; i < skins.Length; i++)
+            // {
+            //     Debug.Log($"{i + 1}. {skins[i].name}");
+            // }
+        }
+        
     }
 
     /// <returns>Returns an obstacle instantiated from the prefab</returns>
     public GameObject GetMainObstacle()
     {
-        return mainObstaclePool.GetObject();
+        GameObject currentObj = mainObstaclePool.GetObject();
+        if(skins != null && skins.Length > 0)
+        {
+            SpriteRenderer currentRenderer = currentObj.GetComponent<SpriteRenderer>();
+            currentRenderer.sprite = skins[Random.Range(0, skins.Length)];
+        }
+        return currentObj;
     }
 
     /// <summary>
@@ -101,4 +121,6 @@ public class Obstacle
         PickUp current = pickUpPools[pickUpChoice].GetObject();
         current.transform.position = obstacle.transform.position + pickUpSpawnOffset;
     }
+
+    
 }

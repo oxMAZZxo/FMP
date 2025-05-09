@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: LowMannyPad
   m_EditorClassIdentifier: 
   prefab: {fileID: 8770690727045251444, guid: 0e81f11c791f8a649b4122e917d0a733, type: 3}
+  alternativeSkins:
+  - {fileID: 21300000, guid: c80d8197ea6af50438109aef8f2531b0, type: 3}
   checkRadius: 5
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0
