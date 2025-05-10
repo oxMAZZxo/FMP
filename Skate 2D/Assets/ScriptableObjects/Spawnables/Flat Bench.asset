@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Flat Bench
   m_EditorClassIdentifier: 
   prefab: {fileID: 558601362516956773, guid: 8a93b6089126c994380feb21f5926417, type: 3}
-  alternativeSkins: []
+  alternativeSkins:
+  - {fileID: 21300000, guid: 82b688e7933e74148ad965b2fd448130, type: 3}
   checkRadius: 1
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0

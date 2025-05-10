@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: MediumRail
   m_EditorClassIdentifier: 
   prefab: {fileID: 7528899764830829493, guid: a6659a40d1f310b43b618ebea9be976a, type: 3}
+  alternativeSkins:
+  - {fileID: 21300000, guid: b2929f704acaa3f4483052f1aab1cf76, type: 3}
+  - {fileID: 21300000, guid: 8bc996f0a59c57143a7c4cccfd9d73e4, type: 3}
+  - {fileID: 21300000, guid: 84150d85b94c2f94e920e1e541b8b03c, type: 3}
+  - {fileID: 21300000, guid: 35af0f5f1df895542a4aa98ac455bd7b, type: 3}
+  - {fileID: 21300000, guid: 5a53736e556e01d429545699bb40266a, type: 3}
+  - {fileID: 21300000, guid: 28fe44c04f5a863498f285376b82d06e, type: 3}
   checkRadius: 2
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0
@@ -22,3 +29,6 @@ MonoBehaviour:
   - {fileID: 558601362516956773, guid: 8a93b6089126c994380feb21f5926417, type: 3}
   followObjectChance: 70
   followUpObjectDistance: 1
+  pickUps: []
+  pickUpSpawnChances: 20
+  spawnOffset: {x: 0, y: 0}

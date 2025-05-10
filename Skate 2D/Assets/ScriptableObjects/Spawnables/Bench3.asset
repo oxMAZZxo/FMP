@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Bench3
   m_EditorClassIdentifier: 
   prefab: {fileID: 1217389600804615233, guid: c0d1d20031b6a0e4da887c5be5df678f, type: 3}
-  alternativeSkins: []
+  alternativeSkins:
+  - {fileID: 21300000, guid: 82aeb9351ad6e4c4a8b17f4fcff6e5f4, type: 3}
   checkRadius: 1
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0

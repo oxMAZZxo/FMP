@@ -15,6 +15,7 @@ MonoBehaviour:
   prefab: {fileID: 586377814081109084, guid: d922febcf0e2d464bb19959cedf36474, type: 3}
   alternativeSkins:
   - {fileID: 21300000, guid: 57019e7b7b368ae4490a9aa173970157, type: 3}
+  - {fileID: 21300000, guid: e8ab07dec26bce1479bd3d362ee78a51, type: 3}
   checkRadius: 1
   minimumAcceptableSpeedForObstacle: 0
   spawnAction: 0
