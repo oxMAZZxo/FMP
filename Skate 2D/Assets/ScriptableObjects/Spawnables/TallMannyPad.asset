@@ -18,9 +18,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0ca899c63f17af148881e24ef2851f0f, type: 3}
   checkRadius: 4
   minimumAcceptableSpeedForObstacle: 1
-  spawnAction: 1
+  spawnAction: 0
   minimumAcceptableGameSpeedForFollowUp: 1
-  followObjectSpawnAction: 1
+  followObjectSpawnAction: 0
   followObjs:
   - {fileID: 158139782263735027, guid: 4998f6a13a0e05f4ca47e1744d72b739, type: 3}
   - {fileID: 5347375017383630457, guid: 42a901ce37334c845aa57007aa44efd3, type: 3}
