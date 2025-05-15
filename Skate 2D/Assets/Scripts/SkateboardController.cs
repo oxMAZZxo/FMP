@@ -302,7 +302,6 @@ public class SkateboardController : MonoBehaviour
         {
             isCombo = true;
             comboCounter++;
-            trickPerformedOutput = " + " + trickPerformedOutput;
         }
         yield return new WaitForSeconds(0.12f);
         if(disablingGrind) 
@@ -311,7 +310,9 @@ public class SkateboardController : MonoBehaviour
             Debug.Log("Grind was invalid");
             yield break;
         }
-        trickPerformed?.Invoke(this, new SkateboardTrickPerformedEventArgs(trickPerformedOutput,comboCounter,isCombo,potentialPoints));
+        bool isGrind = false;
+        if(trickPerformedOutput == "Nose Grind" || trickPerformedOutput == "5-0" || trickPerformedOutput == "50-50") {isGrind = true;}
+        trickPerformed?.Invoke(this, new SkateboardTrickPerformedEventArgs(trickPerformedOutput,comboCounter,isCombo,potentialPoints,isGrind));
     }
 
     /// <summary>
@@ -407,14 +408,14 @@ public class SkateboardController : MonoBehaviour
             animator.SetTrigger("5-0 Grind");
             backWheelSparks.SetActive(true);
             pointsToBeAdded = 10;
-            trickOutput = " 5-0";
+            trickOutput = "5-0";
             break;
 
             case SwipeDirection.RIGHT:
             animator.SetTrigger("Nose Grind");
             pointsToBeAdded = 10;
             frontWheelSparks.SetActive(true);
-            trickOutput = " Nose Grind";
+            trickOutput = "Nose Grind";
             animator.SetBool("reverseOut", true);
             reverseOut = true;
             break;

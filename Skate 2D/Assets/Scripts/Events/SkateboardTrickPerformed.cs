@@ -18,12 +18,14 @@ public class SkateboardTrickPerformedEventArgs : EventArgs
     /// </summary>
     public int comboCount {get;}
     public int potentialPoints {get;}
+    public bool isGrind {get;}
 
-    public SkateboardTrickPerformedEventArgs(string newTrickName, int newComboCount,bool newCombo, int newPotentialPoints)
+    public SkateboardTrickPerformedEventArgs(string newTrickName, int newComboCount,bool newCombo, int newPotentialPoints, bool newIsGrind = false)
     {
         trickName = newTrickName;
         isCombo = newCombo;
         comboCount = newComboCount;
         potentialPoints = newPotentialPoints;
+        isGrind = newIsGrind;
     }
 }

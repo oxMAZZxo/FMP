@@ -112,20 +112,7 @@ public class GameManager : MonoBehaviour
 
     private void StartCameraAnimations()
     {
-        StartCoroutine(VM_ZoomOutAnim());
-    }
-
-    /// <summary>
-    /// Slowly zooms out the camera.
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator VM_ZoomOutAnim()
-    {
-        while(virtualCamera.m_Lens.FieldOfView < 30f)
-        {
-            virtualCamera.m_Lens.FieldOfView += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
+        StartCoroutine(VM_ZoomOutAnim(30f,1.5f));
     }
 
     void Update()
@@ -304,6 +291,11 @@ public class GameManager : MonoBehaviour
         {
             AudioManager.Global.Play("ComboSFX", 0.025f);
         }
+        if(e.isGrind)
+        {
+            Debug.Log($"Is Grind");
+            vmShake.ShakeCamera(cameraShakeTime, 0.5f);
+        }
     }
 
     public void DecrementNumberOfTricks()
@@ -347,6 +339,20 @@ public class GameManager : MonoBehaviour
         ComboAnnouncement current = GameData.Instance.comboAnnouncements[index];
         comboAnnouncementDisplay.text = current.taglines[UnityEngine.Random.Range(0,current.taglines.Length)];
         comboAnnouncementDisplay.gameObject.SetActive(true);
+    }
+
+
+    /// <summary>
+    /// Slowly zooms out the camera.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator VM_ZoomOutAnim(float max, float multiplier = 1)
+    {
+        while(virtualCamera.m_Lens.FieldOfView < max)
+        {
+            virtualCamera.m_Lens.FieldOfView += Time.deltaTime * multiplier;
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     /// <summary>
