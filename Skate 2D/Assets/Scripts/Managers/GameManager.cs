@@ -293,8 +293,7 @@ public class GameManager : MonoBehaviour
         }
         if(e.isGrind)
         {
-            Debug.Log($"Is Grind");
-            vmShake.ShakeCamera(cameraShakeTime, 0.5f);
+            vmShake.ShakeCamera(0.1f, 0.5f);
         }
     }
 
