@@ -54,6 +54,7 @@ public class SkateboardController : MonoBehaviour
     public static event EventHandler<SkateboardTrickPerformedEventArgs> trickPerformed; 
     public static event EventHandler<SkateboardLandEventArgs> skateboardLanded;
     private float preJumpYPosition;
+    private Gradient originalGrindTrailGradient;
 
     void Start()
     {
@@ -61,6 +62,7 @@ public class SkateboardController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<Collider2D>();
         audioManager = GetComponent<AudioManager>();
+        originalGrindTrailGradient = grindingTrail.colorGradient;
     }
 
     void FixedUpdate()
@@ -216,6 +218,7 @@ public class SkateboardController : MonoBehaviour
         audioManager.Play("Landed");
         audioManager.Play("Rolling");
         audioManager.Stop("Wheel Spinning");
+        grindingTrail.colorGradient = originalGrindTrailGradient;
     }
 
     public void Jump()
@@ -296,6 +299,8 @@ public class SkateboardController : MonoBehaviour
         return isPerformingTrick;
     }
 
+    
+
     private IEnumerator DisplayTrick(string trickPerformedOutput)
     {
         if(performedTrick) 
@@ -303,6 +308,10 @@ public class SkateboardController : MonoBehaviour
             isCombo = true;
             comboCounter++;
         }
+        bool isGrind = false;
+        Debug.Log($"{trickPerformedOutput}");
+        if (trickPerformedOutput == "Nose Grind" || trickPerformedOutput == "5-0" || trickPerformedOutput == "50-50") { isGrind = true; }
+        if(isGrind) {GrindingSparksFX();}
         yield return new WaitForSeconds(0.12f);
         if(disablingGrind) 
         {
@@ -310,9 +319,29 @@ public class SkateboardController : MonoBehaviour
             Debug.Log("Grind was invalid");
             yield break;
         }
-        bool isGrind = false;
-        if(trickPerformedOutput == "Nose Grind" || trickPerformedOutput == "5-0" || trickPerformedOutput == "50-50") {isGrind = true;}
+        
         trickPerformed?.Invoke(this, new SkateboardTrickPerformedEventArgs(trickPerformedOutput,comboCounter,isCombo,potentialPoints,isGrind));
+    }
+    
+    private void GrindingSparksFX()
+    {
+        // Get the gradient from the TrailRenderer
+        Gradient gradient = grindingTrail.colorGradient;
+
+        // Copy the existing keys
+        GradientColorKey[] colorKeys = gradient.colorKeys;
+        GradientAlphaKey[] alphaKeys = gradient.alphaKeys;
+
+        // Modify the first color key
+        colorKeys[0].color = new Color(colorKeys[0].color.r, colorKeys[0].color.g - 0.075f, 0);
+        colorKeys[0].time = 0f; // make sure it stays at the start
+
+        // Create and apply a new gradient
+        Gradient newGradient = new Gradient();
+        newGradient.SetKeys(colorKeys, alphaKeys);
+
+        // Assign it back to the TrailRenderer
+        grindingTrail.colorGradient = newGradient;
     }
 
     /// <summary>
