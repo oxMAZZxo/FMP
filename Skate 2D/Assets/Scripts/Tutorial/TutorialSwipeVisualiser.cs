@@ -68,7 +68,7 @@ public class TutorialSwipeVisualiser : MonoBehaviour
         if(index > 5) {index = 0;}
         //disable the arrow
         arrow.SetActive(false);
-        validSwipe?.Invoke(this,EventArgs.Empty);
+        validSwipe?.Invoke(this,e);
     }
 
     private IEnumerator UpdateArrow()

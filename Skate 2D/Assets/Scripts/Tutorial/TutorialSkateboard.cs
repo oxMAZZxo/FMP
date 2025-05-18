@@ -32,7 +32,6 @@ public class TutorialSkateboard : MonoBehaviour
     [SerializeField]private GameObject rollingSmokeParticles;
     [SerializeField]private TrailRenderer grindingTrail;
     [Header("UI")]
-    [SerializeField]private Slider jumpForceSlider;
     [SerializeField]private TextMeshProUGUI trickCounterDisplay;
     [SerializeField]private TextMeshProUGUI comboDisplay;
     [SerializeField]private TextMeshProUGUI comboCounterDisplay;
@@ -43,7 +42,6 @@ public class TutorialSkateboard : MonoBehaviour
     private float currentTouchTime;
     private bool isGrinding;
     private int potentialPoints; //this are points that will be awarded if a trick is landed
-    private bool isCharging;
     private bool isStopped;
     private bool hasStarted;
     private bool performedTrick;
@@ -71,7 +69,6 @@ public class TutorialSkateboard : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<Collider2D>();
         audioManager = GetComponent<AudioManager>();
-        jumpForceSlider.maxValue = 1f;
         comboCounterAnimator = comboCounterDisplay.gameObject.GetComponent<Animator>();
     }
 
@@ -90,13 +87,6 @@ public class TutorialSkateboard : MonoBehaviour
         CheckGrounded();
         
         if(transform.position.x > distanceTravelled) {distanceTravelled = transform.position.x;}     
-
-        if(isCharging){
-            jumpForceSlider.value += Time.fixedDeltaTime;
-        }else
-        {
-            jumpForceSlider.value = 0;
-        }
 
         if(!isGrounded && !isGrinding)
         {
@@ -398,6 +388,19 @@ public class TutorialSkateboard : MonoBehaviour
         bool isPerformingTrick = false;
         if (!isGrounded && !isGrinding)
         {
+            //Check if swipe is valid based on section of the tutorial.
+            if (TutorialManager.Instance.partB)
+            {
+                if (validSwipe)
+                {
+                    validSwipe = false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
             //I check if I can perform a grind
             Collider2D other;
             bool grindable = CheckGrindable(out other, GetGrindCheckPosition(swipeDirection)); //check if player is above a grindable obstacle
@@ -406,11 +409,24 @@ public class TutorialSkateboard : MonoBehaviour
             trickPerformed = PerformGrind(swipeDirection, other);
             isPerformingTrick = true;
             grindingTrail.transform.position = backWheelSparks.transform.position;
-            if(reverseOut){grindingTrail.transform.position = frontWheelSparks.transform.position;}
+            if (reverseOut) { grindingTrail.transform.position = frontWheelSparks.transform.position; }
             grindingTrail.emitting = true;
         }
         else //else if one of those conditions is true
         {
+            //Check if swipe is valid based on section of the tutorial.
+            if (TutorialManager.Instance.partA)
+            {
+                if (validSwipe)
+                {
+                    validSwipe = false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
             //player performs a trick
             isPerformingTrick = true;
             backWheelSparks.SetActive(false);
@@ -622,19 +638,23 @@ public class TutorialSkateboard : MonoBehaviour
 
     private void OnTouchStarted(object sender, Vector2 start)
     {
-        // Debug.Log("Touch Started");
-        isCharging = true;
+        animator.SetBool("isHoldingTouch",true);
     }
 
     private void OnTouchEnded(object sender, Vector2 end)
     {
-        // Debug.Log("Touch Ended");
-        isCharging = false;
+        animator.SetBool("isHoldingTouch",false);
     }
 
     public void SetMinVelocity(float value)
     {
         minVelocity = value;
+    }
+
+    bool validSwipe;
+    private void OnValidSwipe(object sender, EventArgs e)
+    {
+        validSwipe = true;
     }
 
     public void EnableInput()
@@ -643,6 +663,7 @@ public class TutorialSkateboard : MonoBehaviour
         TouchControls.touchEvent += OnInputAction;
         TouchControls.touchStarted += OnTouchStarted;
         TouchControls.touchEnded += OnTouchEnded;
+        TutorialSwipeVisualiser.validSwipe += OnValidSwipe;
     }
 
     public void DisableInput()
@@ -651,6 +672,7 @@ public class TutorialSkateboard : MonoBehaviour
         TouchControls.touchEvent -= OnInputAction;
         TouchControls.touchStarted -= OnTouchStarted;
         TouchControls.touchEnded -= OnTouchEnded;
+        TutorialSwipeVisualiser.validSwipe -= OnValidSwipe;
     }
 
     void OnDrawGizmos()

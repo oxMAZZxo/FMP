@@ -23,7 +23,6 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]private GameObject partDPanel;
     [SerializeField]private GameObject trickCounterDisplay;
     [SerializeField]private GameObject wellDoneDisplay;
-    [SerializeField]private GameObject jumpBar;
     [SerializeField]private GameObject pauseButton;
     [SerializeField]private Transform skateboard;
     [SerializeField]private CinemachineVirtualCamera virtualCamera;
@@ -104,7 +103,6 @@ public class TutorialManager : MonoBehaviour
     private IEnumerator ActivePartDObjects()
     {
         yield return new WaitForSeconds(1.5f);
-        jumpBar.SetActive(true);
         SwitchObstacles();
     }
 
