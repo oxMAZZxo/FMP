@@ -309,7 +309,6 @@ public class SkateboardController : MonoBehaviour
             comboCounter++;
         }
         bool isGrind = false;
-        Debug.Log($"{trickPerformedOutput}");
         if (trickPerformedOutput == "Nose Grind" || trickPerformedOutput == "5-0" || trickPerformedOutput == "50-50") { isGrind = true; }
         if(isGrind) {GrindingSparksFX();}
         yield return new WaitForSeconds(0.12f);

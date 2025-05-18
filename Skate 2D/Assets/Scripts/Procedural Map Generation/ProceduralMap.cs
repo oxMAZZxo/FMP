@@ -386,7 +386,7 @@ public class ProceduralMap : MonoBehaviour
     /// <returns>Returns true if obstacle moved forward, false if obstacle was reset</returns>
     private bool HandleObstacle(Obstacle currentObstacle, GameObject mainObstacle, Collider2D ground, float obstacleBottomBoundsPosition)
     {
-        if(currentObstacle.obstacleType == ObstacleType.ManualPad || currentObstacle.obstacleType == ObstacleType.Unavoidable)
+        if (currentObstacle.obstacleType == ObstacleType.ManualPad || currentObstacle.obstacleType == ObstacleType.Unavoidable)
         {
             mainObstacle.transform.position = Vector3.zero;
             Physics2D.SyncTransforms();
@@ -398,7 +398,7 @@ public class ProceduralMap : MonoBehaviour
 
     private void MoveObstacle(float checkRadius, GameObject mainObstacle, Collider2D ground, float obstacleBottomBoundsPosition)
     {        
-        mainObstacle.transform.position = new Vector2(ground.gameObject.transform.position.x + checkRadius -1,ground.bounds.center.y + ground.bounds.extents.y - obstacleBottomBoundsPosition);
+        mainObstacle.transform.position = new Vector2(ground.gameObject.transform.position.x + checkRadius,ground.bounds.center.y + ground.bounds.extents.y - obstacleBottomBoundsPosition);
         Physics2D.SyncTransforms();
     }
 
