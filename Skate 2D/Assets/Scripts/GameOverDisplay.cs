@@ -43,12 +43,12 @@ public class GameOverDisplay : MonoBehaviour
     private IEnumerator ScoreIncrementation()
     {
         int addition = 1;
-        if(score > 100) {addition = 5;}
-        if(score > 1000) {addition = 10;}
-        if(score > 10000) {addition = 50;}
+        if(score > 100) {addition = 50;}
+        if(score > 1000) {addition = 100;}
+        if(score > 10000) {addition = 250;}
         for(int i = 0; i <= score; i+= addition)
         {
-            yield return new WaitForSeconds(0.0001f);
+            yield return new WaitForSeconds(0.01f);
             if(i > score)
             {
                 scoreDisplayFinal.text = $"Score: {score}";

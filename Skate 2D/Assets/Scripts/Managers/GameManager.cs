@@ -422,16 +422,23 @@ public class GameManager : MonoBehaviour
         skateboardController.Resume();
     }
 
+    private void OnPickUpAcquired(object sender, PickUpAcquiredEventArgs e)
+    {
+        Debug.Log($"Pick up acquired has a x{e.multiplier} multiplier");
+    }
+
     void OnEnable()
     {
         SkateboardController.trickPerformed += OnSkateboardTrickPerformed;
         SkateboardController.skateboardLanded += OnSkateboardLanded;
+        PickUp.PickUpAcquired += OnPickUpAcquired;
     }
 
     void OnDisable()
     {
         SkateboardController.trickPerformed -= OnSkateboardTrickPerformed;
         SkateboardController.skateboardLanded -= OnSkateboardLanded;
+        PickUp.PickUpAcquired -= OnPickUpAcquired;
     }
 }
 
