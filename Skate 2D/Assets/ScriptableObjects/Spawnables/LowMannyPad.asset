@@ -26,7 +26,7 @@ MonoBehaviour:
   - {fileID: 3921992949018577769, guid: fe989d88da9eb054ca304060018d2e15, type: 3}
   - {fileID: 5007686268176904371, guid: a50f9fd20bd55ef4188b70ab0f368eac, type: 3}
   followObjectChance: 100
-  followUpObjectDistance: 1
+  followUpObjectDistance: 1.25
   pickUps: []
   pickUpSpawnChances: 20
   spawnOffset: {x: 0, y: 0}
