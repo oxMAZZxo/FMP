@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// The Procedural Map class is a singleton object which will generate the endless map that the player will play on.
@@ -22,7 +24,7 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private LayerMask whatIsObstacle;
     [Header("Pick Ups")]
     [SerializeField] private PickUp[] pickUpPrefabs;
-
+    [SerializeField, Range(1, 100)] private int pickUpSpawnChance;
     [Header("Combo Rush")]
     [SerializeField]private bool comboRush = false;
     [Header("Background Environment Generation")]
@@ -296,11 +298,17 @@ public class ProceduralMap : MonoBehaviour
             yield break;
         }
         bool secondObstacleElligible = PositionFirst(ground, mainObstacle, currentObstacleType);
+        GameObject secondObstacle = null;
 
-        if (currentObstacleType.noOfFollowObstacleObjs > 0 && secondObstacleElligible && ((GameManager.Instance.currentGameSpeed >= currentObstacleType.minimumAcceptableGameSpeedForFollowUp
+        if (currentObstacleType.noOfFollowObstacleObjs > 0 && secondObstacleElligible &&
+        ((GameManager.Instance.currentGameSpeed >= currentObstacleType.minimumAcceptableGameSpeedForFollowUp
         && UnityEngine.Random.Range(0, 100) <= currentObstacleType.followObjectChance) || comboRush))
         {
-            CreateSecondObstacle(currentObstacleType, mainObstacle.GetComponent<Collider2D>(), ground.GetComponent<Collider2D>());
+            secondObstacle = CreateSecondObstacle(currentObstacleType, mainObstacle.GetComponent<Collider2D>(), ground.GetComponent<Collider2D>());
+        }
+        if (currentObstacleType.obstacleType == ObstacleType.Bench || currentObstacleType.obstacleType == ObstacleType.Rail || currentObstacleType.obstacleType == ObstacleType.Kicker)
+        {
+            CreatePickUp(currentObstacleType.obstacleType,mainObstacle, secondObstacle);
         }
     }
 
@@ -345,39 +353,76 @@ public class ProceduralMap : MonoBehaviour
     /// <param name="currentObstacleTypeChoice">The current obstacle choice in terms of type</param>
     /// <param name="mainObstacleCollider">The main obstacles collider</param>
     /// <param name="groundCollider">The current grounds collider</param>
-    private void CreateSecondObstacle(Obstacle currentObstacleTypeChoice,Collider2D mainObstacleCollider, Collider2D groundCollider)
+    private GameObject CreateSecondObstacle(Obstacle currentObstacleTypeChoice, Collider2D mainObstacleCollider, Collider2D groundCollider)
     {
-        int choice = UnityEngine.Random.Range(0,currentObstacleTypeChoice.noOfFollowObstacleObjs);
+        int choice = UnityEngine.Random.Range(0, currentObstacleTypeChoice.noOfFollowObstacleObjs);
         GameObject secondObstacle = currentObstacleTypeChoice.GetFollowUpObstacle(choice);
-        if(GameobjectInSight(secondObstacle))
+        if (GameobjectInSight(secondObstacle))
         {
             Debug.Log($"Second obstacle {secondObstacle.name} of main obstacle {mainObstacleCollider.name} is visible, therefore cannot use it.");
             currentObstacleTypeChoice.RollBackFollowUpObstacle(choice);
-            return;
+            return null;
         }
         Collider2D secondObstacleCollider = secondObstacle.GetComponent<Collider2D>();
         secondObstacle.transform.position = Vector3.zero;
         Physics2D.SyncTransforms();
-        if(!secondObstacle.activeInHierarchy) {secondObstacle.SetActive(true);}
+        if (!secondObstacle.activeInHierarchy) { secondObstacle.SetActive(true); }
 
-        float obstacleBottomBoundsPosition = secondObstacleCollider.bounds.center.y - secondObstacleCollider.bounds.extents.y; 
-        
+        float obstacleBottomBoundsPosition = secondObstacleCollider.bounds.center.y - secondObstacleCollider.bounds.extents.y;
+
         float mainToSecondSideToSideDistance = mainObstacleCollider.bounds.extents.x + secondObstacleCollider.bounds.extents.x;
-        
+
         Vector2 secondObstaclePos = new Vector2(mainObstacleCollider.transform.position.x + mainToSecondSideToSideDistance + currentObstacleTypeChoice.followUpObjectDistance + distanceToAddToFollowUp, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
         secondObstacle.transform.position = secondObstaclePos;
         Physics2D.SyncTransforms();
         currentSpawnAction = currentObstacleTypeChoice.followObjectSpawnAction;
+
+        return secondObstacle;
     }
 
-    private bool CheckForPreviousObjectNear(Collider2D obstacle,float checkRadius)
+    private void CreatePickUp(ObstacleType obstacleType, GameObject mainObstacle, GameObject secondObstacle)
     {
-        Vector3 checkPos = new Vector3(obstacle.transform.position.x - obstacle.bounds.extents.x,obstacle.transform.position.y,obstacle.transform.position.z);
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(checkPos, checkRadius, whatIsObstacle);
+        Collider2D obstacleSpawnChoice = mainObstacle.GetComponent<Collider2D>();
         
-        foreach(Collider2D collider in colliders)
+        if (secondObstacle != null && UnityEngine.Random.Range(1, 100) > 50)
         {
-            if(collider != obstacle)
+            obstacleSpawnChoice = secondObstacle.GetComponent<Collider2D>();
+        }
+
+        if (UnityEngine.Random.Range(1, 100) > pickUpSpawnChance) { return; }
+
+        PickUp currentPickUp;
+        Debug.Log($"Creating pick up");
+        if (obstacleType == ObstacleType.Kicker)
+        {
+            currentPickUp = Instantiate(pickUpPrefabs[0], mainObstacle.transform.position + new Vector3(2,2,0), Quaternion.identity);
+            CircleCollider2D currentCollider = currentPickUp.GetComponent<CircleCollider2D>();
+
+        }
+        else
+        {
+            currentPickUp = Instantiate(pickUpPrefabs[UnityEngine.Random.Range(1, 4)], new Vector2(0, 0), Quaternion.identity);
+            CircleCollider2D currentPickUpCollider = currentPickUp.GetComponent<CircleCollider2D>();
+            float obstacleTopBounds = obstacleSpawnChoice.bounds.center.y + obstacleSpawnChoice.bounds.extents.y;
+            float pickUpBottomBounds = currentPickUpCollider.bounds.center.y + currentPickUpCollider.bounds.extents.y;
+            currentPickUpCollider.transform.position = new Vector3(obstacleSpawnChoice.transform.position.x, obstacleTopBounds + pickUpBottomBounds);
+        }
+        Physics2D.SyncTransforms();
+
+        if (currentPickUp != null)
+        {
+            Destroy(currentPickUp, 10f);
+        }
+    }
+
+    private bool CheckForPreviousObjectNear(Collider2D obstacle, float checkRadius)
+    {
+        Vector3 checkPos = new Vector3(obstacle.transform.position.x - obstacle.bounds.extents.x, obstacle.transform.position.y, obstacle.transform.position.z);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(checkPos, checkRadius, whatIsObstacle);
+
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider != obstacle)
             {
                 return true;
             }

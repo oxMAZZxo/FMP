@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Animator),typeof(Rigidbody2D),typeof(Collider2D))]
+[RequireComponent(typeof(Animator), typeof(Rigidbody2D), typeof(Collider2D))]
 [RequireComponent(typeof(AudioManager))]
 public class SkateboardController : MonoBehaviour
 {
@@ -12,23 +12,23 @@ public class SkateboardController : MonoBehaviour
     private Collider2D myCollider;
     private AudioManager audioManager;
     [Header("Movement & Tricks")]
-    [SerializeField,Range(0.01f,1f)]private float movementSmoothing = 1f;
+    [SerializeField, Range(0.01f, 1f)] private float movementSmoothing = 1f;
     private float minVelocity = 3f;
-    [SerializeField,Range(0.1f,1f)]private float minimumJumpForce = 1f;
-    [SerializeField]private Transform groundCheck;
-    [SerializeField]private LayerMask whatIsGround;
-    [SerializeField,Range(0.01f,1f)]private float groundedCheckRadius = 0.2f; 
+    [SerializeField, Range(0.1f, 1f)] private float minimumJumpForce = 1f;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField, Range(0.01f, 1f)] private float groundedCheckRadius = 0.2f;
     [Header("Grinds")]
-    [SerializeField]private LayerMask whatIsGrindable;
-    [SerializeField]private Vector2 grindableCheckBoxSize;
-    [SerializeField]private Vector2 isGrindingCheckBoxSize;
+    [SerializeField] private LayerMask whatIsGrindable;
+    [SerializeField] private Vector2 grindableCheckBoxSize;
+    [SerializeField] private Vector2 isGrindingCheckBoxSize;
     [Header("SFX")]
-    [SerializeField]private GameObject backWheelSparks;
-    [SerializeField]private GameObject frontWheelSparks;
-    [SerializeField]private GameObject frontSmokeParticles;
-    [SerializeField]private GameObject backSmokeParticles;
-    [SerializeField]private GameObject rollingSmokeParticles;
-    [SerializeField]private TrailRenderer grindingTrail;
+    [SerializeField] private GameObject backWheelSparks;
+    [SerializeField] private GameObject frontWheelSparks;
+    [SerializeField] private GameObject frontSmokeParticles;
+    [SerializeField] private GameObject backSmokeParticles;
+    [SerializeField] private GameObject rollingSmokeParticles;
+    [SerializeField] private TrailRenderer grindingTrail;
     [Header("Visualisation")]
     public bool drawGizmos;
     private bool isGrounded;
@@ -51,10 +51,11 @@ public class SkateboardController : MonoBehaviour
     private float unPausedCounter;
     private bool disablingGrind;
     private float jumpHeight;
-    public static event EventHandler<SkateboardTrickPerformedEventArgs> trickPerformed; 
+    public static event EventHandler<SkateboardTrickPerformedEventArgs> trickPerformed;
     public static event EventHandler<SkateboardLandEventArgs> skateboardLanded;
     private float preJumpYPosition;
     private Gradient originalGrindTrailGradient;
+    public string CurrentTrickPerformed { get; private set; }
 
     void Start()
     {
@@ -67,28 +68,28 @@ public class SkateboardController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(isStopped || !GameManager.Instance.gameHasStarted || GameManager.Instance.isGamePaused) {return;}
+        if (isStopped || !GameManager.Instance.gameHasStarted || GameManager.Instance.isGamePaused) { return; }
 
-        if(!hasStarted && transform.position.x > 0.01f) 
-        { 
+        if (!hasStarted && transform.position.x > 0.01f)
+        {
             hasStarted = true;
             EnableInput();
             audioManager.Play("Rolling");
         }
 
-        if(isGrounded || isGrinding)
+        if (isGrounded || isGrinding)
         {
             Vector3 targetVelocity = new Vector2(minVelocity * 50 * Time.fixedDeltaTime, rb.velocity.y);
             rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothing);
         }
 
-        if(transform.position.x > distanceTravelled) {distanceTravelled = transform.position.x;}
+        if (transform.position.x > distanceTravelled) { distanceTravelled = transform.position.x; }
 
         //While the player is performing a grind, we want to make sure to enable physics
         //as the skateboard is reaching the end of the grindable obstacle
-        if(isGrinding) 
+        if (isGrinding)
         {
-            if(CheckIsGrinding() == false)
+            if (CheckIsGrinding() == false)
             {
                 DisableGrinding();
             }
@@ -96,11 +97,11 @@ public class SkateboardController : MonoBehaviour
         }
         CheckGrounded();
 
-        if(!isGrounded && !isGrinding)
+        if (!isGrounded && !isGrinding)
         {
             Quaternion rot = transform.rotation;
             Vector3 euler = rot.eulerAngles;
-    
+
             // Ensure angles are within the range (-180, 180) for correct clamping
             if (euler.z > 180) euler.z -= 360;
 
@@ -108,29 +109,29 @@ public class SkateboardController : MonoBehaviour
 
             transform.rotation = Quaternion.Euler(euler);
             float currentHeight = transform.position.y - preJumpYPosition;
-            if(currentHeight > jumpHeight) {jumpHeight = currentHeight;}
+            if (currentHeight > jumpHeight) { jumpHeight = currentHeight; }
             audioManager.Stop("Rolling");
         }
-        oldPosX = transform.position.x;  
+        oldPosX = transform.position.x;
     }
 
     void LateUpdate()
     {
-        if(!GameManager.Instance.isGamePaused && wasPaused)
+        if (!GameManager.Instance.isGamePaused && wasPaused)
         {
             unPausedCounter += Time.deltaTime;
-            if(unPausedCounter > 0.5f)
+            if (unPausedCounter > 0.5f)
             {
                 wasPaused = false;
                 unPausedCounter = 0;
             }
         }
 
-        if(!isStopped && !wasPaused && hasStarted && (transform.position.x - oldPosX) == 0)
+        if (!isStopped && !wasPaused && hasStarted && (transform.position.x - oldPosX) == 0)
         {
             isStopped = true;
             audioManager.Stop("Rolling");
-            GameManager.Instance.SessionEnded(longestCombo,distanceTravelled);
+            GameManager.Instance.SessionEnded(longestCombo, distanceTravelled);
             DisableInput();
         }
     }
@@ -141,15 +142,15 @@ public class SkateboardController : MonoBehaviour
         DisableInput();
         wasPaused = true;
 
-        if(isGrounded)
+        if (isGrounded)
         {
             audioManager.Stop("Rolling");
         }
-        if(isGrinding)
+        if (isGrinding)
         {
             audioManager.Stop("Mid Grind");
         }
-        if(!isGrinding && !isGrounded)
+        if (!isGrinding && !isGrounded)
         {
             audioManager.Stop("Wheel Spinning");
         }
@@ -160,15 +161,15 @@ public class SkateboardController : MonoBehaviour
         rb.simulated = true;
         EnableInput();
 
-        if(isGrounded)
+        if (isGrounded)
         {
             audioManager.Play("Rolling");
         }
-        if(isGrinding)
+        if (isGrinding)
         {
             audioManager.Play("Mid Grind");
         }
-        if(!isGrinding && !isGrounded)
+        if (!isGrinding && !isGrounded)
         {
             audioManager.Play("Wheel Spinning");
         }
@@ -177,40 +178,42 @@ public class SkateboardController : MonoBehaviour
     private void CheckGrounded()
     {
         bool wasGrounded = isGrounded;
-		isGrounded = false;
+        isGrounded = false;
 
-		// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
-		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
-		Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, groundedCheckRadius, whatIsGround);
-        
-		for (int i = 0; i < colliders.Length; i++)
-		{
-			if (colliders[i].gameObject != gameObject)
-			{
-				isGrounded = true;
-				if (!wasGrounded) //meaning you just landed
-				{
-                    skateboardLanded?.Invoke(this, new SkateboardLandEventArgs(potentialPoints,comboCounter, jumpHeight));
+        // The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
+        // This can be done using layers instead but Sample Assets will not overwrite your project settings.
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, groundedCheckRadius, whatIsGround);
+
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i].gameObject != gameObject)
+            {
+                isGrounded = true;
+                if (!wasGrounded) //meaning you just landed
+                {
+                    skateboardLanded?.Invoke(this, new SkateboardLandEventArgs(potentialPoints, comboCounter, jumpHeight));
                     OnLand();
                 }
-			}
-		}
+            }
+        }
     }
 
     private void OnLand()
     {
-        if(!hasStarted) {return;}
+        if (!hasStarted) { return; }
+        CurrentTrickPerformed = "";
         animator.SetBool("reverseOut", false);
         reverseOut = false;
         frontSmokeParticles.SetActive(true);
         backSmokeParticles.SetActive(true);
         rollingSmokeParticles.SetActive(true);
         performedTrick = false;
-        if(isCombo && comboCounter > 3){
+        if (isCombo && comboCounter > 3)
+        {
             AudioManager.Global.Play("OnLandComboSFX");
         }
         isCombo = false;
-        if(comboCounter > longestCombo) { longestCombo = comboCounter;}
+        if (comboCounter > longestCombo) { longestCombo = comboCounter; }
         potentialPoints = 0;
         comboCounter = 1;
         jumpHeight = 0;
@@ -225,13 +228,13 @@ public class SkateboardController : MonoBehaviour
     {
         performedTrick = true;
         float jumpForce = minimumJumpForce * (100 + (100 * currentTouchTime));
-        if(!isGrinding && !isGrounded) {jumpForce += 25;}
-        if(isGrinding)
+        if (!isGrinding && !isGrounded) { jumpForce += 25; }
+        if (isGrinding)
         {
             jumpForce += 15;
             DisableGrinding();
         }
-        if(isGrounded) {audioManager.Stop("Rolling");}
+        if (isGrounded) { audioManager.Stop("Rolling"); }
         rollingSmokeParticles.SetActive(false);
         audioManager.Play("Tail Snap");
         audioManager.Play("Wheel Spinning");
@@ -242,17 +245,17 @@ public class SkateboardController : MonoBehaviour
     private void OnInputAction(object sender, TouchEventArgs e)
     {
         currentTouchTime = e.touchTime + 1;
-        if(currentTouchTime > 2f) {currentTouchTime = 2f;}
-        if(e.swipeDirection == SwipeDirection.NONE)
+        if (currentTouchTime > 2f) { currentTouchTime = 2f; }
+        if (e.swipeDirection == SwipeDirection.NONE)
         {
             return;
         }
 
         bool isPerformingTrick;
         string trickPerformed;
-        
-        isPerformingTrick = CalculateAction(e.swipeDirection,out trickPerformed);
-        if(!isPerformingTrick) {return;}
+
+        isPerformingTrick = CalculateAction(e.swipeDirection, out trickPerformed);
+        if (!isPerformingTrick) { return; }
         StartCoroutine(DisplayTrick(trickPerformed));
     }
 
@@ -275,14 +278,14 @@ public class SkateboardController : MonoBehaviour
             trickPerformed = PerformGrind(swipeDirection, other);
             isPerformingTrick = true;
             grindingTrail.transform.position = backWheelSparks.transform.position;
-            if(reverseOut){grindingTrail.transform.position = frontWheelSparks.transform.position;}
+            if (reverseOut) { grindingTrail.transform.position = frontWheelSparks.transform.position; }
             grindingTrail.emitting = true;
         }
         else //else if one of those conditions is true
         {
             //player performs a trick
             trickPerformed = ShowTrickAnimation(swipeDirection);//perfrom a trick
-            if(trickPerformed == "")
+            if (trickPerformed == "")
             {
                 return false;
             }
@@ -299,29 +302,29 @@ public class SkateboardController : MonoBehaviour
         return isPerformingTrick;
     }
 
-    
+
 
     private IEnumerator DisplayTrick(string trickPerformedOutput)
     {
-        if(performedTrick) 
+        if (performedTrick)
         {
             isCombo = true;
             comboCounter++;
         }
         bool isGrind = false;
         if (trickPerformedOutput == "Nose Grind" || trickPerformedOutput == "5-0" || trickPerformedOutput == "50-50") { isGrind = true; }
-        if(isGrind) {GrindingSparksFX();}
+        if (isGrind) { GrindingSparksFX(); }
         yield return new WaitForSeconds(0.12f);
-        if(disablingGrind) 
+        if (disablingGrind)
         {
             disablingGrind = false;
             Debug.Log("Grind was invalid");
             yield break;
         }
-        
-        trickPerformed?.Invoke(this, new SkateboardTrickPerformedEventArgs(trickPerformedOutput,comboCounter,isCombo,potentialPoints,isGrind));
+        CurrentTrickPerformed = trickPerformedOutput;
+        trickPerformed?.Invoke(this, new SkateboardTrickPerformedEventArgs(trickPerformedOutput, comboCounter, isCombo, potentialPoints, isGrind));
     }
-    
+
     private void GrindingSparksFX()
     {
         // Get the gradient from the TrailRenderer
@@ -351,41 +354,41 @@ public class SkateboardController : MonoBehaviour
     private string ShowTrickAnimation(SwipeDirection swipeDirection)
     {
         string trickOutput = "";
-        switch(swipeDirection)
+        switch (swipeDirection)
         {
             case SwipeDirection.UP:
-            animator.SetTrigger("ollie");
-            potentialPoints +=1;
-            trickOutput = "Ollie";
-            break;
+                animator.SetTrigger("ollie");
+                potentialPoints += 1;
+                trickOutput = "Ollie";
+                break;
 
             case SwipeDirection.DOWN:
-            animator.SetTrigger("shuvit");
-            potentialPoints +=2;
-            trickOutput = "Shuvit";
-            break;
+                animator.SetTrigger("shuvit");
+                potentialPoints += 2;
+                trickOutput = "Shuvit";
+                break;
 
             case SwipeDirection.RIGHT:
-            animator.SetTrigger("kickflip");
-            potentialPoints +=5;
-            trickOutput = "Kickflip";
-            break;
+                animator.SetTrigger("kickflip");
+                potentialPoints += 5;
+                trickOutput = "Kickflip";
+                break;
 
             case SwipeDirection.LEFT:
-            animator.SetTrigger("heelflip");
-            potentialPoints +=5;
-            trickOutput = "Heelflip";
-            break;
+                animator.SetTrigger("heelflip");
+                potentialPoints += 5;
+                trickOutput = "Heelflip";
+                break;
 
             case SwipeDirection.DOWN_RIGHT:
-            animator.SetTrigger("treflip");
-            potentialPoints += 10;
-            trickOutput = "360 Kickflip";
-            break;
+                animator.SetTrigger("treflip");
+                potentialPoints += 10;
+                trickOutput = "360 Kickflip";
+                break;
 
         }
-        
-        if(trickOutput != "" && animator.GetBool("reverseOut"))
+
+        if (trickOutput != "" && animator.GetBool("reverseOut"))
         {
             trickOutput = "Nollie " + trickOutput;
         }
@@ -406,11 +409,11 @@ public class SkateboardController : MonoBehaviour
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         transform.position = new Vector2(transform.position.x, transform.position.y + obstacleTopBounds - skateboardBottomBounds);
-        isGrinding = true;    
+        isGrinding = true;
         rb.rotation = 0;
         Physics2D.SyncTransforms();
         //show grind animation
-        return ShowGrindAnimation(swipeDirection);       
+        return ShowGrindAnimation(swipeDirection);
     }
 
     /// <summary>
@@ -420,36 +423,36 @@ public class SkateboardController : MonoBehaviour
     private string ShowGrindAnimation(SwipeDirection swipeDirection)
     {
         string trickOutput = "";
-        animator.SetBool("reverseOut",false);
+        animator.SetBool("reverseOut", false);
         reverseOut = false;
         switch (swipeDirection)
         {
             case SwipeDirection.DOWN:
-            animator.SetTrigger("50-50");
-            pointsToBeAdded = 5;
-            backWheelSparks.SetActive(true);
-            frontWheelSparks.SetActive(true);
-            trickOutput = "50-50";
-            break;
+                animator.SetTrigger("50-50");
+                pointsToBeAdded = 5;
+                backWheelSparks.SetActive(true);
+                frontWheelSparks.SetActive(true);
+                trickOutput = "50-50";
+                break;
 
             case SwipeDirection.LEFT:
-            animator.SetTrigger("5-0 Grind");
-            backWheelSparks.SetActive(true);
-            pointsToBeAdded = 10;
-            trickOutput = "5-0";
-            break;
+                animator.SetTrigger("5-0 Grind");
+                backWheelSparks.SetActive(true);
+                pointsToBeAdded = 10;
+                trickOutput = "5-0";
+                break;
 
             case SwipeDirection.RIGHT:
-            animator.SetTrigger("Nose Grind");
-            pointsToBeAdded = 10;
-            frontWheelSparks.SetActive(true);
-            trickOutput = "Nose Grind";
-            animator.SetBool("reverseOut", true);
-            reverseOut = true;
-            break;
+                animator.SetTrigger("Nose Grind");
+                pointsToBeAdded = 10;
+                frontWheelSparks.SetActive(true);
+                trickOutput = "Nose Grind";
+                animator.SetBool("reverseOut", true);
+                reverseOut = true;
+                break;
         }
         potentialPoints += pointsToBeAdded;
-        animator.SetBool("isGrinding",true);   
+        animator.SetBool("isGrinding", true);
         audioManager.Play("Start Grind");
         audioManager.Play("Mid Grind");
         return trickOutput;
@@ -457,11 +460,11 @@ public class SkateboardController : MonoBehaviour
 
     private Vector2 GetGrindCheckPosition(SwipeDirection swipeDirection)
     {
-        if(swipeDirection == SwipeDirection.RIGHT || swipeDirection == SwipeDirection.DOWN_RIGHT || swipeDirection == SwipeDirection.UP_RIGHT)
+        if (swipeDirection == SwipeDirection.RIGHT || swipeDirection == SwipeDirection.DOWN_RIGHT || swipeDirection == SwipeDirection.UP_RIGHT)
         {
             return frontWheelSparks.transform.position;
         }
-        if(swipeDirection == SwipeDirection.LEFT || swipeDirection == SwipeDirection.DOWN_LEFT || swipeDirection == SwipeDirection.UP_LEFT)
+        if (swipeDirection == SwipeDirection.LEFT || swipeDirection == SwipeDirection.DOWN_LEFT || swipeDirection == SwipeDirection.UP_LEFT)
         {
             return backWheelSparks.transform.position;
         }
@@ -476,10 +479,10 @@ public class SkateboardController : MonoBehaviour
     private bool CheckGrindable(out Collider2D outCollider, Vector2 grindCheckPosition)
     {
         Collider2D[] colliders = Physics2D.OverlapBoxAll(grindCheckPosition, grindableCheckBoxSize, whatIsGrindable);
-		foreach(Collider2D collider in colliders)
+        foreach (Collider2D collider in colliders)
         {
             outCollider = collider;
-            if(collider.CompareTag("Grindable"))
+            if (collider.CompareTag("Grindable"))
             {
                 return true;
             }
@@ -491,17 +494,17 @@ public class SkateboardController : MonoBehaviour
     private bool CheckIsGrinding()
     {
         Vector2 grindCheckPosition = backWheelSparks.transform.position;
-        
-        if(reverseOut)
+
+        if (reverseOut)
         {
             grindCheckPosition = frontWheelSparks.transform.position;
         }
 
         Collider2D[] colliders = Physics2D.OverlapBoxAll(grindCheckPosition, isGrindingCheckBoxSize, whatIsGrindable);
-        
-		foreach(Collider2D collider in colliders)
+
+        foreach (Collider2D collider in colliders)
         {
-            if(collider.CompareTag("Grindable"))
+            if (collider.CompareTag("Grindable"))
             {
                 audioManager.Stop("Wheel Spinning");
                 return true;
@@ -513,7 +516,7 @@ public class SkateboardController : MonoBehaviour
 
     private void DisableGrinding()
     {
-        if(grindingTime < 0.1)
+        if (grindingTime < 0.1)
         {
             disablingGrind = true;
             RemoveGrind();
@@ -522,7 +525,7 @@ public class SkateboardController : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.None;
         rb.gravityScale = 1;
         isGrinding = false;
-        animator.SetBool("isGrinding",false);
+        animator.SetBool("isGrinding", false);
         backWheelSparks.SetActive(false);
         frontWheelSparks.SetActive(false);
         grindingTime = 0;
@@ -539,13 +542,13 @@ public class SkateboardController : MonoBehaviour
     private void OnTouchStarted(object sender, Vector2 start)
     {
         // Debug.Log("Touch Started");
-        animator.SetBool("isHoldingTouch",true);
+        animator.SetBool("isHoldingTouch", true);
     }
 
     private void OnTouchEnded(object sender, Vector2 end)
     {
         // Debug.Log("Touch Ended");
-        animator.SetBool("isHoldingTouch",false);
+        animator.SetBool("isHoldingTouch", false);
     }
 
     public void SetMinVelocity(float value)
@@ -582,14 +585,14 @@ public class SkateboardController : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if(!drawGizmos) {return;}
+        if (!drawGizmos) { return; }
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(groundCheck.position,groundedCheckRadius);
+        Gizmos.DrawWireSphere(groundCheck.position, groundedCheckRadius);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(backWheelSparks.transform.position,grindableCheckBoxSize);
-        Gizmos.DrawWireCube(frontWheelSparks.transform.position,grindableCheckBoxSize);
+        Gizmos.DrawWireCube(backWheelSparks.transform.position, grindableCheckBoxSize);
+        Gizmos.DrawWireCube(frontWheelSparks.transform.position, grindableCheckBoxSize);
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(backWheelSparks.transform.position,isGrindingCheckBoxSize);
-        Gizmos.DrawWireCube(frontWheelSparks.transform.position,isGrindingCheckBoxSize);
+        Gizmos.DrawWireCube(backWheelSparks.transform.position, isGrindingCheckBoxSize);
+        Gizmos.DrawWireCube(frontWheelSparks.transform.position, isGrindingCheckBoxSize);
     }
 }
