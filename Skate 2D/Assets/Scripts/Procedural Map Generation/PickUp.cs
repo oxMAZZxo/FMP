@@ -15,6 +15,7 @@ public class PickUp : MonoBehaviour
     [SerializeField] private TextMeshPro multiplierDisplay;
     public static event EventHandler<PickUpAcquiredEventArgs> PickUpAcquired;
     private bool triggered;
+    private SpriteRenderer spriteRenderer;
 
     void OnTriggerStay2D(Collider2D collision)
     {
@@ -37,6 +38,7 @@ public class PickUp : MonoBehaviour
         {
             Debug.LogError("The Multiplier display in the PickUp class of a pickup has not been assigned.", this);
         }
+        spriteRenderer = GetComponent<SpriteRenderer>();
         AssignMultiplier();
     }
 
@@ -44,6 +46,12 @@ public class PickUp : MonoBehaviour
     {
         currentMultiplier = UnityEngine.Random.Range(minMultiplier, maxMultiplier + 1);
         multiplierDisplay.text = $"x{currentMultiplier}";
+
+        float t = (currentMultiplier - 1) / 9f;// Normalize multiplier to [0,1]
+        // Linearly interpolate color from green (1) to red (10)
+        multiplierDisplay.color = Color.Lerp(Color.grey, Color.white,t);
+        spriteRenderer.color = Color.Lerp(Color.yellow, Color.red, t);
+
     }
 
     public void OnDisable()
