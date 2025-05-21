@@ -395,8 +395,7 @@ public class ProceduralMap : MonoBehaviour
         Debug.Log($"Creating pick up");
         if (obstacleType == ObstacleType.Kicker)
         {
-            currentPickUp = Instantiate(pickUpPrefabs[0], mainObstacle.transform.position + new Vector3(2,2,0), Quaternion.identity);
-            CircleCollider2D currentCollider = currentPickUp.GetComponent<CircleCollider2D>();
+            currentPickUp = Instantiate(pickUpPrefabs[0], mainObstacle.transform.position + new Vector3(2,2.2f,0), Quaternion.identity);
 
         }
         else

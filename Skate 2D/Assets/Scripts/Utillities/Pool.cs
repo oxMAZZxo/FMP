@@ -75,8 +75,8 @@ public class Pool<T>
             indexToReturn = rnd.Next(0, maxExclusive);
         } while (indexPreviouslyUsed == indexToReturn);
 
-        T currentObject = objects[index];
         index = indexToReturn;
+        T currentObject = objects[index];
         return currentObject;
     }
     

@@ -4808,8 +4808,8 @@ MonoBehaviour:
   generateObstacles: 1
   obstacleTypes:
   - {fileID: 11400000, guid: ea21cd7a15cd99545bf9ac11ed3ee776, type: 2}
-  - {fileID: 11400000, guid: ec0b25e71ea869d43942bda469f19365, type: 2}
   - {fileID: 11400000, guid: a0834ec11e796004e898f482b61c309c, type: 2}
+  - {fileID: 11400000, guid: ec0b25e71ea869d43942bda469f19365, type: 2}
   - {fileID: 11400000, guid: 0843d37503d85e94ba3108309ee7b9db, type: 2}
   - {fileID: 11400000, guid: 24b15a2382b965a4181c642f6362e919, type: 2}
   whatIsObstacle:
@@ -4820,7 +4820,7 @@ MonoBehaviour:
   - {fileID: 7230437420348686260, guid: 294af55e6929a634eb9db000ca58aad5, type: 3}
   - {fileID: 7744629992558461414, guid: 6152b403d15322344bebab845b3bd169, type: 3}
   - {fileID: 7584446832308147335, guid: 493b66fc93b6acc4b835694d886218f3, type: 3}
-  pickUpSpawnChance: 100
+  pickUpSpawnChance: 25
   comboRush: 0
   generateEnvironment: 1
   backgroundPrefabs:
@@ -10747,6 +10747,14 @@ PrefabInstance:
     - target: {fileID: 3352248071572651824, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_Name
       value: Skateboard
+      objectReference: {fileID: 0}
+    - target: {fileID: 5591234733782061087, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_Size.y
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5591234733782061087, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
