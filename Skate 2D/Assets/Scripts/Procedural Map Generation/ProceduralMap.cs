@@ -20,6 +20,9 @@ public class ProceduralMap : MonoBehaviour
     [SerializeField]private bool generateObstacles;
     [SerializeField]private Obstacles[] obstacleTypes;
     [SerializeField]private LayerMask whatIsObstacle;
+    [Header("Pick Ups")]
+    [SerializeField] private PickUp[] pickUpPrefabs;
+
     [Header("Combo Rush")]
     [SerializeField]private bool comboRush = false;
     [Header("Background Environment Generation")]
@@ -159,7 +162,7 @@ public class ProceduralMap : MonoBehaviour
     public void GenerateMap()
     {
         GameObject ground = CreateGround();
-        if(generateObstacles) {StartCoroutine(CreateObstacle(ground));}
+        if(generateObstacles) {StartCoroutine(CreateObstacles(ground));}
         
         if(generateEnvironment) {CreateBackgroundEnvironment();}
     }
@@ -259,15 +262,15 @@ public class ProceduralMap : MonoBehaviour
     /// </summary>
     /// <param name="ground">The current ground</param>
     /// <returns></returns>
-    IEnumerator CreateObstacle(GameObject ground)
+    IEnumerator CreateObstacles(GameObject ground)
     {
-        if(currentSpawnAction != SpawnAction.Spawn) 
+        if (currentSpawnAction != SpawnAction.Spawn)
         {
             currentSpawnAction = SpawnAction.Spawn;
             yield break;
         }
         yield return new WaitForSeconds(0.3f);
-        
+
         int maxIndex;
         switch (GameManager.Instance.currentGameSpeed)
         {
@@ -276,57 +279,64 @@ public class ProceduralMap : MonoBehaviour
             case GameSpeed.Fast: maxIndex = lastFastObstacleIndex; break;
             default: maxIndex = obstacles.length - 1; break;
         }
-        
+
         Pool<Obstacle> obstaclePoolToChooseFrom = obstacles;
-        if(comboRush) 
+        if (comboRush)
         {
-            obstaclePoolToChooseFrom = grindableObstacles; 
+            obstaclePoolToChooseFrom = grindableObstacles;
             maxIndex = grindableObstacles.length - 1;
         }
 
-        Obstacle currentObstacleTypeChoice = obstaclePoolToChooseFrom.GetRandomObject(maxIndex + 1);
-        GameObject mainObstacle = currentObstacleTypeChoice.GetMainObstacle();
-        if(GameobjectInSight(mainObstacle))
+        Obstacle currentObstacleType = obstaclePoolToChooseFrom.GetRandomObject(maxIndex + 1);
+        GameObject mainObstacle = currentObstacleType.GetMainObstacle();
+        if (GameobjectInSight(mainObstacle))
         {
-            currentObstacleTypeChoice.RollBackMainObstacle();
-            Debug.Log($"Main Obstacle {mainObstacle.name} is in sight, therefore I cannot use it. Returning function");
+            currentObstacleType.RollBackMainObstacle();
+            Debug.Log($"Main Obstacle {mainObstacle.name} is in sight, therefore I cannot use it. SKIPPING.");
             yield break;
         }
-        PositionObstacle(ground, mainObstacle,currentObstacleTypeChoice);
+        bool secondObstacleElligible = PositionFirst(ground, mainObstacle, currentObstacleType);
+
+        if (currentObstacleType.noOfFollowObstacleObjs > 0 && secondObstacleElligible && ((GameManager.Instance.currentGameSpeed >= currentObstacleType.minimumAcceptableGameSpeedForFollowUp
+        && UnityEngine.Random.Range(0, 100) <= currentObstacleType.followObjectChance) || comboRush))
+        {
+            CreateSecondObstacle(currentObstacleType, mainObstacle.GetComponent<Collider2D>(), ground.GetComponent<Collider2D>());
+        }
     }
 
-    private void PositionObstacle(GameObject ground, GameObject mainObstacle, Obstacle currentObstacleType)
+    /// <summary>
+    /// Positions the first obstacle in the current obstacle choice.
+    /// </summary>
+    /// <param name="ground"></param>
+    /// <param name="mainObstacle"></param>
+    /// <param name="currentObstacleType"></param>
+    /// <returns>Returns true if a follow up obstacle can be created.</returns>
+    private bool PositionFirst(GameObject ground, GameObject mainObstacle, Obstacle currentObstacleType)
     {
         Collider2D mainObstacleCollider = mainObstacle.GetComponent<Collider2D>();
         mainObstacle.transform.position = Vector3.zero;
         Physics2D.SyncTransforms();
 
-        if(!mainObstacle.activeInHierarchy) {mainObstacle.SetActive(true);}
-        
+        if (!mainObstacle.activeInHierarchy) { mainObstacle.SetActive(true); }
+
         Collider2D groundCollider = ground.GetComponent<Collider2D>();
 
-        float obstacleBottomBoundsPosition = mainObstacleCollider.bounds.center.y - mainObstacleCollider.bounds.extents.y; 
+        float obstacleBottomBoundsPosition = mainObstacleCollider.bounds.center.y - mainObstacleCollider.bounds.extents.y;
 
-        Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x,groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
+        Vector2 obstacleSpawnPos = new Vector2(ground.transform.position.x, groundCollider.bounds.center.y + groundCollider.bounds.extents.y - obstacleBottomBoundsPosition);
 
         mainObstacle.transform.position = obstacleSpawnPos;
         Physics2D.SyncTransforms();
-        
-        bool obstacleInTheWay = CheckForPreviousObjectNear(mainObstacleCollider,currentObstacleType.checkRadius);
-        bool secondObstacleElligible = true;
-        if(obstacleInTheWay)
+
+        bool obstaclePositioningSuccess = true;
+        if (CheckForPreviousObjectNear(mainObstacleCollider, currentObstacleType.checkRadius))
         {
-            secondObstacleElligible = HandleObstacle(currentObstacleType,mainObstacle,groundCollider,obstacleBottomBoundsPosition);
+            obstaclePositioningSuccess = HandleObstacle(currentObstacleType, mainObstacle, groundCollider, obstacleBottomBoundsPosition);
         }
 
         currentSpawnAction = currentObstacleType.spawnAction;
-        if(currentObstacleType.obstacleType == ObstacleType.Unavoidable && GameManager.Instance.currentGameSpeed == GameSpeed.Slow) {currentSpawnAction = SpawnAction.Spawn;}
-        
-        if(currentObstacleType.noOfFollowObstacleObjs > 0 && secondObstacleElligible && ((GameManager.Instance.currentGameSpeed >= currentObstacleType.minimumAcceptableGameSpeedForFollowUp
-        && UnityEngine.Random.Range(0,100) <= currentObstacleType.followObjectChance) || comboRush))
-        {
-            CreateSecondObstacle(currentObstacleType,mainObstacleCollider,groundCollider);
-        }
+        if (currentObstacleType.obstacleType == ObstacleType.Unavoidable && GameManager.Instance.currentGameSpeed == GameSpeed.Slow) { currentSpawnAction = SpawnAction.Spawn; }
+        return obstaclePositioningSuccess;
     }
 
     /// <summary>
