@@ -13,6 +13,7 @@ public class Pool<T>
     /// The number of objects the pool holds.
     /// </summary>
     public int length { get; }
+    private static readonly Random rnd = new Random();
 
     /// <summary>
     /// Instantiates a pool only using an amount, no objects are in the pool
@@ -68,7 +69,6 @@ public class Pool<T>
         int indexPreviouslyUsed = index-1;
         if(indexPreviouslyUsed == -1){indexPreviouslyUsed = objects.Length -1;}
 
-        Random rnd = new Random();
         int indexToReturn;
         do
         {
