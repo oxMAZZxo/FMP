@@ -418,18 +418,32 @@ public class ProceduralMap : MonoBehaviour
         }
         else
         {
-            currentPickUp = pickUps[UnityEngine.Random.Range(1, 4)];
+            currentPickUp = SelectRandomPickUp();
             currentPickUp.gameObject.SetActive(true);
             currentPickUp.transform.position = Vector3.zero;
             Physics2D.SyncTransforms();
-            CircleCollider2D currentPickUpCollider = currentPickUp.GetComponent<CircleCollider2D>();
+            Collider2D currentPickUpCollider = currentPickUp.GetComponent<Collider2D>();
             float obstacleTopBounds = obstacleSpawnChoice.bounds.center.y + obstacleSpawnChoice.bounds.extents.y;
             float pickUpBottomBounds = currentPickUpCollider.bounds.center.y + currentPickUpCollider.bounds.extents.y;
             spawnPosition = new Vector3(obstacleSpawnChoice.transform.position.x, obstacleTopBounds + pickUpBottomBounds);
         }
 
+        currentPickUp.AssignMultiplier();
         currentPickUp.transform.position = spawnPosition;
         Physics2D.SyncTransforms();
+    }
+
+    private PickUp SelectRandomPickUp()
+    {
+        PickUp current;
+        do
+        {
+            current = pickUps[UnityEngine.Random.Range(1, 4)];
+            SpriteRenderer spriteRenderer = current.GetComponent<SpriteRenderer>();
+            if (spriteRenderer.isVisible) { current = null; }
+        } while (current == null);
+
+        return current;
     }
 
     private bool CheckForPreviousObjectNear(Collider2D obstacle, float checkRadius)

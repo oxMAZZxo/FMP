@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 600424101606772340}
   - component: {fileID: 4600046537126559085}
-  - component: {fileID: 3625834083443301811}
+  - component: {fileID: 5349620155705516700}
   - component: {fileID: 7230437420348686260}
   m_Layer: 0
   m_Name: FiftyFiftyGrindPickUp
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -396847931
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 757670fb5491c6444a2f77a9a0d76776, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -87,8 +87,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &3625834083443301811
-CircleCollider2D:
+--- !u!61 &5349620155705516700
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -119,9 +119,19 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.3004669, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Size: {x: 0.3990662, y: 1}
+  m_EdgeRadius: 0
 --- !u!114 &7230437420348686260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,7 +327,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -396847931
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 2
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4182628359168231227

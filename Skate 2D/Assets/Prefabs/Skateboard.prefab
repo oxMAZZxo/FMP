@@ -5135,7 +5135,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2128687969
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -859734094, guid: f8a8b5632bd17204b81c702da24afe88, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5432,7 +5432,7 @@ GameObject:
   - component: {fileID: 5591234733782061087}
   m_Layer: 3
   m_Name: PickUpCollider
-  m_TagString: Player
+  m_TagString: PickUpCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5484,8 +5484,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.3}
-  m_Size: {x: 0.5, y: 1.5}
+  m_Offset: {x: -0.08, y: -0.45}
+  m_Size: {x: 0.35, y: 1.1}
   m_Direction: 0
 --- !u!1 &7357346109206956288
 GameObject:

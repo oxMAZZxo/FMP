@@ -16,19 +16,20 @@ public class PickUp : MonoBehaviour
     public static event EventHandler<PickUpAcquiredEventArgs> PickUpAcquired;
     private bool triggered;
     private SpriteRenderer spriteRenderer;
+    
 
     void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && !triggered)
+        if (collision.CompareTag("PickUpCollider") && !triggered)
         {
+            triggered = true;
             SkateboardController skateboard = collision.GetComponentInParent<SkateboardController>();
             if (isTrickRequired && skateboard.CurrentTrickPerformed != trickRequired)
             {
+                triggered = false;
                 return;
             }
-            triggered = true;
             PickUpAcquired?.Invoke(this, new PickUpAcquiredEventArgs(currentMultiplier));
-            
             gameObject.SetActive(false);
         }
     }
@@ -58,7 +59,5 @@ public class PickUp : MonoBehaviour
     public void OnDisable()
     {
         triggered = false;
-        transform.position = Vector3.zero;
-        Physics2D.SyncTransforms();
     }
 }
