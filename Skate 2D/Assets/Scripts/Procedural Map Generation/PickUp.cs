@@ -28,6 +28,7 @@ public class PickUp : MonoBehaviour
             }
             triggered = true;
             PickUpAcquired?.Invoke(this, new PickUpAcquiredEventArgs(currentMultiplier));
+            
             gameObject.SetActive(false);
         }
     }
@@ -49,7 +50,7 @@ public class PickUp : MonoBehaviour
 
         float t = (currentMultiplier - 1) / 9f;// Normalize multiplier to [0,1]
         // Linearly interpolate color from green (1) to red (10)
-        multiplierDisplay.color = Color.Lerp(Color.grey, Color.white,t);
+        multiplierDisplay.color = Color.Lerp(Color.grey, Color.white, t);
         spriteRenderer.color = Color.Lerp(Color.yellow, Color.red, t);
 
     }
@@ -57,5 +58,7 @@ public class PickUp : MonoBehaviour
     public void OnDisable()
     {
         triggered = false;
+        transform.position = Vector3.zero;
+        Physics2D.SyncTransforms();
     }
 }

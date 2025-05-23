@@ -25,6 +25,7 @@ public class ProceduralMap : MonoBehaviour
     [Header("Pick Ups")]
     [SerializeField] private PickUp[] pickUpPrefabs;
     [SerializeField, Range(1, 100)] private int pickUpSpawnChance;
+    private PickUp[] pickUps;
     [Header("Combo Rush")]
     [SerializeField]private bool comboRush = false;
     [Header("Background Environment Generation")]
@@ -57,22 +58,25 @@ public class ProceduralMap : MonoBehaviour
     void Start()
     {
         InitPools();
-        if(generateObstacles) {InitObstaclePool();}
+        if (generateObstacles) { InitObstaclePool(); }
         InitBackgroundPool();
-        if(startGround == null)
+        if (startGround == null)
         {
             Debug.LogError("The variable Start Ground in the Procedural Map Component is null. Cannot generate ground, obstacles or environment without that");
-        }else
+        }
+        else
         {
             previousGround = startGround;
         }
-        if(startBackground == null)
+        if (startBackground == null)
         {
             Debug.LogError("The variable Start Background in the Procedural Map Component is null. Cannot generate background environment without that");
-        }else
+        }
+        else
         {
             previousBackground = startBackground;
         }
+        InitPickUps();
     }
 
     /// <summary>
@@ -158,15 +162,25 @@ public class ProceduralMap : MonoBehaviour
         return followObjs;
     }
 
+    private void InitPickUps()
+    {
+        pickUps = new PickUp[4];
+        for (int i = 0; i < pickUpPrefabs.Length; i++)
+        {
+            PickUp current = Instantiate(pickUpPrefabs[i], new Vector3(0,100,0), Quaternion.identity);
+            pickUps[i] = current;
+        }
+    }
+
     /// <summary>
     /// Generates Terrain and Obstacles
     /// </summary>
     public void GenerateMap()
     {
         GameObject ground = CreateGround();
-        if(generateObstacles) {StartCoroutine(CreateObstacles(ground));}
-        
-        if(generateEnvironment) {CreateBackgroundEnvironment();}
+        if (generateObstacles) { StartCoroutine(CreateObstacles(ground)); }
+
+        if (generateEnvironment) { CreateBackgroundEnvironment(); }
     }
     
     /// <summary>
@@ -382,36 +396,40 @@ public class ProceduralMap : MonoBehaviour
 
     private void CreatePickUp(ObstacleType obstacleType, GameObject mainObstacle, GameObject secondObstacle)
     {
+        if (UnityEngine.Random.Range(1, 100) > pickUpSpawnChance) { return; }
+
         Collider2D obstacleSpawnChoice = mainObstacle.GetComponent<Collider2D>();
         
-        if (secondObstacle != null && UnityEngine.Random.Range(1, 100) > 50)
+        if (secondObstacle != null && obstacleType == ObstacleType.Bench && UnityEngine.Random.Range(1, 100) > 50 )
         {
             obstacleSpawnChoice = secondObstacle.GetComponent<Collider2D>();
         }
 
-        if (UnityEngine.Random.Range(1, 100) > pickUpSpawnChance) { return; }
-
         PickUp currentPickUp;
-        Debug.Log($"Creating pick up");
+        Vector3 spawnPosition;
+        
         if (obstacleType == ObstacleType.Kicker)
         {
-            currentPickUp = Instantiate(pickUpPrefabs[0], mainObstacle.transform.position + new Vector3(2,2.2f,0), Quaternion.identity);
-
+            currentPickUp = pickUps[0];
+            currentPickUp.gameObject.SetActive(true);
+            currentPickUp.transform.position = Vector3.zero;
+            Physics2D.SyncTransforms();
+            spawnPosition = new Vector3(2, 2.2f, 0) + obstacleSpawnChoice.transform.position;
         }
         else
         {
-            currentPickUp = Instantiate(pickUpPrefabs[UnityEngine.Random.Range(1, 4)], new Vector2(0, 0), Quaternion.identity);
+            currentPickUp = pickUps[UnityEngine.Random.Range(1, 4)];
+            currentPickUp.gameObject.SetActive(true);
+            currentPickUp.transform.position = Vector3.zero;
+            Physics2D.SyncTransforms();
             CircleCollider2D currentPickUpCollider = currentPickUp.GetComponent<CircleCollider2D>();
             float obstacleTopBounds = obstacleSpawnChoice.bounds.center.y + obstacleSpawnChoice.bounds.extents.y;
             float pickUpBottomBounds = currentPickUpCollider.bounds.center.y + currentPickUpCollider.bounds.extents.y;
-            currentPickUpCollider.transform.position = new Vector3(obstacleSpawnChoice.transform.position.x, obstacleTopBounds + pickUpBottomBounds);
+            spawnPosition = new Vector3(obstacleSpawnChoice.transform.position.x, obstacleTopBounds + pickUpBottomBounds);
         }
-        Physics2D.SyncTransforms();
 
-        if (currentPickUp != null)
-        {
-            Destroy(currentPickUp, 10f);
-        }
+        currentPickUp.transform.position = spawnPosition;
+        Physics2D.SyncTransforms();
     }
 
     private bool CheckForPreviousObjectNear(Collider2D obstacle, float checkRadius)
