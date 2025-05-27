@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MultiplierManager : MonoBehaviour
 {
@@ -22,6 +23,15 @@ public class MultiplierManager : MonoBehaviour
     private void OnPickUpAcquired(object sender, PickUpAcquiredEventArgs e)
     {
         RectTransform current = Instantiate(multiplierUiPrefab, transform).GetComponent<RectTransform>();
+        PositionMultiplierUI(current);
+        ChangeMultiplierAttributes(current.gameObject, e);
+
+        multiplierEmblems.Add(current.gameObject);
+
+    }
+
+    private void PositionMultiplierUI(RectTransform current)
+    {
         float newX = 50 + (100 * columnCount);
         float newY = -50 - (100 * rowCount);
 
@@ -36,10 +46,15 @@ public class MultiplierManager : MonoBehaviour
             current.anchoredPosition = new Vector2(newX, newY);
             columnCount = 1;
         }
+    }
 
+    private void ChangeMultiplierAttributes(GameObject current, PickUpAcquiredEventArgs attributes)
+    {
+        Image image = current.GetComponentInChildren<Image>();
+        image.color = attributes.colour;
 
-        multiplierEmblems.Add(current.gameObject);
-
+        TextMeshProUGUI tmp = current.GetComponentInChildren<TextMeshProUGUI>();
+        tmp.text = $"x{attributes.multiplier}";
     }
 
     void OnEnable()

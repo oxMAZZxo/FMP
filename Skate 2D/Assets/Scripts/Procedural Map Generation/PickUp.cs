@@ -29,7 +29,7 @@ public class PickUp : MonoBehaviour
                 triggered = false;
                 return;
             }
-            PickUpAcquired?.Invoke(this, new PickUpAcquiredEventArgs(currentMultiplier));
+            PickUpAcquired?.Invoke(this, new PickUpAcquiredEventArgs(currentMultiplier,spriteRenderer.color));
             gameObject.SetActive(false);
         }
     }
