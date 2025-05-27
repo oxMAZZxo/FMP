@@ -1070,7 +1070,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &103669460
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6871,6 +6871,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multiplierUiPrefab: {fileID: 1976368021230938651, guid: 5231fd49121cf5c4582de8742ab6690d, type: 3}
+  multiplierEmblems: []
 --- !u!1 &1307456087
 GameObject:
   m_ObjectHideFlags: 0
@@ -9575,7 +9576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1955194286
 MonoBehaviour:
   m_ObjectHideFlags: 0
