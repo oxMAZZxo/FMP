@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using Cinemachine;
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI comboCounterDisplay;
     [SerializeField]private TextMeshProUGUI addedScoreDisplay;
     [SerializeField]private TextMeshProUGUI comboAnnouncementDisplay;
+    [SerializeField] private GameObject multiplierEmblemPrefab;
     private Animator comboCounterDisplayAnimator;
     // [SerializeField]private TextMeshProUGUI multiplierDisplay;
     // [SerializeField]private TextMeshProUGUI potentialPointsDisplay;
@@ -71,6 +73,7 @@ public class GameManager : MonoBehaviour
     /// Has the a game session started
     /// </summary>
     public bool gameHasStarted {get; private set;}
+    private List<Multiplier> multipliers;
     public static event EventHandler<EventArgs> reset;
     public static event EventHandler gamespeedChanged;
 
@@ -92,6 +95,7 @@ public class GameManager : MonoBehaviour
         gameHasStarted = false;
         canActivateComboRush = true;
         comboCounterDisplayAnimator = comboCounterDisplay.gameObject.GetComponent<Animator>();
+        multipliers = new List<Multiplier>();
     }
 
     /// <summary>
@@ -164,10 +168,13 @@ public class GameManager : MonoBehaviour
         // Debug.Log($"Value: {value}");
         int finalValue = score + value;
         // Debug.Log($"Final Value: {finalValue}");
-        int addition = 1;
+        int addition = 5;
         if(value > 100) {addition = 10;}
         if(value > 1000) {addition = 50;}
-        if(value > 10000) {addition = 100;}
+        if(value > 10000) {addition = 500;}
+        if(value > 100000) {addition = 5000;}
+        if(value > 1000000) {addition = 50000;}
+        if(value > 10000000) {addition = 500000;}
         for(int i = score; i <= finalValue; i+= addition)
         {
             yield return new WaitForSeconds(0.0001f);
@@ -425,6 +432,11 @@ public class GameManager : MonoBehaviour
     private void OnPickUpAcquired(object sender, PickUpAcquiredEventArgs e)
     {
         Debug.Log($"Pick up acquired has a x{e.multiplier} multiplier");
+        multipliers.Add(new Multiplier { multiplier = e.multiplier, colour = e.colour, });
+        int value = score * (int)e.multiplier;
+        value = value - score;
+        DisplayPointsIncrement(score, (int)e.multiplier);
+        StartCoroutine(IncrementScoreAnimation(value));
     }
 
     void OnEnable()
@@ -447,4 +459,9 @@ public enum GameSpeed{
     Medium,
     Fast,
     SuperFast
+}
+
+public struct Multiplier {
+    public float multiplier;
+    public Color colour;
 }

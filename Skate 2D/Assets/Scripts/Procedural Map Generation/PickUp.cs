@@ -29,6 +29,7 @@ public class PickUp : MonoBehaviour
                 triggered = false;
                 return;
             }
+            AudioManager.Global.Play("PickUp");
             PickUpAcquired?.Invoke(this, new PickUpAcquiredEventArgs(currentMultiplier,spriteRenderer.color));
             gameObject.SetActive(false);
         }
@@ -53,7 +54,6 @@ public class PickUp : MonoBehaviour
         // Linearly interpolate color from green (1) to red (10)
         multiplierDisplay.color = Color.Lerp(Color.grey, Color.white, t);
         spriteRenderer.color = Color.Lerp(Color.yellow, Color.red, t);
-
     }
 
     public void OnDisable()

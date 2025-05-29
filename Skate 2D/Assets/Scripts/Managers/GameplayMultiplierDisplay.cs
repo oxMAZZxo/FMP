@@ -1,12 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MultiplierManager : MonoBehaviour
+public class GameplayMultiplierDisplay : MonoBehaviour
 {
     [SerializeField] private GameObject multiplierUiPrefab;
     [SerializeField]private List<GameObject> multiplierEmblems;
@@ -57,13 +55,23 @@ public class MultiplierManager : MonoBehaviour
         tmp.text = $"x{attributes.multiplier}";
     }
 
+    private void OnGameReset(object sender, EventArgs e)
+    {
+        rowCount = 0;
+        columnCount = 0;
+        multiplierEmblems.Clear();
+    }
+
     void OnEnable()
     {
         PickUp.PickUpAcquired += OnPickUpAcquired;
+        GameManager.reset += OnGameReset;
     }
+
 
     void OnDisable()
     {
         PickUp.PickUpAcquired -= OnPickUpAcquired;
+        GameManager.reset -= OnGameReset;
     }
 }

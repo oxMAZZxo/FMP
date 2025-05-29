@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using System;
 
 public class GameOverDisplay : MonoBehaviour
 {
@@ -15,21 +17,6 @@ public class GameOverDisplay : MonoBehaviour
     private int noOfCombos;
     private int longestCombo;
     private float distanceTravelled;
-
-    public int testScore;
-    public int testTricks;
-    public int testCombos;
-    public int testCombo;
-    public float testDistance;
-
-    // void Start()
-    // {
-    //     score = testScore;
-    //     noOfTricks = testTricks;
-    //     noOfCombos = testCombos;
-    //     longestCombo = testCombo;
-    //     distanceTravelled = testDistance;
-    // }
 
     public void StartIncrementAnimation()
     {
@@ -61,12 +48,12 @@ public class GameOverDisplay : MonoBehaviour
     private IEnumerator NoOfTricksIncrementation()
     {
         int addition = 1;
-        if(noOfTricks > 1000) {addition = 10;}
-        if(noOfTricks > 10000) {addition = 50;}
-        for(int i = 0; i <= noOfTricks; i+= addition)
+        if (noOfTricks > 1000) { addition = 10; }
+        if (noOfTricks > 10000) { addition = 50; }
+        for (int i = 0; i <= noOfTricks; i += addition)
         {
             yield return new WaitForSeconds(0.001f);
-            if(i > noOfTricks)
+            if (i > noOfTricks)
             {
                 noOfTricksDisplay.text = $"Tricks: {noOfTricks}";
                 break;
@@ -127,9 +114,9 @@ public class GameOverDisplay : MonoBehaviour
         }
     }
 
-    public void SetValues(int newScore, int newNoOfTricks, int newNoOfCombos, int newLongestCombo, float newDistanceTravelled)
+    public void SetValues(int preMultiplierScore, int newNoOfTricks, int newNoOfCombos, int newLongestCombo, float newDistanceTravelled)
     {
-        score = newScore;
+        score = preMultiplierScore;
         noOfTricks = newNoOfTricks;
         noOfCombos = newNoOfCombos;
         longestCombo = newLongestCombo;
