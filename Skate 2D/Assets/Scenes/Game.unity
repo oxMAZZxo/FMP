@@ -352,11 +352,8 @@ MonoBehaviour:
   noOfCombosDisplay: {fileID: 184468119}
   longestComboDisplay: {fileID: 1830285386}
   distanceTravelledDisplay: {fileID: 1092970402}
-  testScore: 17123
-  testTricks: 352
-  testCombos: 110
-  testCombo: 18
-  testDistance: 632
+  multiplierDisplay: {fileID: 0}
+  multiplierEmblemPrefab: {fileID: 0}
 --- !u!95 &21715829
 Animator:
   serializedVersion: 5
@@ -895,6 +892,16 @@ MonoBehaviour:
   - name: OnLandComboSFX
     clip: {fileID: 8300000, guid: cc7033f43665842489bf6770bd2f2df1, type: 3}
     volume: 0.15
+    pitch: 1
+    spatialBlend: 0
+    source: {fileID: 0}
+    loop: 0
+    isMusic: 0
+    playOnAwake: 0
+    preLoadAudioData: 1
+  - name: PickUp
+    clip: {fileID: 8300000, guid: 3846cfca37e31374d8a05cbe0f920efd, type: 3}
+    volume: 0.06
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
@@ -1531,6 +1538,7 @@ MonoBehaviour:
   comboCounterDisplay: {fileID: 1437382175}
   addedScoreDisplay: {fileID: 930265750}
   comboAnnouncementDisplay: {fileID: 1173863728}
+  multiplierEmblemPrefab: {fileID: 0}
   comboRushGameSpeed: 1
   comboRushActivateChance: 15
   comboRushActivationCooldown: 60
@@ -2964,7 +2972,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 24.66565, y: 80}
+  m_AnchoredPosition: {x: 24.665771, y: 80}
   m_SizeDelta: {x: -100.66, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &586017632
@@ -4821,7 +4829,7 @@ MonoBehaviour:
   - {fileID: 7230437420348686260, guid: 294af55e6929a634eb9db000ca58aad5, type: 3}
   - {fileID: 7744629992558461414, guid: 6152b403d15322344bebab845b3bd169, type: 3}
   - {fileID: 7584446832308147335, guid: 493b66fc93b6acc4b835694d886218f3, type: 3}
-  pickUpSpawnChance: 100
+  pickUpSpawnChance: 20
   comboRush: 0
   generateEnvironment: 1
   backgroundPrefabs:
@@ -6838,7 +6846,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1307354659
 RectTransform:
   m_ObjectHideFlags: 0
