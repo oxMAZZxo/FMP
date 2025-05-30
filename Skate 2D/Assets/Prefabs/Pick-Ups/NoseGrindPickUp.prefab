@@ -417,8 +417,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7080a0c24cbd3a8419a6c193bf0a4f09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minMultiplier: 4
-  maxMultiplier: 10
+  minMultiplier: 2
+  maxMultiplier: 9
   isTrickRequired: 1
   trickRequired: Nose Grind
   multiplierDisplay: {fileID: 1815407682426294694}

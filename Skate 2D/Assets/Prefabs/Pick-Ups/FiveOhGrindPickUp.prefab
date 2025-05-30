@@ -144,8 +144,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7080a0c24cbd3a8419a6c193bf0a4f09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minMultiplier: 3
-  maxMultiplier: 8
+  minMultiplier: 2
+  maxMultiplier: 7
   isTrickRequired: 1
   trickRequired: 5-0
   multiplierDisplay: {fileID: 8558236953445786910}
