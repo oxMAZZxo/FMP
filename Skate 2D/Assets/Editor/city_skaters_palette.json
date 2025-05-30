@@ -1,0 +1,35 @@
+{
+    "base": {
+        "primaryBackground": "#2C2C2C",
+        "secondaryBackground": "#1A1A1A",
+        "lightSurface": "#F5F5F5",
+        "hoverBackground": "#3C4A57"
+    },
+    "accents": {
+        "primaryAccent": "#F9D342",
+        "secondaryAccent": "#2D9CDB",
+        "success": "#3BD671",
+        "warning": "#FF9F1C",
+        "error": "#E63946"
+    },
+    "skaterTheme": {
+        "neutral": "#7D5A50",
+        "contrast": "#6B8E23",
+        "detail": "#A55233",
+        "accessory": "#7FDBFF"
+    },
+    "text": {
+        "main": "#FFFFFF",
+        "secondary": "#CCCCCC",
+        "disabled": "#888888",
+        "scoreHighlight": "#F9D342",
+        "comboHighlight": "#3BD671",
+        "comboText": "#9B59B6"
+    },
+    "uiStates": {
+        "default": "#F5F5F5",
+        "hovered": "#FFE66D",
+        "pressed": "#2D9CDB",
+        "disabled": "#AAAAAA"
+    }
+}
