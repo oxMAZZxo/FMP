@@ -105,7 +105,6 @@ public class GameManager : MonoBehaviour
     {
         if(gameHasStarted) {return;}
         StartCameraAnimations();
-
         currentVelocity = startVelocity;
         skateboardController.SetMinVelocity(currentVelocity);
         gameHasStarted = true;

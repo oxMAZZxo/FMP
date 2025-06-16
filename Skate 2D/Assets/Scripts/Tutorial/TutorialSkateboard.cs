@@ -376,6 +376,8 @@ public class TutorialSkateboard : MonoBehaviour
         }
     }
 
+    int counter = 0;
+
     /// <summary>
     /// Calculates if an action can be performed
     /// </summary>
@@ -386,58 +388,64 @@ public class TutorialSkateboard : MonoBehaviour
     {
         trickPerformed = "";
         bool isPerformingTrick = false;
+        if (counter > 2)
+        {
+            validSwipe = true;
+        }
         if (!isGrounded && !isGrinding)
-        {
-            //Check if swipe is valid based on section of the tutorial.
-            if (TutorialManager.Instance.partB)
             {
-                if (validSwipe)
+                //Check if swipe is valid based on section of the tutorial.
+                if (TutorialManager.Instance.partB)
                 {
-                    validSwipe = false;
+                    if (validSwipe)
+                    {
+                        validSwipe = false;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-                else
-                {
-                    return false;
-                }
-            }
+                counter++;
+                
 
-            //I check if I can perform a grind
+                //I check if I can perform a grind
             Collider2D other;
-            bool grindable = CheckGrindable(out other, GetGrindCheckPosition(swipeDirection)); //check if player is above a grindable obstacle
-            if (!grindable || swipeDirection != SwipeDirection.DOWN && swipeDirection != SwipeDirection.LEFT && swipeDirection != SwipeDirection.RIGHT) { return false; }
-            Resume(true);
-            trickPerformed = PerformGrind(swipeDirection, other);
-            isPerformingTrick = true;
-            grindingTrail.transform.position = backWheelSparks.transform.position;
-            if (reverseOut) { grindingTrail.transform.position = frontWheelSparks.transform.position; }
-            grindingTrail.emitting = true;
-        }
-        else //else if one of those conditions is true
-        {
-            //Check if swipe is valid based on section of the tutorial.
-            if (TutorialManager.Instance.partA)
-            {
-                if (validSwipe)
-                {
-                    validSwipe = false;
-                }
-                else
-                {
-                    return false;
-                }
+                bool grindable = CheckGrindable(out other, GetGrindCheckPosition(swipeDirection)); //check if player is above a grindable obstacle
+                if (!grindable || swipeDirection != SwipeDirection.DOWN && swipeDirection != SwipeDirection.LEFT && swipeDirection != SwipeDirection.RIGHT) { return false; }
+                Resume(true);
+                trickPerformed = PerformGrind(swipeDirection, other);
+                isPerformingTrick = true;
+                grindingTrail.transform.position = backWheelSparks.transform.position;
+                if (reverseOut) { grindingTrail.transform.position = frontWheelSparks.transform.position; }
+                grindingTrail.emitting = true;
             }
+            else //else if one of those conditions is true
+            {
+                //Check if swipe is valid based on section of the tutorial.
+                if (TutorialManager.Instance.partA)
+                {
+                    if (validSwipe)
+                    {
+                        validSwipe = false;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
 
-            //player performs a trick
-            isPerformingTrick = true;
-            backWheelSparks.SetActive(false);
-            frontWheelSparks.SetActive(false);
-            trickPerformed = ShowTrickAnimation(swipeDirection);//perfrom a trick
-            if (isGrinding) // if they are grinding before the trick
-            {
-                animator.SetBool("isGrinding", false); //disable the grind animations
-                //so that the trick animation can play
+                //player performs a trick
+                isPerformingTrick = true;
+                backWheelSparks.SetActive(false);
+                frontWheelSparks.SetActive(false);
+                trickPerformed = ShowTrickAnimation(swipeDirection);//perfrom a trick
+                if (isGrinding) // if they are grinding before the trick
+                {
+                    animator.SetBool("isGrinding", false); //disable the grind animations
+                                                           //so that the trick animation can play
+                }
             }
-        }
 
         return isPerformingTrick;
     }
@@ -652,6 +660,7 @@ public class TutorialSkateboard : MonoBehaviour
     }
 
     bool validSwipe;
+    
     private void OnValidSwipe(object sender, EventArgs e)
     {
         validSwipe = true;

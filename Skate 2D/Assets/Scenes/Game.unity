@@ -796,7 +796,7 @@ MonoBehaviour:
   sounds:
   - name: ButtonClick
     clip: {fileID: 8300000, guid: b41cf0040a31b50408ba4f61ed19a3d4, type: 3}
-    volume: 0.4
+    volume: 0.5
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
@@ -806,7 +806,7 @@ MonoBehaviour:
     preLoadAudioData: 0
   - name: ComboSFX
     clip: {fileID: 8300000, guid: 3703ded44923bac44862a3020ef6a2c7, type: 3}
-    volume: 0.2
+    volume: 0.5
     pitch: 0.7
     spatialBlend: 0
     source: {fileID: 0}
@@ -816,7 +816,7 @@ MonoBehaviour:
     preLoadAudioData: 1
   - name: OnLandComboSFX
     clip: {fileID: 8300000, guid: cc7033f43665842489bf6770bd2f2df1, type: 3}
-    volume: 0.15
+    volume: 0.5
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
@@ -826,7 +826,7 @@ MonoBehaviour:
     preLoadAudioData: 1
   - name: PickUp
     clip: {fileID: 8300000, guid: 3846cfca37e31374d8a05cbe0f920efd, type: 3}
-    volume: 0.06
+    volume: 0.3
     pitch: 1
     spatialBlend: 0
     source: {fileID: 0}
@@ -8430,8 +8430,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 257e9a3d3ba145f41bc0d943bdf853f6, type: 2}
-  m_sharedMaterial: {fileID: 807619287589194047, guid: 257e9a3d3ba145f41bc0d943bdf853f6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e9b1a0a4c1a50b345b0a56481b21c6d4, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: dad2f367d7b1723469f0cbf70878cc6f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11376,6 +11376,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2211915514947516166, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: sounds.Array.data[0].volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211915514947516166, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: sounds.Array.data[1].volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211915514947516166, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: sounds.Array.data[2].volume
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211915514947516166, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: sounds.Array.data[3].volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211915514947516166, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: sounds.Array.data[4].volume
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211915514947516166, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
+      propertyPath: sounds.Array.data[5].volume
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 3220706696710446752, guid: e6a8343be60baae4d85b167a55d510ad, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
