@@ -44,7 +44,7 @@ Players control a skater via intuitive swipe controls to perform tricks and grin
 |------------|-------------|
 | **Unity (C#)** | Game engine used for core development, physics, and 2D animation |
 | **Cinemachine** | Used for smooth, responsive camera systems |
-| **Custom Touch Input System** | Built to manage all swipe detection and trigger trick logic |
+| **Custom Touch Input System** | Built on top of Unity's New Input System, to manage all swipe detection and trigger trick logic |
 | **Google Play Games Services** | SDK used for integrating achievements, leaderboards and live events |
 
 ---
