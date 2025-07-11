@@ -17,7 +17,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField]private AudioMixerGroup musicMixer;
     private Dictionary<string, int> soundIndexes;
     
-    void Awake()
+    void Awake() 
     {
         CreateSounds();
         if(!isGlobal) {return;}
