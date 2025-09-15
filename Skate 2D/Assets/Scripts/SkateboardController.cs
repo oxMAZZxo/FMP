@@ -79,8 +79,8 @@ public class SkateboardController : MonoBehaviour
 
         if (isGrounded || isGrinding)
         {
-            Vector3 targetVelocity = new Vector2(minVelocity * 50 * Time.fixedDeltaTime, rb.velocity.y);
-            rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothing);
+            Vector3 targetVelocity = new Vector2(minVelocity * 50 * Time.fixedDeltaTime, rb.linearVelocity.y);
+            rb.linearVelocity = Vector2.SmoothDamp(rb.linearVelocity, targetVelocity, ref m_Velocity, movementSmoothing);
         }
 
         if (transform.position.x > distanceTravelled) { distanceTravelled = transform.position.x; }
@@ -579,7 +579,7 @@ public class SkateboardController : MonoBehaviour
         hasStarted = false;
         wasPaused = false;
         rb.simulated = true;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         DisableInput();
     }
 

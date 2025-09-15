@@ -110,8 +110,8 @@ public class TutorialSkateboard : MonoBehaviour
 
         if(isGrounded || isGrinding)
         {
-            Vector3 targetVelocity = new Vector2(minVelocity * 50 * Time.fixedDeltaTime, rb.velocity.y);
-            rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, movementSmoothing);
+            Vector3 targetVelocity = new Vector2(minVelocity * 50 * Time.fixedDeltaTime, rb.linearVelocity.y);
+            rb.linearVelocity = Vector2.SmoothDamp(rb.linearVelocity, targetVelocity, ref m_Velocity, movementSmoothing);
         }
 
     }
@@ -259,7 +259,7 @@ public class TutorialSkateboard : MonoBehaviour
                 trickCounterDisplay.text = "0/3";
                 trickCounter = 0;
                 DisableInput();
-                rb.velocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
             }else
             {
                 return;
@@ -275,7 +275,7 @@ public class TutorialSkateboard : MonoBehaviour
                 trickCounterDisplay.text = "0/5";
                 trickCounter = 0;
                 DisableInput();
-                rb.velocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
             }else
             {
                 return;
