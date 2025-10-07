@@ -66,7 +66,7 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "swappywrapper::@7e25bd1f32ce224db4e9",
-					"jsonFile" : "target-swappywrapper-RelWithDebInfo-29d20333cd6a20ff4cc8.json",
+					"jsonFile" : "target-swappywrapper-RelWithDebInfo-ea180bdcbe413065c6a7.json",
 					"name" : "swappywrapper",
 					"projectIndex" : 1
 				}
@@ -76,7 +76,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "D:/GitHub/FMP/Skate 2D/.utmp/RelWithDebInfo/6a312030/arm64-v8a",
+		"build" : "D:/GitHub/FMP/Skate 2D/.utmp/RelWithDebInfo/6a312030/armeabi-v7a",
 		"source" : "D:/GitHub/FMP/Skate 2D/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp"
 	},
 	"version" : 
